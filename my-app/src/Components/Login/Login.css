@@ -1,0 +1,41 @@
+#title {
+
+    font-family: "Over the Rainbow", cursive;
+    margin-bottom: 0px;
+
+}
+
+#logIn {
+
+    
+
+}
+
+button {
+
+    width: 100px;
+    height: 37px;
+    margin: 20px 5px;
+    border-radius: 7px;
+    border: 1px solid #6e6e6e;
+
+}
+
+button:hover {
+
+    cursor: pointer;
+    background-color:#6e6e6e;
+    border: 1px solid #6e6e6e;
+    color: white;
+
+}
+
+.login-wrapper {
+
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}

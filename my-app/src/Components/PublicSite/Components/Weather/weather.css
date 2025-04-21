@@ -1,0 +1,13 @@
+.weather {
+
+    margin: 10px 40px;
+
+}
+
+.weather > div {
+
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    
+}

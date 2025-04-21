@@ -1,0 +1,40 @@
+#banner {
+
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+
+}
+
+.privacy-policy {
+
+    color: lightblue;
+
+}
+
+#banner > div {
+
+    margin: 10px;
+    
+
+}
+
+.buttons {
+
+    display:flex;
+    flex-direction: column;
+    
+}
+
+button {
+
+    margin: 2px;
+
+}

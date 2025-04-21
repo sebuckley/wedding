@@ -1,0 +1,169 @@
+.rsvpheader {
+    
+    text-align: center;
+
+}
+
+.rowHidden {
+
+    display: none;
+
+}
+
+.rsvp {
+
+    display: flex;
+    justify-content:center;
+    align-items: center;
+
+}
+
+
+.logo {
+
+    display: flex;
+    justify-content:center;
+    align-items: center;
+
+
+}
+
+.row {
+
+    display: flex;
+    flex-direction: row;
+
+
+}
+
+#addNumber {
+
+    font-size: 10vh;
+    font-weight: bold;
+    width:70px;
+    height: 70px;
+    text-align: center;
+
+}
+
+#addGuest, #minusGuest {
+
+    font-size: 10vh;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:70px;
+    height: 100%;
+    cursor: pointer;
+
+}
+
+
+
+.inputGroupHalf {
+
+    width: 48%;
+    margin: 10px;
+
+}
+
+.inputGroupFull {
+
+    width: 100%;
+    margin: 5px;
+
+}
+
+
+.label {
+
+    display: block;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    
+}
+
+input {
+
+    width: 100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid grey;
+    height: 25px;
+    padding: 5px;
+    border-radius: 7px;
+
+}
+
+.btn-group {
+
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
+.btn {
+
+    padding: 10px;
+    border: 1px solid rgb(197, 197, 197);
+    
+
+}
+
+.btn:hover {
+
+    cursor: pointer;
+    border: 1px solid grey;
+
+
+}
+
+select {
+
+    display: block;
+    width: 100%;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid grey;
+    height: 40px;
+    padding: 5px;
+    border-radius: 7px;
+}
+
+.btnLeft {
+
+    border-radius: 5px 0px 0px 5px;
+
+}
+
+.btnRight {
+
+    border-radius: 0px 5px 5px 0px;
+
+}
+
+@media only screen and (max-width: 900px) {
+
+    .left {
+
+        width : 100%;
+        padding: 10px;
+    
+    }
+    
+    .right {
+    
+        width : 100%;
+        padding: 10px;
+        
+    }
+
+
+}
+
+
+

@@ -1,0 +1,48 @@
+import './Dashboard.css';
+import Login from '../Login/Login';
+import ListItems from '../PublicSite/Wigits/list';
+import data from '../App/mainData';
+import Header from '../PublicSite/Components/Header/header';
+
+export default function Details(props){
+  
+    const { token, setToken } = props.useToken();
+    const bridalParty = props.bridalParty;
+    const wedding = props.wedding;
+    const weddingVenue = props.weddingVenue;
+
+    if(!token) {
+  
+      return <Login setToken={ setToken } bridalParty={ bridalParty } />
+  
+    }
+
+    return(
+
+      <div>
+
+        <Header fName={bridalParty.groom.fName} sName={bridalParty.bride.fName}/>
+
+        <div className="adminBody">
+
+          <div>
+
+            <h2>Wedding Details</h2>
+            <ListItems data={ wedding }/>
+
+          </div>
+
+          <div>
+
+            <h2>Wedding Venue Details</h2>
+            <ListItems data={ weddingVenue }/>
+
+          </div>
+
+        </div>
+
+      </div>
+       
+    )
+    
+}

@@ -1,0 +1,53 @@
+.countdownHeader {
+    
+    text-align: center;
+
+}
+
+#countdown {
+
+    margin: 400px; 
+
+
+}
+
+.countdown {
+
+    margin: 0px; 
+    padding: 5px 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+.types {
+
+    margin: 10px;
+    padding:20px;
+    text-align: center;
+
+}
+
+.timeInfo {
+
+    font-size: 10vw;
+}
+
+
+@media only screen and (max-width: 900px) {
+
+    .countdown {
+
+        margin: 0px; 
+        padding: 5px 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    
+    }
+
+}
+
+
+
