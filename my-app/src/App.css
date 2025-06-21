@@ -1,13 +1,62 @@
+:root {
+
+  --color-1: #f7a1b2;
+  --color-2: #f6c6d7;
+  --color-3: #f4e1e6;
+  --color-4: #e3c8e4;
+  --color-5: #d2a8d6;
+  --white: white;
+  --black: black;
+  --red: red;
+  --green: green;
+  --grey: rgb(185, 185, 185);
+  --light-grey: rgb(211, 210, 210);
+
+  /* Colour palete is 60% primary / 30% secondary / 10% accent */
+
+  /* Colour set 1 */
+
+  /* White background 60% */
+
+  --primary: var(--color-2); /* 30% */
+  --primary-text: var(--black);
+  --accent: var(--color-5); /* 10% */
+  
+  --secondary: var(--white);
+  --secondary-text-color: var(--primary);
+
+  --bg-hover-link: var(--white);
+
+  /* Colour set 1 end*/
+
+
+  --text-font-logo-1: "Over the Rainbow", cursive;
+  --text-color-logo-1: var(--white);
+  --text-shadow-logo-1: var(--black);
+  --and-color-logo-1: var(--grey);
+  --and-font-logo-1:  "Anton", sans-serif;
+
+  --text-color-iCal: black;
+  --bg-color-iCal: var(--color-2); 
+  --bg-color-iCal-hover: var(--color-5); 
+  --text-color-iCal-hover: black;
+
+}
+
+
 body {
 
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  width: 100%;
 
 }
 
 .App {
+
   text-align: center;
+
 }
 
 .wrapper {

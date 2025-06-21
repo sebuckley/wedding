@@ -2,7 +2,7 @@ import './picturewall.css';
 import React from 'react';
 import Logo from '../Logo/logo';
 import ICalendarLink from "react-icalendar-link";
-import getDateDayDMY from '../../Wigits/timeConvert';
+import getDateDayDMY from '../../../Wigits/timeConvert';
 
 export default function PictureWall(props){
 
@@ -24,12 +24,12 @@ export default function PictureWall(props){
         "position": "absolute",
         "top": "-10px",
         "left": "-20px",
-        "fontFamily": "'Over the Rainbow', cursive",
+        "fontFamily": "var(--text-font-logo-1)",
         "fontWeight": "400",
         "fontStyle": "normal",
         "fontSize": "60px",
-        "color": "white",
-        "textShadow": "2px 2px black",
+        "color": "var(--text-color-logo-1)",
+        "textShadow": "1px 1px var(--text-shadow-logo-1)",
         "zIndex": "1",
 
     }
@@ -39,12 +39,12 @@ export default function PictureWall(props){
         "position": "absolute",
         "bottom": "-10px",
         "left": "60px",
-        "fontFamily": "'Over the Rainbow', cursive",
+        "fontFamily": "var(--text-font-logo-1)",
         "fontWeight": "400",
         "fontStyle": "normal",
         "fontSize": "60px",
-        "color": "white",
-        "textShadow": "2px 2px black",
+        "color": "var(--text-color-logo-1)",
+        "textShadow": "1px 1px var(--text-shadow-logo-1)",
         "zIndex": "1",
 
     }
@@ -55,11 +55,11 @@ export default function PictureWall(props){
         "top": "50%",
         "left": "50%",
         "transform": "translate(-50%, -50%)",
-        "fontFamily": "'Anton', sans-serif",
+        "fontFamily": "var(--and-font-logo-1)",
         "fontWeight": "400",
         "fontStyle": "normal",
         "fontSize": "200px",
-        "color": "rgb(185, 185, 185)",
+        "color": "var(--and-color-logo-1)",
         "zIndex": "0",
         "opacity": "0.6",
 
@@ -79,7 +79,7 @@ export default function PictureWall(props){
 
             <div className="iCal">
 
-                <ICalendarLink event={event}>Add to Calendar</ICalendarLink>
+                <ICalendarLink event={event}>Add to calendar</ICalendarLink>
 
             </div>
 

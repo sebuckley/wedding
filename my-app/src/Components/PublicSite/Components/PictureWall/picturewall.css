@@ -20,8 +20,8 @@
     
     font-size: 20px;
     font-weight: 800;
-    color: white;
-    text-shadow: 2px 2px black;
+    color: var(--text-color-logo-1);
+    text-shadow: 1px 1px var(--text-shadow-logo-1);
  
 }
 
@@ -46,7 +46,7 @@
   font-weight: 400;
   font-style: normal;
   font-size: 200px;
-  color: rgb(185, 185, 185);
+  color: var(--and-color);
   z-index: -1;
   opacity: 0.6;
 
@@ -89,21 +89,36 @@
 
 .date {
 
-  color: white;
-  text-shadow: 2px 2px black;
-
+  color: var(--text-color-logo-1);
+  text-shadow: 1px 1px var(--text-shadow-logo-1);
+ 
 }
 
 
 
 .iCal > a {
 
-  background-color: white;
+  background-color: var(--bg-color-iCal);
+  text-decoration: none;
   border-radius: 20px;
   padding: 10px 20px;
   cursor: pointer;
   text-align: center;
-  color: black;
+  color: var(--text-color-iCal);
+
+
+}
+
+.iCal > a:hover {
+
+  background-color: var(--bg-color-iCal-hover);
+  text-decoration: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-color-iCal-hover);
+
 
 }
 

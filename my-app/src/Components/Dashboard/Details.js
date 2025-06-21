@@ -1,8 +1,8 @@
 import './Dashboard.css';
 import Login from '../Login/Login';
-import ListItems from '../PublicSite/Wigits/list';
-import data from '../App/mainData';
-import Header from '../PublicSite/Components/Header/header';
+import ListItemsJSON from '../Wigits/listJSON';
+
+import Header from '../Wigits/Header/header';
 
 export default function Details(props){
   
@@ -25,17 +25,17 @@ export default function Details(props){
 
         <div className="adminBody">
 
-          <div>
+          <div className="weddingDetails">
 
             <h2>Wedding Details</h2>
-            <ListItems data={ wedding }/>
+            <ListItemsJSON data={ wedding }/>
 
           </div>
 
-          <div>
+          <div className="weddingDetails">
 
             <h2>Wedding Venue Details</h2>
-            <ListItems data={ weddingVenue }/>
+            <ListItemsJSON data={ weddingVenue }/>
 
           </div>
 

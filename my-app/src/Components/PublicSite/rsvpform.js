@@ -1,6 +1,6 @@
 import './Components/rsvp/rsvp.css';
 import React, { useState } from 'react';
-import Header from './Components//Header/header';
+import Header from '../Wigits/Header/header';
 import dietry from './Components/Data/dietry'
 import DietSection from './Components/rsvp/dietrysection'
 import PlusOne from './Components/rsvp/plusone'

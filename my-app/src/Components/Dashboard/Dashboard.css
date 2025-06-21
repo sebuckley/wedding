@@ -1,28 +1,1007 @@
+
 .adminBody {
 
     margin-top: 100px;
-    margin-left: 20px;
-    padding: 10px, 5px;
+    padding: 20px;
+    width: calc(100% - 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+}
+
+#dashboard{
+
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 10px;
+
+}
+
+#dashboard > div {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin: 5px;
+ 
+
+}
+
+.dashboardBox {
+
+ margin: 10px;
+
+}
+
+.contentWrapper{
+
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+}
+
+#dashboard > div {
+
+    margin: 10px;
+
+}
+
+#links{
+
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+}
+
+#links > a {
+
+    margin: 5px;
+
+}
+
+#addGuestSection {
+
+    width: 60%;
     
 }
 
+#addGuestTitle {
+
+    padding-left: 50px;
+    cursor: pointer;
+
+}
+
+#guestListSection{
+
+    width: 60%;
+
+}
+
+#updateGuestSection {
+
+    width: 100%;
+    
+}
+
+#familyListSection{
+
+    width: 100%;
+
+}
+
+.additionalGuests {
+
+    width: 100%;
+    
+
+}
+
+#tasks{
+
+    width: 60%;
+
+}
+
+#addTaskSection {
+
+    width: 60%;
+    
+}
+
+#addTaskTitle {
+
+    padding-left: 50px;
+    cursor: pointer;
+
+}
+
+
+.weddingDetails {
+
+    width: 60%;
+
+}
+
+ul {
+
+    padding: 10px;
+}
+
 li {
+    
 
     list-style-type: none;
     padding: 5px;
-    width:90%;
+    display:flex;
+    align-items: center;
+
+ 
+    
+
+}
+
+li > div {
+
+    margin: 5px;
+  
+
+}
+
+.row {
+
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.col-1 {
+
+    width: 8.33%;
+
+}
+
+.col-2 {
+
+    width: 16.66%;
+
+}
+
+.col-3 {
+
+    width: 25%;
+
+}
+
+.col-4 {
+
+    width: 33%;
+
+}
+
+.col-6 {
+
+    width: 50%;
+
+}
+
+.col-7 {
+
+    width: 58.33% !important; 
+
+}
+
+
+.col-8 {
+
+    width: 66.66%;
+
+}
+
+.col-12 {
+
+    width: 100%;
 
 }
 
 .titleName {
 
     margin: 5px;
+    text-align: left;
 
 }
 
-.input[type=text] {
 
-    width:100%;
+textarea{
+
+    width: 100%;
+    display: inline-block;
+    margin: 0px;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid var(--light-grey);
+    border-radius: 10px;
+    font-size: 18px;
+    width: calc(100% - 60px);
+    white-space: pre-wrap;
 
 }
 
+.iconHeader {
+
+    position: absolute;
+    color: var(--accent);
+    padding: 10px;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    font-size: 24px;
+    cursor: pointer;
+
+}
+
+.icon {
+
+    position: absolute;
+    color: var(--accent);
+    padding: 15px;
+    font-size: 18px;
+    
+}
+
+.icon2 {
+
+    display: inline-block;
+    color: var(--grey);
+    padding: 15px;
+    font-size: 19px;
+    
+}
+
+
+
+.inputBox {
+
+    display: inline-block;
+    width: calc(100% - 60px);
+    margin: 0px;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid var(--light-grey);
+    border-radius: 10px;
+    padding-left: 50px;
+    font-size: 18px;
+
+
+
+}
+
+.inputBox2 {
+
+    display: inline-block;
+    width: calc(100% - 15px);
+    margin: 0px;
+    padding: 9px !important;;
+    text-align: left;
+    border: 1px solid var(--light-grey);
+    border-radius: 10px;
+    font-size: 18px;
+ 
+
+}
+
+.checkIcon {
+
+    width: calc(92% - 60px);
+
+}
+
+.guestType {
+
+    outline: none;
+    
+}
+
+.guestType:focus {
+
+   outline: none;
+   border-color: var(--primary);
+   box-shadow: 0 0 10px var(--primary);
+
+}
+
+.guestAdd {
+
+    outline: none;
+    
+}
+
+.guestAdd:focus {
+
+   outline: none;
+   border-color: var(--primary);
+   box-shadow: 0 0 10px var(--primary);
+
+}
+
+.rsvp {
+
+    outline: none;
+    
+}
+
+.rsvp:focus {
+
+   outline: none;
+   border-color: var(--primary);
+   box-shadow: 0 0 10px var(--primary);
+
+}
+
+.inputBox:focus {
+
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+ 
+ }
+
+.inputBox::placeholder{
+
+   color: var(--grey);
+
+}
+
+.addGuest {
+
+    width: 200px;
+    border: none;
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--primary-text-color);
+
+
+}
+
+.deleteButton{
+
+    background-color: var(--secondary);
+    border: 1px solid var(--primary);
+    color: var(--secondary-text-color);
+
+}
+
+
+
+.primary {
+
+    display: block;
+    width: 100%;
+    height: 50px;
+    border: none;
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--primary-text-color);
+    font-weight:bold;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+
+}
+
+.primary:hover {
+
+    display: block;
+    width: 100%;
+    height: 50px;
+    border: none;
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--primary-text-color);
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+
+}
+
+.secondary {
+
+    display: block;
+    width: 100%;
+    height: 50px;
+    border: none;
+    background-color: var(--secondary);
+    border: 1px solid var(--primary);
+    color: var(--secondary-text-color);
+    font-weight:bold;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+
+}
+
+.secondary:hover {
+
+    display: block;
+    width: 100%;
+    height: 50px;
+    border: none;
+    background-color: var(--secondary);
+    border: 1px solid var(--primary);
+    color: var(--secondary-text-color);
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+
+}
+
+.state {
+
+    width: 20%;
+}
+
+#addGuestSection {
+
+    margin: 20px 0px;
+
+}
+
+.inputForm {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.inputGroup {
+
+    margin: 10px;
+    
+}
+
+#guestList > .guestRow {
+
+   
+    margin: 10px;
+
+
+
+}
+
+.guestRow {
+
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    
+
+}
+
+.guestRow > div {
+
+    margin: 10px;
+
+}
+
+
+
+.guestType {
+
+    border: 1px solid var(--grey);
+    height: 45px !important;
+    border-radius:10px !important;
+    padding: 14px 12px 12px 50px !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 16px;
+    margin: 0px !important;
+    color: grey;
+
+}
+
+.guestAdd {
+
+    border: 1px solid var(--grey);
+    height: 45px !important;
+    border-radius:10px !important;
+    padding: 14px 12px 12px 50px !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 16px;
+    margin: 0px !important;
+    color: grey;
+    
+}
+
+
+
+.rsvp {
+
+    border: 1px solid var(--grey);
+    height: 45px !important;
+    border-radius:10px !important;
+    padding: 14px 12px 12px 50px !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 16px;
+    margin: 0px !important;
+
+}
+
+select {
+
+    border: 1px solid var(--grey);
+    height: 35px !important;
+    border-radius:10px !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 16px;
+    margin: 0px !important;
+    color: black;
+    min-width: 150px;
+    padding:5px !important;
+    margin: 5px !important;
+
+}
+
+select::picker-icon {
+
+    color: #999;
+    transition: 0.4s rotate;
+
+}
+
+option {
+
+    color: black;
+    padding: 10px;
+
+
+
+}
+
+
+
+/* select,
+::picker(select) {
+  appearance: base-select;
+} */
+
+
+
+.filterButtons {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.filterButton {
+
+  background-color: var(--primary);
+  border: none;
+  color: black;
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.filterButton:hover {
+
+  background-color: var(--primary);
+   color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+
+.activeFB {
+
+  background-color: var(--white);
+  border: none;
+  color:  var(--black);
+  border: 2px solid  var(--primary);
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.filterButton2 {
+
+  background-color: var(--primary);
+  border: none;
+  color: black;
+  text-align: center;
+  height: 35px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.filterButton2:hover {
+
+  background-color: var(--primary);
+   color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+
+.activeFB2 {
+
+  background-color: var(--white);
+  border: none;
+  color:  var(--black);
+  border: 2px solid  var(--primary);
+  text-align: center;
+  height: 35px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.listSelectButtons {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.listSelectButton {
+
+  background-color: var(--primary);
+  border: none;
+  color: black;
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.listSelectButton:hover {
+
+  background-color: var(--primary);
+   color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+
+.activeLS {
+
+  background-color: var(--white);
+  border: none;
+  color:  var(--black);
+  border: 2px solid  var(--primary);
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.guestfilterButton {
+
+  background-color: var(--primary);
+  border: none;
+  color: black;
+  text-align: center;
+  height: 35px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.guestfilterButton:hover {
+
+  background-color: var(--primary);
+   color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+
+.activeGuestFB {
+
+  background-color: var(--white);
+  border: none;
+  color:  var(--black);
+  border: 2px solid  var(--primary);
+  text-align: center;
+  height: 35px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.sortOptions {
+
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.sortOptions > div  {
+
+    margin: 10px;
+
+}
+
+.guestSortedBy {
+
+    width: 20%;
+
+}
+
+.guestSorted {
+
+    width: 10%;
+    
+}
+
+
+.noOption {
+
+    color: var(--grey) !important;
+    padding-left: 200px !important;
+
+}
+
+.dashLink {
+
+    text-decoration: none !important;
+    
+}
+
+
+@media screen and (max-width: 1150px) {
+
+
+    .contentWrapper{
+
+        width: 100%;
+     
+    
+    }
+    
+
+    #addGuestSection {
+
+        width: 100%;
+        
+    }
+
+    #guestListSection{
+
+        width: 100%;
+    
+    }
+    
+        
+    #updateGuestSection {
+
+        width: 100%;
+        
+    }
+
+    #familyListSection{
+
+        width: 100%;
+    
+    }
+
+    #tasks{
+
+        width: 100%;
+
+    }
+
+    #addTaskSection {
+
+        width: 100%;
+    
+    }
+
+
+    .sortOptions {
+
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+    }
+
+    .weddingDetails {
+
+        width: 100%;
+    
+    }
+    
+    .row {
+
+        width: 100%;
+        display: flex;
+        flex-direction: column !important;
+
+    }
+
+    .col-1 {
+
+        width: 100%;
+
+    }
+
+
+    .col-2 {
+
+        width: 100%;
+
+    }
+
+    .col-3 {
+
+        width: 100%;
+
+    }
+
+    .col-4 {
+
+        display: block;
+        width: 100%;
+
+    }
+
+    .col-6 {
+
+        width: 100%;
+
+    }
+
+    .col-7 {
+
+        width: 100%;
+
+    }
+
+
+    .col-8 {
+
+        width: 100%;
+
+    }
+
+    .inputBox {
+
+        display: inline-block;
+        width: calc(100% - 80px);
+        margin: 0px;
+        padding: 10px;
+        text-align: left;
+        border: 1px solid var(--grey);
+        border-radius: 10px;
+        padding-left: 50px;
+        font-size: 18px;
+    
+    
+    }
+
+    .checkIcon {
+
+        width: calc(88% - 60px);
+    
+    }
+
+    .titleName {
+
+        margin: 5px;
+        width: 100%;
+        text-align: right;
+        display: block !important;
+    
+    }
+    
+    .inputName{
+    
+        width: 100%;
+        display: block !important;
+    
+    }
+
+    .guestRow {
+
+        display: flex;
+        flex-direction: column !important;
+        align-items: center;
+        justify-content: center;
+    
+    }
+
+    .sortOptions {
+
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .guestSortedBy {
+
+        width: 100%;
+
+    }
+
+    .guestSorted {
+
+        width: 100%;
+        
+    }
+
+
+
+}

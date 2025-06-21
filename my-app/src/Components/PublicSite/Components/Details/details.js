@@ -1,6 +1,6 @@
 import './details.css';
 import React from 'react';
-import getDateDayDMY from '../../Wigits/timeConvert';
+import getDateDayDMY from '../../../Wigits/timeConvert';
 
 export default function FAQ(props){
 

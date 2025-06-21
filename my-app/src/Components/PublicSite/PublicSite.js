@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './Components/Header/header'
+import Header from '../Wigits/Header/header'
 import FAQ from './Components/faq/faq';
 import Details from './Components/Details/details';
 import Countdown from './Components/Countdown/countdown';
@@ -7,7 +7,7 @@ import NoVenue from './Components/no-venue';
 import NoFAQ from './Components/faq/no-faq';
 import PictureWall from './Components/PictureWall/picturewall';
 import WeatherToday from './Components/Weather/weather-today';
-import CookieConsent from './Wigits/cookie-consent/cookie-consent';
+import CookieConsent from '../Wigits/cookie-consent/cookie-consent';
 
 
 export default function PublicSite(props){

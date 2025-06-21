@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './Login.css';
-import Header from '../PublicSite/Components/Header/header';
+import Header from '../Wigits/Header/header';
 
 async function loginUser(credentials) {
 
@@ -32,12 +32,9 @@ export default function Login(props) {
 
     e.preventDefault();
 
-    const token = await loginUser({
+    const token = await loginUser({username,password});
 
-      username,
-      password
-
-    });
+    console.log(token);
 
     setToken(token);
 

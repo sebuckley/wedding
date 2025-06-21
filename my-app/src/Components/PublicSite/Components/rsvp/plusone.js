@@ -1,6 +1,6 @@
 import React from 'react';
-import Select from '../../Wigits/select'
-import AdditionalGuests from './additionalguests'
+import Select from '../../../Wigits/select';
+import AdditionalGuests from './additionalguests';
 
 export default function PlusOne(props){
 

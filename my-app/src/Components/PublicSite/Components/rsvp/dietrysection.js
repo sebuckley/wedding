@@ -1,38 +1,22 @@
 import React from 'react';
-import Select from '../../Wigits/select'
+import Select from '../../../Wigits/select'
 
 export default function DietSection(props){
 
     const diet = props.diet;
-    const allergies = props.allergies
+    const allergies = props.allergies;
+    const showGuest = props.showGuest;
+    const onChange = props.onChange;
+    const valueDiet = props.valueDiet;
+    const valueAllergies = props.valueAllergies;
+    const titleType = props.titleType;
+    const arrayNumber = props.arrayNumber;
 
-    return(
+    const addRSVPButton = () => {
 
-        <div className="dietRow">
+        return (
 
-            <h2>Your dietry requirements</h2>
-    
-            <div className="row">
-
-                <div className="inputGroupHalf">
-                
-                    <label className="label">Diet:</label>
-
-                    <Select name="diet" arrayList={ diet } />
-
-                </div>
-
-                <div className="inputGroupHalf">
-
-                    <label className="label">Allergies:</label>
-
-                    <Select name="allergies" arrayList={ allergies } />
-
-                </div>
-
-            </div>
-
-            <div className="row">
+             <div className="row">
 
                 <div className="inputGroupHalf">
 
@@ -45,6 +29,73 @@ export default function DietSection(props){
                 </div>
 
             </div>
+        )
+
+    }
+
+    const getTitle = (type) => {
+
+        let title;
+
+        if(type === "guest"){
+
+            title = "Guests dietry requirements";
+
+        }else{
+
+            title = "Your dietry requirements";
+
+        }
+
+        return title;
+
+    }
+
+    const getClassName = (name, number="") => {
+
+        let returnText;
+
+        if(number === ""){
+
+            returnText = name;
+
+        }else{
+
+            returnText = name + " " + arrayNumber;
+
+        }
+
+        return returnText;
+
+    }
+
+    return(
+
+        <div className="dietRow">
+
+            <h2>{ getTitle(titleType) }</h2>
+    
+            <div className="row">
+
+                <div className="inputGroupHalf">
+                
+                    <label className="label">Diet:</label>
+
+                    <Select className={ getClassName("diet", arrayNumber)} name="diet" arrayList={ diet } onChange={ onChange } value={ valueDiet }/>
+
+                </div>
+
+                <div className="inputGroupHalf">
+
+                    <label className="label">Allergies:</label>
+
+                    <Select className={ getClassName("allergies", arrayNumber)} name="allergies" arrayList={ allergies }  onChange={ onChange } value={ valueAllergies } />
+
+                </div>
+
+            </div>
+
+           { showGuest !== "" ? addRSVPButton() : "" }
 
         </div>
 

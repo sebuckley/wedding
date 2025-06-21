@@ -57,7 +57,7 @@ if(weddingVenue ===""){
 
 }else{
 
-    venueInfo = weddingVenue.venue + ", " + weddingVenue.venueAddress + "\\n\\nDress Code: \\n\\n" + weddingVenue.dressCode + "\\n\\n " + weddingVenue.venueWebAddress + " \\n " + weddingVenue.venueGoogleMaps;
+    venueInfo = weddingVenue.venue + ", " + weddingVenue.venueAddress + "\\n\\nDress Code: \\n\\n" + weddingVenue.dressCode + "\\n\\n" + weddingVenue.venueWebAddress + " \\n " + weddingVenue.venueGoogleMaps;
     
 }
 
@@ -69,8 +69,8 @@ const wedding = {
     description: "The wedding of " + bridalParty.groom.fName +  " and " + bridalParty.bride.fName + " at " + venueInfo,
     date: weddingDateTime,
     dateEnd: "2026/04/28 23:59",
-    rsvp: "2026/02/01 20:00",
-    reception: "2025/06/01 17:00",
+    rsvpDate: "2026/02/01 20:00",
+    receptionDate: "2025/06/01 17:00",
     receptionName: "Wedding Reception of " + bridalParty.groom.fName +  " & " + bridalParty.bride.fName,
     receptionDescription: "Wedding reception of  " + bridalParty.groom.fName +  " and  "+ bridalParty.bride.fName + "  at the venue",
     maxGuests: 1,
