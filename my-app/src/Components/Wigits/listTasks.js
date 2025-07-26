@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { splitByCapitalNums } from "./dataFunctions";
 import { getTaskIndex, deleteTaskListItem } from "./dataFunctions-taskList";
+import { getSupplierName } from "./dataFunctions-suppliers";
 
 
 const ListTasks = (props) => {
@@ -12,11 +13,11 @@ const ListTasks = (props) => {
   const taskSorted = props.taskSorted;
   const taskSortedBy = props.taskSortedBy;
   const onChange = props.onChange;
-   const onChangeDate = props.onChangeDate;
+  const onChangeDate = props.onChangeDate;
   const taskFiltered = props.taskFiltered;
   const [taskListUpdated, setThisListUpdated] = useState(0);
   
-   const selectOptionState = (className, state) => {
+  const selectOptionState = (className, state) => {
 
     let currentState;
 
@@ -65,7 +66,7 @@ const ListTasks = (props) => {
 
         <option value="Not started">Not started</option>
         <option value="Planned">Planned</option>
-        <option value="Researched">Researched</option>
+        <option value="Researching">Researching</option>
         <option value="Enquiry made">Enquiry made</option>
         <option value="Selected">Selected</option>
 
@@ -76,21 +77,53 @@ const ListTasks = (props) => {
 
   }
 
-  const addDate = (date) => {
-    
+  const addDate = (date, type) => {
+
+    let returnObject;
     let currentDate;
 
-    if (date === "") {
+    if (date === "" || date === null) {
 
       currentDate = "";
 
     }else{
 
-      currentDate = new Date(date).toISOString().split('T')[0];
+      if(type === "input"){
+
+        currentDate = new Date(date).toISOString().split('T')[0];
+
+      }else{
+
+        currentDate = new Date(date);
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth()+1;
+        let dt = currentDate.getDate();
+
+        if (dt < 10) {
+          dt = '0' + dt;
+        }
+        if (month < 10) {
+          month = '0' + month;
+        }
+        currentDate = dt + '/' + month + '/' + year;
+
+      }
+      
+    }
+
+    if(type === "input"){
+
+      
+      returnObject = <input type='date' onChange={ onChangeDate } className="dateInput inputBox2" value={ currentDate }></input>
+
+
+    }else{
+
+      returnObject = currentDate
 
     }
 
-    return <input type='date' onChange={ onChangeDate } className="dateInput inputBox2" value={ currentDate }></input>
+    return returnObject;
 
   }
 
@@ -116,11 +149,11 @@ const ListTasks = (props) => {
 
         if(type === "asc"){
 
-          array.sort((a, b) => new Date(a.lastUpdated) - new Date(b.lastUpdated)); 
+          array.sort((a, b) => new Date(a.updated) - new Date(b.updated)); 
 
         }else{
 
-          array.sort((a, b) =>  new Date(b.lastUpdated) - new Date(a.lastUpdated)); 
+          array.sort((a, b) =>  new Date(b.updated) - new Date(a.updated)); 
 
         }
 
@@ -161,6 +194,23 @@ const ListTasks = (props) => {
 
   }
 
+  const getSupplierLink = (a) => {
+
+    const name = getSupplierName(a);
+    const link = "./supplier/?supplierID=" + a;
+
+    return <a href={link}>{name}</a>
+
+  }
+
+  const linkSuppliers = (a,name) => {
+
+    const link = "./suppliers/?filter=" + a;
+
+    return <a href={link}>{name}</a>
+
+  }
+
   const generateList = (dataList) => {
 
     let itemList = sortList(dataList.list, taskSortedBy, taskSorted);
@@ -168,30 +218,22 @@ const ListTasks = (props) => {
     itemList = itemList.map((value) => {
 
       let taskName;
+      let taskNameSplit;
       let state;
       let activity;
       let toDoDate;
       let itemID;
+      let updated;
+      let supplierID
 
       taskName = value.taskName;
+      taskNameSplit = splitByCapitalNums(taskName);
       itemID = value.itemID;
-      state = value.state;
-      activity = value.activity;
+      state = value.state.trim();
+      activity = value.activity.trim();
+      updated = value.updated;
       toDoDate = value.toDoDate;
-
-      if(!taskListState.hasOwnProperty(taskName)){
-
-        let obj = {
-
-          state: state,
-          activity: activity,
-          toDoDate: toDoDate
-
-        }
-
-        setTaskListState({...taskListState, [taskName]:obj});
-
-      }
+      supplierID = value.supplierID;
 
       if(taskFiltered === "All"){
 
@@ -201,7 +243,7 @@ const ListTasks = (props) => {
 
                 <div className="titleName col-3">
                   
-                  { splitByCapitalNums(taskName) }:
+                  { taskNameSplit }:
 
                 </div>
 
@@ -217,15 +259,22 @@ const ListTasks = (props) => {
                 
                 </div>
 
-                <div className="inputDate col-2">
+                <div className="inputDateText col-2">
               
-                  { addDate(toDoDate) }
+                  { addDate(updated,"text") }
 
                 </div>
 
-                <div className="inputDelete col-2">
+                <div className="inputDate col-2">
               
-                  <button className="deleteButton" onClick={ deleteTaskItem }>Delete</button>
+                  { state !== "Completed" ? addDate(toDoDate, "input") : getSupplierLink(supplierID, "Supplier") }
+
+                </div>
+
+                <div className="inputDelete col-1">
+              
+                  { state === "To-do" ? <button className="deleteButton" onClick={ deleteTaskItem }>Delete</button> : ""}
+                  { state === "In-progress" ? linkSuppliers(taskName, "Suppliers") : "" }
 
                 </div>
 
@@ -366,7 +415,7 @@ const ListTasks = (props) => {
 
                   </div>
 
-                </li>
+              </li>
 
             )
 

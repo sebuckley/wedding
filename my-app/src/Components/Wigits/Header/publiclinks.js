@@ -3,8 +3,8 @@ import React from 'react';
 export default function PublicLinks(props){
 
     const displayRSVP = window.location.href.includes("rsvp");
-    const displayDashboard = props.webPage;
     const onClickPage = props.onClickPage;
+    const loggedIn = props.loggedIn;
 
     const rsvpLink = () => {
 
@@ -35,8 +35,8 @@ export default function PublicLinks(props){
             <a className={ props.activeSection === 'Countdown' ? "menuActive active": "menuActive" } href="#Countdown" onClick={(e) => props.onClickMenuItem(e)}>Countdown</a>
 
             { displayRSVP ? rsvpLink() : "" }
-            { displayDashboard === 0 && props.token ? dashboardLink(onClickPage) : "" }
-            { props.token ? logOutLink() : "" }
+            { loggedIn ? dashboardLink(onClickPage) : "" }
+            { loggedIn ? logOutLink() : "" }
          
 
         </nav>

@@ -1,11 +1,12 @@
 const bridalParty = {
 
-    bride: {
+    first: {
 
         fName: "Charlotte", 
         lName: "Myers",
         pName: "Charlie",
         gender: "Female",
+        role: "Bride",
         email: "c-myers@hotmail.co.uk",
         ringSize: "k",
         dressSize: "",
@@ -15,12 +16,13 @@ const bridalParty = {
         waistSize: "",
 
     },
-    groom: {
+    second: {
 
         fName: "Stephen", 
         lName: "Buckley",
         pName: "",
         gender: "Male",
+        role: "Groom",
         email: "sebuckley@hotmail.com",
         ringSize: "g",
         dressSize: "",
@@ -63,16 +65,14 @@ if(weddingVenue ===""){
 
 const wedding = {
 
-   
-
-    name: "Wedding of " + bridalParty.groom.fName +  " & " + bridalParty.bride.fName,
-    description: "The wedding of " + bridalParty.groom.fName +  " and " + bridalParty.bride.fName + " at " + venueInfo,
+    name: "Wedding of " + bridalParty.first.fName +  " & " + bridalParty.second.fName,
+    description: "The wedding of " + bridalParty.first.fName +  " and " + bridalParty.second.fName + " at " + venueInfo,
     date: weddingDateTime,
     dateEnd: "2026/04/28 23:59",
     rsvpDate: "2026/02/01 20:00",
     receptionDate: "2025/06/01 17:00",
-    receptionName: "Wedding Reception of " + bridalParty.groom.fName +  " & " + bridalParty.bride.fName,
-    receptionDescription: "Wedding reception of  " + bridalParty.groom.fName +  " and  "+ bridalParty.bride.fName + "  at the venue",
+    receptionName: "Wedding Reception of " + bridalParty.first.fName +  " & " + bridalParty.second.fName,
+    receptionDescription: "Wedding reception of  " + bridalParty.first.fName +  " and  "+ bridalParty.second.fName + "  at the venue",
     maxGuests: 1,
     email: "sebuckley@hotmail.com",
     faqSubject: "Additional Question",
@@ -101,9 +101,9 @@ const weddingDayInvite = {
     geo: { lat: latitude, lon: longitude },
     status: 'CONFIRMED',
     busyStatus: 'BUSY',
-    organizer: { name: bridalParty.bride.fName + " " + bridalParty.bride.lName, email: bridalParty.bride.email },
+    organizer: { name: bridalParty.second.fName + " " + bridalParty.second.lName, email: bridalParty.second.email },
     // attendees: [
-    //     { name: bridalParty.groom.fName + " " + bridalParty.groom.lName, email: bridalParty.groom.email, rsvp: true, partstat: 'ACCEPTED', role: 'REQ-PARTICIPANT' },
+    //     { name: bridalParty.first.fName + " " + bridalParty.first.lName, email: bridalParty.first.email, rsvp: true, partstat: 'ACCEPTED', role: 'REQ-PARTICIPANT' },
 
     // ]
 
@@ -124,9 +124,9 @@ const weddingReceptionInvite = {
     geo: { lat: latitude, lon: longitude},
     status: 'CONFIRMED',
     busyStatus: 'BUSY',
-    organizer: { name: bridalParty.bride.fName + " " + bridalParty.bride.lName, email: bridalParty.bride.email },
+    organizer: { name: bridalParty.second.fName + " " + bridalParty.second.lName, email: bridalParty.second.email },
     attendees: [
-        { name: bridalParty.groom.fName + " " + bridalParty.groom.lName, email: bridalParty.groom.email, rsvp: true, partstat: 'ACCEPTED', role: 'REQ-PARTICIPANT' },
+        { name: bridalParty.first.fName + " " + bridalParty.first.lName, email: bridalParty.first.email, rsvp: true, partstat: 'ACCEPTED', role: 'REQ-PARTICIPANT' },
 
     ]
 

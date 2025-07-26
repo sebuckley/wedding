@@ -5,7 +5,8 @@ import '../Dashboard.css';
 export default function TaskFilter(props){
 
     const setTaskFilter = props.setTaskFiltered;
-
+    const filterName = props.filterName;
+    
     const onClick = (e) => {
 
         e.preventDefault();
@@ -56,27 +57,61 @@ export default function TaskFilter(props){
 
     }
 
+    const getActive = (button, filterName, type) => {
+
+        let text;
+
+        if(type === 1){
+
+            if(button === filterName){
+
+                text = "filterButton activeFB";
+
+            }else{
+
+                text = "filterButton";
+
+            }
+
+        }else{
+
+            if(button === filterName){
+
+                text = "filterButton2 activeFB2";
+
+            }else{
+
+                text = "filterButton2";
+
+            }
+
+
+        }
+
+        return text;
+
+    }
+
     return (
 
         <div>
 
             <div className="filterButtons 1"> 
 
-                <button className='filterButton activeFB' onClick={ onClick }>All</button>
-                <button className='filterButton' onClick={ onClick }>To-do</button>
-                <button className='filterButton' onClick={ onClick }>In-progress</button>
-                <button className='filterButton' onClick={ onClick }>Completed</button>
+                <button className={ getActive("All", filterName,1) } onClick={ onClick }>All</button>
+                <button className={ getActive("To-do", filterName,1) } onClick={ onClick }>To-do</button>
+                <button className={ getActive("In-progress", filterName,1) } onClick={ onClick }>In-progress</button>
+                <button className={ getActive("Completed", filterName,1) } onClick={ onClick }>Completed</button>
                
-
             </div>
 
             <div className="filterButtons 2"> 
 
-                <button className='filterButton2' onClick={ onClick2 }>Not started</button>
-                <button className='filterButton2' onClick={ onClick2 }>Planned</button>
-                <button className='filterButton2' onClick={ onClick2 }>Researched</button>
-                <button className='filterButton2' onClick={ onClick2 }>Enquiry made</button>
-                <button className='filterButton2' onClick={ onClick2 }>Selected</button>
+                <button className={ getActive("Not started", filterName,2) } onClick={ onClick2 }>Not started</button>
+                <button className={ getActive("Planned", filterName,2) } onClick={ onClick2 }>Planned</button>
+                <button className={ getActive("Researched", filterName,2) } onClick={ onClick2 }>Researched</button>
+                <button className={ getActive("Enquiry made", filterName,2) } onClick={ onClick2 }>Enquiry made</button>
+                <button className={ getActive("Selected", filterName,2) } onClick={ onClick2 }>Selected</button>
 
             </div>
 

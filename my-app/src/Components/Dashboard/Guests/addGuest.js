@@ -1,17 +1,23 @@
 import '../Dashboard.css';
 import { useState, useEffect } from 'react';
 import { getGuestList, saveGuestList, checkExistingGuest } from '../../Wigits/dataFunctions-guestList';
+import { roles } from '../../App/mainData';
+import GenderDropdownWithDress from '../../Wigits/genderDropdown';
 // import { parsePhoneNumberFromString, isPossiblePhoneNumber, isValidPhoneNumber, validatePhoneNumberLength } from 'libphonenumber-js';
 
 export default function AddGuests(props){
 
     const [firstName, setFirstName] = useState('');
     const [surname, setSurname] = useState('');
+    const role = props.role;
+    const setRole = props.setRole;
     const [guestType, setguestType] = useState('');
+    const [gender, setGender] = useState('');
     const [mobile, setMobile] = useState('');
     const [email, setEmail] = useState('');
     const [maxGuests, setMaxGuests] = useState('');
     const [display, setDisplay]  = useState(false);
+    const getRoles = props.getRoles;
 
     const checkPhone = (number) => {
 
@@ -26,8 +32,6 @@ export default function AddGuests(props){
         }
         
         const getIcon = document.getElementsByClassName("phoneCheck")[0];
-
-        console.log(getIcon);
 
         if(validNumber){
 
@@ -123,6 +127,17 @@ export default function AddGuests(props){
             setguestType(value);
 
         }
+
+        if(item === "role"){
+
+            setRole(value);
+        }
+
+         if(item === "gender"){
+
+            setGender(value);
+        }
+
 
         saveItem(item, value);
         checkEmpty(e.target);
@@ -427,6 +442,18 @@ export default function AddGuests(props){
 
             }
 
+            if(typeof getData["gender"] !== 'undefined'){
+
+                setGender(getData["gender"]);
+
+            }
+
+             if(typeof getData["role"] !== 'undefined'){
+
+                setRole(getData["role"]);
+
+            }
+
           
         }
     }
@@ -545,6 +572,7 @@ export default function AddGuests(props){
 
     }
 
+
     return(
 
         <section id="addGuestSection">
@@ -558,11 +586,11 @@ export default function AddGuests(props){
 
                     <div className='inputGroup col-6'>
                         <i className="fa fa-user icon"></i>
-                        <input type='text' className='inputBox' onInput={ onInput } onChange={ e => setFirstName( e.target.value )} name='firstName' placeholder='first name' value={firstName}></input>
+                        <input type='text' className='inputBox' onInput={ onInput } onChange={ e => setFirstName( e.target.value )} name='firstName' placeholder='first name (required)' value={firstName}></input>
                     </div>
                     <div className='inputGroup col-6'>
                         <i className="fa fa-user icon"></i>
-                        <input type='text' className='inputBox' onInput={ onInput }  onChange={ e => setSurname( e.target.value )} name='surname' placeholder='surname' value={ surname }></input>
+                        <input type='text' className='inputBox' onInput={ onInput }  onChange={ e => setSurname( e.target.value )} name='surname' placeholder='surname (required)' value={ surname }></input>
                     </div>
 
                 </div>
@@ -571,9 +599,38 @@ export default function AddGuests(props){
 
                     <div className='inputGroup col-12'>
 
+                        <i className="fa-solid fa-venus-mars icon"></i>
+                        <GenderDropdownWithDress getColor={ getColor } onChange={ onInput } value={ gender }/>
+                       
+                    </div>
+
+                </div>
+
+                <div className='row'>
+
+                    <div className='inputGroup col-12'>
+                        { console.log(role) }
+                        <i className="fa-solid fa-person-circle-question icon"></i>
+                        <select id="guestRole" className='guestType' style={ getColor(role) } name='role' onChange={ onInput } value={ role }>
+                            <option value="" hidden className="noOption">please select role... (required)</option>
+                            <option>Guest</option>
+                            { getRoles(roles) }
+
+                        </select>
+                       
+                    </div>
+
+                </div>
+
+                
+
+                <div className='row'>
+
+                    <div className='inputGroup col-12'>
+
                         <i className="fa-solid fa-circle-info icon"></i>
                         <select className='guestType' style={ getColor() } name='guestType' onChange={ onInput } value={ guestType }>
-                            <option value="" hidden className="noOption">please select age category...</option>
+                            <option value="" hidden className="noOption">please select age category... (required)</option>
                             <option>Over 18</option>
                             <option>Under 18</option>
                             <option>Under 5</option>
@@ -589,7 +646,7 @@ export default function AddGuests(props){
 
                         <i className="fa-solid fa-envelope icon"></i>
                        
-                        <input type='email' className='inputBox checkIcon' onInput={ onInput } onChange={ e => setEmail( e.target.value )} name='email' placeholder='email' value={ email }></input>
+                        <input type='email' className='inputBox checkIcon' onInput={ onInput } onChange={ e => setEmail( e.target.value )} name='email' placeholder='email (required)' value={ email }></input>
                         <i className="fa-solid fa-circle-minus icon2 emailCheck"></i>
                        
                     </div>
@@ -610,7 +667,7 @@ export default function AddGuests(props){
 
                     <div className='inputGroup col-12'>
                         <i className="fa-solid fa-person-circle-plus icon"></i>
-                        <input type='text' className='inputBox' onInput={ onInput } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests' value={ maxGuests }></input>
+                        <input type='text' className='inputBox' onInput={ onInput } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests (required)' value={ maxGuests }></input>
                     </div>
 
                 </div>

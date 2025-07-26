@@ -5,6 +5,7 @@ import '../Dashboard.css';
 export default function GuestFilter(props){
 
     const setGuestFilter = props.setGuestFilter;
+    const filterName = props.filterName;
 
     const onClick = (e) => {
 
@@ -23,14 +24,32 @@ export default function GuestFilter(props){
 
     }
 
+    const getActive = (button, name) =>{
+
+        let text;
+
+        if(button === name){
+
+            text = "guestfilterButton activeGuestFB";
+
+        }else{
+
+            text = "guestfilterButton";
+
+        }
+
+        return text;
+
+    }
+
     return (
 
         <div className="filterButtons"> 
 
-            <button className="guestfilterButton activeGuestFB" onClick={ onClick }>All</button>
-            <button className="guestfilterButton" onClick={ onClick }>Confirmed</button>
-            <button className="guestfilterButton" onClick={ onClick }>Declined</button>
-            <button className="guestfilterButton" onClick={ onClick }>Not confirmed</button>
+            <button className={ getActive("All", filterName) } onClick={ onClick }>All</button>
+            <button className={ getActive("Confirmed", filterName) } onClick={ onClick }>Confirmed</button>
+            <button className={ getActive("Declined", filterName) } onClick={ onClick }>Declined</button>
+            <button className={ getActive("Not confirmed", filterName) } onClick={ onClick }>Not confirmed</button>
 
         </div>
 

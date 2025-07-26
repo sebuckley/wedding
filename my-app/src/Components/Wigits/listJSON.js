@@ -2,8 +2,11 @@ import React from "react";
 
 const ListItemsJSON = (props) => {
 
+  
   const dataList = props.data;
   let returnItems = [];
+
+  console.log(dataList);
 
   function checkCapital(str){
 

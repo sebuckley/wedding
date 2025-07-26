@@ -1,0 +1,193 @@
+{
+  "type": "object",
+  "title": "WeddingClothingSizes",
+  "properties": {
+    "fullName": {
+      "type": "string",
+      "description": "Full name of the participant"
+    },
+    "role": {
+      "type": "string",
+      "description": "Role in the wedding (e.g., Bride, Groom, Groomsman, etc.)"
+    },
+    "formalwear": {
+      "type": "object",
+      "properties": {
+        "jacketSize": {
+          "type": "string",
+          "description": "e.g., 40R, 42L",
+          "enum": ["XS", "S", "M", "L", "XL", "XXL", "Custom"],
+          "meta": {"genderAssociation": ["Male", "Non-binary"]}
+        },
+        "dressSize": {
+          "type": "string",
+          "description": "e.g., US 8, UK 10",
+          "enum": ["0", "2", "4", "6", "8", "10", "12", "14", "16", "18", "20", "Custom"],
+          "meta": {"genderAssociation": ["Female", "Non-binary"]}
+        },
+        "shirtNeck": {
+          "type": "string",
+          "description": "e.g., 15.5\"",
+          "enum": ["14", "14.5", "15", "15.5", "16", "16.5", "17", "17.5", "18", "Custom"],
+          "meta": {"genderAssociation": ["Male", "Non-binary"]}
+        },
+        "shirtSleeve": {
+          "type": "string",
+          "description": "e.g., 32\"",
+          "enum": ["30", "31", "32", "33", "34", "35", "36", "Custom"],
+          "meta": {"genderAssociation": ["Male", "Non-binary"]}
+        },
+        "waist": {
+          "type": "string",
+          "description": "Pant waist in inches",
+          "enum": ["28", "30", "32", "34", "36", "38", "40", "42", "44", "Custom"],
+          "meta": {"genderAssociation": ["Male", "Female", "Non-binary"]}
+        },
+        "inseam": {
+          "type": "string",
+          "description": "Pant length",
+          "enum": ["28", "30", "32", "34", "36", "Custom"],
+          "meta": {"genderAssociation": ["Male", "Female", "Non-binary"]}
+        },
+        "bust": {
+          "type": "string",
+          "description": "For dresses, in inches",
+          "enum": ["30", "32", "34", "36", "38", "40", "42", "44", "Custom"],
+          "meta": {"genderAssociation": ["Female", "Non-binary"]}
+        },
+        "hips": {
+          "type": "string",
+          "description": "For dresses, in inches",
+          "enum": ["32", "34", "36", "38", "40", "42", "44", "46", "Custom"],
+          "meta": {"genderAssociation": ["Female", "Non-binary"]}
+        },
+        "height": {
+          "type": "string",
+          "description": "e.g., 5'8\" or cm",
+          "enum": ["4'10\"", "5'0\"", "5'2\"", "5'4\"", "5'6\"", "5'8\"", "5'10\"", "6'0\"", "6'2\"", "6'4\"", "Custom"],
+          "meta": {"genderAssociation": ["Male", "Female", "Non-binary"]}
+        },
+        "fitPreference": {
+          "type": "string",
+          "enum": ["Slim", "Regular", "Relaxed", "Custom", "Custom"],
+          "description": "Fit preference",
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "genderType": {
+          "type": "string",
+          "description": "Gender identity associated with this clothing section",
+          "enum": ["Male", "Female", "Non-binary", "Unisex", "Custom"]
+        }
+      }
+    },
+    "culturalAttire": {
+      "type": "object",
+      "properties": {
+        "sariLength": {
+          "type": "string",
+          "description": "Length of sari in meters or inches",
+          "enum": ["5", "5.5", "6", "6.5", "7", "Custom"],
+          "meta": {"genderAssociation": ["Female"]}
+        },
+        "lehengaWaist": {
+          "type": "string",
+          "description": "Waist measurement for lehenga",
+          "enum": ["28", "30", "32", "34", "36", "38", "Custom"],
+          "meta": {"genderAssociation": ["Female"]}
+        },
+        "sherwaniChest": {
+          "type": "string",
+          "description": "Chest size for sherwani",
+          "enum": ["36", "38", "40", "42", "44", "Custom"],
+          "meta": {"genderAssociation": ["Male"]}
+        },
+        "kiltWaist": {
+          "type": "string",
+          "description": "Waist measurement for kilt",
+          "enum": ["28", "30", "32", "34", "36", "38", "40", "Custom"],
+          "meta": {"genderAssociation": ["Male"]}
+        },
+        "kiltLength": {
+          "type": "string",
+          "description": "Length of the kilt",
+          "enum": ["20", "22", "24", "26", "28", "Custom"],
+          "meta": {"genderAssociation": ["Male"]}
+        },
+        "thobeLength": {
+          "type": "string",
+          "description": "Length of thobe",
+          "enum": ["50", "52", "54", "56", "58", "60", "Custom"],
+          "meta": {"genderAssociation": ["Male"]}
+        },
+        "kimonoSize": {
+          "type": "string",
+          "description": "Kimono size",
+          "enum": ["XS", "S", "M", "L", "XL", "Custom"],
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "hanbokSize": {
+          "type": "string",
+          "description": "Hanbok size",
+          "enum": ["XS", "S", "M", "L", "XL", "Custom"],
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "headwrapPreference": {
+          "type": "string",
+          "enum": ["One-size", "Fitted", "Custom"],
+          "description": "Headwrap preference",
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "genderType": {
+          "type": "string",
+          "description": "Gender identity associated with this clothing section",
+          "enum": ["Male", "Female", "Non-binary", "Unisex", "Custom", "Custom"]
+        }
+      }
+    },
+    "accessories": {
+      "type": "object",
+      "properties": {
+        "hatSize": {
+          "type": "string",
+          "description": "Hat size in inches or standard sizing",
+          "enum": ["S", "M", "L", "XL", "Custom"],
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "beltSize": {
+          "type": "string",
+          "description": "Belt length or waist size",
+          "enum": ["28", "30", "32", "34", "36", "38", "40", "Custom"],
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "gloveSize": {
+          "type": "string",
+          "description": "Glove size (e.g., S, M, L)",
+          "enum": ["XS", "S", "M", "L", "XL", "Custom"],
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "ringSize": {
+          "type": "string",
+          "description": "Ring size (US or UK sizing)",
+          "enum": ["4", "5", "6", "7", "8", "9", "10", "11", "12", "Custom"],
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "headCircumference": {
+          "type": "string",
+          "description": "Head circumference for veils/turbans",
+          "enum": ["20", "21", "22", "23", "24", "Custom"],
+          "meta": {"genderAssociation": ["Unisex"]}
+        },
+        "genderType": {
+          "type": "string",
+          "description": "Gender identity associated with this clothing section",
+          "enum": ["Male", "Female", "Non-binary", "Unisex", "Custom", "Custom"]
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Any special tailoring instructions or notes"
+    }
+  },
+  "required": ["fullName", "role"]
+}

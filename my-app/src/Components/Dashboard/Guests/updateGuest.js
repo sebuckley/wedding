@@ -4,6 +4,9 @@ import { getGuestIndex, saveGuestList, saveGuestListItem, saveGuestListItemGuest
 import AddGuestDetails from './addGuestDetails';
 import DietSection from '../../PublicSite/Components/rsvp/dietrysection';
 import dietry from '../../PublicSite/Components/Data/dietry';
+import { roles } from '../../App/mainData';
+import WeddingClothingForm from './clothing';
+import GenderDropdownWithDress from '../../Wigits/genderDropdown';
 // import { parsePhoneNumberFromString, isPossiblePhoneNumber, isValidPhoneNumber, validatePhoneNumberLength } from 'libphonenumber-js';
 
 export default function UpdateGuest(props){
@@ -12,10 +15,13 @@ export default function UpdateGuest(props){
 
     const guestList = props.guestList;
     const setGuestList = props.setGuestList;
+    const bridalParty = props.bridalParty;
  
     const [personID, setPersonID] = useState('');
     const [firstName, setFirstName] = useState('');
     const [surname, setSurname] = useState('');
+    const [gender, setGender] = useState('')
+    const [role, setRole] = useState('');
     const [guestType, setguestType] = useState('');
     const [mobile, setMobile] = useState('');
     const [email, setEmail] = useState('');
@@ -36,6 +42,7 @@ export default function UpdateGuest(props){
     const [UUID, setUUID] = useState('');
     const [updated, setUpdated] = useState(0);
     const [totalEmptyState, setTotalEmptyState] = useState(0);
+    const getRoles = props.getRoles;
 
     if(personID === ""){
 
@@ -210,6 +217,18 @@ export default function UpdateGuest(props){
 
             }
 
+             if(typeof guestList.list[index]["gender"] !== 'undefined'){
+
+                setGender(guestList.list[index]["gender"]);
+
+            }
+
+            if(typeof guestList.list[index]["role"] !== 'undefined'){
+
+                setRole(guestList.list[index]["role"]);
+
+            }
+
             if(typeof guestList.list[index]["guestType"] !== 'undefined'){
 
                 setguestType(guestList.list[index]["guestType"]);
@@ -341,12 +360,12 @@ export default function UpdateGuest(props){
 
     const checkEmpty = (item) => {
 
-
         if(item.value !== ""){
 
             if(item.tagName === "SELECT"){
 
                 item.style.outline = "none";
+                item.style.borderColor = "var(--grey)";
 
             }else{
 
@@ -396,7 +415,13 @@ export default function UpdateGuest(props){
 
         }
 
-         if(itemName === "guestType"){
+        if(itemName === "role"){
+
+            setRole(itemValue);
+            
+        }
+
+        if(itemName === "guestType"){
 
             setguestType(itemValue);
             
@@ -416,6 +441,13 @@ export default function UpdateGuest(props){
             
         }
 
+        if(itemName === "gender"){
+
+            setGender(itemValue);
+            e.target.style.color = "black";
+
+        }
+
 
 
     }
@@ -426,7 +458,6 @@ export default function UpdateGuest(props){
         const itemValue = e.target.value.trim();
         const className = e.target.className.split(" ");
         const guestIndex = className[className.length - 1];
-
 
         saveGuestListItemGuest(guestList, index, guestIndex, itemName, itemValue);
 
@@ -652,7 +683,6 @@ export default function UpdateGuest(props){
 
     }
 
-
     return(
 
         <div className='contentWrapper'>
@@ -678,6 +708,33 @@ export default function UpdateGuest(props){
                         <div className='inputGroup col-6'>
                             <i className="fa fa-user icon"></i>
                             <input type='text' className='inputBox' onInput={ onInputMainGuest }  onChange={ e => setSurname( e.target.value )} name='surname' placeholder='surname' value={ surname }></input>
+                        </div>
+
+                    </div>
+
+                    <div className='row'>
+
+                        <div className='inputGroup col-12'>
+
+                            <i className="fa-solid fa-venus-mars icon"></i>
+                            <GenderDropdownWithDress getColor={ getColor } guestList={ guestList } index={ index } value={ gender } onChange={ onChangeOption }/>
+                            
+                        </div>
+
+                    </div>
+
+                    <div className='row'>
+
+                        <div className='inputGroup col-12'>
+
+                            <i className="fa-solid fa-person-circle-question icon"></i>
+                            <select className='guestType' style={ getColor() } name='role'  onChange={ onChangeOption } value={ role }>
+                                <option value="" hidden className="noOption">please select role...</option>
+                                <option>Guest</option>
+                                { getRoles(roles) }
+
+                            </select>
+                        
                         </div>
 
                     </div>
@@ -794,7 +851,7 @@ export default function UpdateGuest(props){
 
                     { rsvp === "Confirmed" ? <DietSection diet={ dietry.dietry.diet } allergies={ dietry.dietry.allergies } showGuest={ "" } hideGuest={ "" } onChange={ onChangeOption } valueDiet={ valueDiet } valueAllergies={ valueAllergies }/> : ""}
 
-                 
+                    { guestType !== "Guest" ? <WeddingClothingForm gender={ gender } getColor={ getColor } sizeSystem={ bridalParty["weddingDetails"].sizeSystem } religiousType={ bridalParty["weddingDetails"].religiousType } guestList={ guestList } index={ index } checkEmpty={ checkEmpty }/> : ""}
 
                     <div className='row'>
                         <div className='inputGroup col-12'>

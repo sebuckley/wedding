@@ -5,7 +5,7 @@ export default function Select(props){
     const array = props.arrayList;
     const onChange = props.onChange;
     const className = props.className;
-    const value = props.value;
+    const value = props.value || "";
     const name = props.name;
 
     const getText = (name) => {
@@ -46,6 +46,7 @@ export default function Select(props){
         return color;
 
     } 
+
 
     return(
 

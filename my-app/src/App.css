@@ -23,7 +23,7 @@
   --accent: var(--color-5); /* 10% */
   
   --secondary: var(--white);
-  --secondary-text-color: var(--primary);
+  --secondary-text-color: var(--black);
 
   --bg-hover-link: var(--white);
 

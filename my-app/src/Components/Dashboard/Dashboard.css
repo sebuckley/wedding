@@ -8,7 +8,67 @@
     flex-direction: column;
     align-items: center;
 
+}
 
+.flexColumn {
+
+    display: flex;
+    flex-direction: column !important;
+    align-items: center;
+
+}
+
+.flexColumn > div {
+
+    margin: 5px;
+}
+
+form {
+
+    width: 30%;
+
+}
+
+.detailsForm {
+
+    width: 60%;
+
+}
+
+.colorChart {
+
+    margin-top: 10px;
+}
+
+.inputColor {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.inputColor::-webkit-color-swatch-wrapper {
+    padding: 0; 
+}
+
+.inputColor::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
+.flexColorSelect {
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+
+}
+
+.flexColorSelect > div {
+
+    margin-top: 10px
 }
 
 #dashboard{
@@ -132,10 +192,54 @@
 
 }
 
+#addSupplierTitle {
+
+    padding-left: 50px;
+    cursor: pointer;
+
+}
+
+
+#addSupplierSection {
+
+    width: 60%;
+
+}
+
+#clothingForm {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#clothingForm > fieldset {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px
+
+}
+
+#supplierListSection {
+
+    width: 60%;
+}
+
+#supplierForm {
+
+    width: 100%;
+
+}
 
 .weddingDetails {
 
-    width: 60%;
+    
 
 }
 
@@ -172,6 +276,14 @@ li > div {
 
 }
 
+.row2 {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
 .col-1 {
 
     width: 8.33%;
@@ -196,6 +308,13 @@ li > div {
 
 }
 
+.col-5 {
+
+    display: block;
+    width: 41.66%;
+
+}
+
 .col-6 {
 
     width: 50%;
@@ -215,6 +334,24 @@ li > div {
 
 }
 
+.col-9 {
+
+    width: 75%;
+
+}
+
+.col-10 {
+
+    width: 83.33%;
+
+}
+
+.col-11 {
+
+    width: 91.66%;
+
+}
+
 .col-12 {
 
     width: 100%;
@@ -227,6 +364,23 @@ li > div {
     text-align: left;
 
 }
+
+.titleName {
+
+    margin: 5px;
+    width: 12%;
+    text-align: right;
+    display: block !important;
+
+}
+
+.inputName{
+
+    width: 80%;
+    display: block !important;
+
+}
+
 
 
 textarea{
@@ -244,6 +398,14 @@ textarea{
 
 }
 
+#Note {
+
+    padding-left: 50px !important;
+    font-size: 16px;
+    font-family: Arial, sans-serif !important;
+
+}
+
 .iconHeader {
 
     position: absolute;
@@ -256,12 +418,17 @@ textarea{
 
 }
 
+.inputDateText {
+
+    text-align: center;
+}
+
 .icon {
 
     position: absolute;
     color: var(--accent);
     padding: 15px;
-    font-size: 18px;
+    font-size: 19px;
     
 }
 
@@ -274,6 +441,15 @@ textarea{
     
 }
 
+.icon3 {
+
+    display: inline-block;
+    color: var(--accent);
+    padding: 15px;
+    font-size: 25px;
+    cursor: pointer;
+    
+}
 
 
 .inputBox {
@@ -286,9 +462,7 @@ textarea{
     border: 1px solid var(--light-grey);
     border-radius: 10px;
     padding-left: 50px;
-    font-size: 18px;
-
-
+    font-size: 16px;
 
 }
 
@@ -303,6 +477,19 @@ textarea{
     border-radius: 10px;
     font-size: 18px;
  
+
+}
+
+.inputBox3 {
+
+    display: inline-block;
+    width: calc(100% - 30px);
+    margin: 0px;
+    padding: 14px 12px 12px 14px;
+    text-align: left;
+    border: 1px solid var(--light-grey);
+    border-radius: 10px;
+    font-size: 18px;
 
 }
 
@@ -340,6 +527,20 @@ textarea{
 
 }
 
+.guestClothing {
+
+    outline: none;
+    
+}
+
+.guestClothing:focus {
+
+   outline: none;
+   border-color: var(--primary);
+   box-shadow: 0 0 10px var(--primary);
+
+}
+
 .rsvp {
 
     outline: none;
@@ -368,6 +569,34 @@ textarea{
 
 }
 
+.inputBox2:focus {
+
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+ 
+ }
+
+.inputBox2::placeholder{
+
+   color: var(--grey);
+
+}
+
+.inputBox3:focus {
+
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+ 
+ }
+
+.inputBox3::placeholder{
+
+   color: var(--grey);
+
+}
+
 .addGuest {
 
     width: 200px;
@@ -386,6 +615,23 @@ textarea{
     color: var(--secondary-text-color);
 
 }
+
+.primaryButton {
+
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--primary-text-color);
+
+}
+
+.secondaryButton{
+
+    background-color: var(--secondary);
+    border: 1px solid var(--primary);
+    color: var(--secondary-text-color);
+
+}
+
 
 
 
@@ -466,12 +712,13 @@ textarea{
 
 }
 
-.inputForm {
+#inputForm {
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100% !important;
 
 }
 
@@ -484,7 +731,10 @@ textarea{
 #guestList > .guestRow {
 
    
-    margin: 10px;
+    margin: 5px;
+    border: 1px solid var(--grey);
+    border-radius: 9px;
+    cursor: pointer;
 
 
 
@@ -500,6 +750,11 @@ textarea{
 
 }
 
+.dietRow {
+
+    width: 100%;
+}
+
 .guestRow > div {
 
     margin: 10px;
@@ -513,7 +768,7 @@ textarea{
     border: 1px solid var(--grey);
     height: 45px !important;
     border-radius:10px !important;
-    padding: 14px 12px 12px 50px !important;
+    padding: 14px 10px 10px 50px !important;
     font-family: Arial, sans-serif !important;
     font-size: 16px;
     margin: 0px !important;
@@ -534,6 +789,48 @@ textarea{
     
 }
 
+.guestClothing {
+
+    border: 1px solid var(--grey);
+    height: 45px !important;
+    border-radius:10px !important;
+    padding: 14px 12px 12px 14px !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 16px;
+    margin: 0px !important;
+    color: grey;
+    
+}
+
+#supplierList > .supplierRow {
+
+   
+    margin: 5px;
+    border: 1px solid var(--grey);
+    border-radius: 9px;
+    cursor: pointer;
+
+
+
+}
+
+.supplierRow {
+
+    display: flex;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    
+
+}
+
+.supplierRow > div {
+
+    margin: 10px;
+
+}
+
+
 
 
 .rsvp {
@@ -551,15 +848,14 @@ textarea{
 select {
 
     border: 1px solid var(--grey);
-    height: 35px !important;
+    height: 45px !important;
     border-radius:10px !important;
     font-family: Arial, sans-serif !important;
     font-size: 16px;
     margin: 0px !important;
     color: black;
     min-width: 150px;
-    padding:5px !important;
-    margin: 5px !important;
+    padding:9px !important;
 
 }
 
@@ -579,7 +875,31 @@ option {
 
 }
 
+.state {
 
+    width: 150px;
+
+}
+
+.activity {
+
+    width: 150px;
+
+}
+
+.topLinks {
+
+    display: flex;
+    align-items: center;
+    justify-content: left;
+
+}
+
+.topLinks > div {
+
+    margin: 5px;
+
+}
 
 /* select,
 ::picker(select) {
@@ -776,6 +1096,49 @@ option {
 
 }
 
+.supplierfilterButton {
+
+  background-color: var(--primary);
+  border: none;
+  color: black;
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.supplierfilterButton:hover {
+
+  background-color: var(--primary);
+   color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+
+.activeSupplierFB {
+
+  background-color: var(--white);
+  border: none;
+  color:  var(--black);
+  border: 2px solid  var(--primary);
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
 .sortOptions {
 
     width: 60%;
@@ -814,8 +1177,29 @@ option {
 .dashLink {
 
     text-decoration: none !important;
-    
+
 }
+
+.inputDelete {
+
+    display: flex;
+    align-items: center;
+   
+
+}
+
+.notes {
+
+    display: flex;
+    align-items: center;
+
+}
+
+.notes > div {
+
+    margin: 10px;
+}
+
 
 
 @media screen and (max-width: 1150px) {
@@ -891,6 +1275,7 @@ option {
 
     }
 
+
     .col-1 {
 
         width: 100%;
@@ -917,6 +1302,13 @@ option {
 
     }
 
+    .col-5 {
+
+        display: block;
+        width: 100%;
+
+    }
+
     .col-6 {
 
         width: 100%;
@@ -936,6 +1328,24 @@ option {
 
     }
 
+    .col-9 {
+
+        width: 100%;
+
+    }
+
+    .col-10 {
+
+        width: 100%;
+
+    }
+
+    .col-11 {
+
+        width: 100%;
+
+    }
+
     .inputBox {
 
         display: inline-block;
@@ -946,7 +1356,23 @@ option {
         border: 1px solid var(--grey);
         border-radius: 10px;
         padding-left: 50px;
-        font-size: 18px;
+        font-size: 16px;
+    
+    
+    }
+
+    
+    .inputBox3 {
+
+        display: inline-block;
+        width: calc(100% - 80px);
+        margin: 0px;
+        padding: 10px;
+        text-align: left;
+        border: 1px solid var(--grey);
+        border-radius: 10px;
+        padding-left: 14px 12px 12px 14px;
+        font-size: 16px;
     
     
     }
@@ -1000,6 +1426,14 @@ option {
 
         width: 100%;
         
+    }
+
+    .topLinks {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
     }
 
 

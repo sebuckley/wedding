@@ -1,0 +1,212 @@
+{
+  "WeddingStyles": {
+    "Traditional": [
+      {
+        "name": "Classic",
+        "description": "Timeless and elegant with formal attire, traditional vows, and classic color palettes like white, ivory, and gold."
+      },
+      {
+        "name": "Formal",
+        "description": "A black-tie event with upscale d\u00e9cor, a sit-down dinner, and often held in a ballroom or luxury venue."
+      },
+      {
+        "name": "Black Tie",
+        "description": "Ultra-formal evening wedding where guests wear tuxedos and floor-length gowns."
+      },
+      {
+        "name": "Religious Ceremony",
+        "description": "Traditional ceremonies rooted in religious customs and held in places of worship."
+      },
+      {
+        "name": "Ballroom",
+        "description": "Grand and elegant with chandeliers, marble floors, and a sophisticated atmosphere."
+      }
+    ],
+    "Modern": [
+      {
+        "name": "Minimalist",
+        "description": "Clean lines, neutral tones, and simple d\u00e9cor focused on quality over quantity."
+      },
+      {
+        "name": "Urban/City Chic",
+        "description": "Sleek and modern, often in lofts, art galleries, or rooftop venues in metropolitan areas."
+      },
+      {
+        "name": "Art Deco",
+        "description": "Inspired by the 1920s with geometric patterns, metallics, and a touch of vintage glamour."
+      },
+      {
+        "name": "Contemporary",
+        "description": "Trendy and stylish with up-to-date designs, often mixing unique layouts and color schemes."
+      },
+      {
+        "name": "Industrial",
+        "description": "Exposed brick, metal fixtures, and a raw, edgy vibe, often set in warehouses or lofts."
+      }
+    ],
+    "Romantic": [
+      {
+        "name": "Fairy Tale",
+        "description": "Inspired by fantasy and magic, with dramatic gowns, castles, and whimsical elements."
+      },
+      {
+        "name": "Garden Party",
+        "description": "Floral-focused with soft colors and an outdoor setting, ideal for spring or summer weddings."
+      },
+      {
+        "name": "Whimsical",
+        "description": "Playful and dreamy, often with colorful palettes, creative themes, and unique touches."
+      },
+      {
+        "name": "Soft & Dreamy",
+        "description": "Pastels, flowing fabrics, and delicate details like candlelight and lace."
+      },
+      {
+        "name": "Vintage Romance",
+        "description": "Inspired by bygone eras (like the 1920s or 1950s) with antique decor and nostalgic elegance."
+      }
+    ],
+    "Rustic": [
+      {
+        "name": "Barn Wedding",
+        "description": "Held in a barn or farm setting, with wooden d\u00e9cor, string lights, and country charm."
+      },
+      {
+        "name": "Country",
+        "description": "Laid-back and homey, often featuring cowboy boots, BBQ, and folk music."
+      },
+      {
+        "name": "Boho Rustic",
+        "description": "A mix of bohemian and rustic elements with natural textures, macram\u00e9, and earthy tones."
+      },
+      {
+        "name": "Woodland/Forest",
+        "description": "Nature-centric weddings held in the woods, with moss, greenery, and a fairy-tale feel."
+      },
+      {
+        "name": "Farmhouse",
+        "description": "Cozy and simple with a farmhouse venue, vintage accents, and farm-to-table catering."
+      }
+    ],
+    "Bohemian": [
+      {
+        "name": "Free-Spirited",
+        "description": "Carefree and non-traditional with natural materials, dreamcatchers, and relaxed styling."
+      },
+      {
+        "name": "Eclectic",
+        "description": "A creative mix of styles, patterns, and colors for a personalized, artsy vibe."
+      },
+      {
+        "name": "Earthy",
+        "description": "Inspired by nature with wooden elements, organic foods, and wildflowers."
+      },
+      {
+        "name": "Outdoor Boho",
+        "description": "A bohemian wedding in nature\u2014deserts, beaches, or gardens\u2014with rugs, low seating, and tapestries."
+      },
+      {
+        "name": "Festival-Inspired",
+        "description": "Music-festival vibe with food trucks, live bands, tents, and an all-night party."
+      }
+    ],
+    "Beach & Coastal": [
+      {
+        "name": "Beachfront",
+        "description": "Laid-back ceremonies on the sand with barefoot vows and ocean views."
+      },
+      {
+        "name": "Tropical",
+        "description": "Bright colors, palm leaves, exotic flowers, and tropical cocktails."
+      },
+      {
+        "name": "Nautical",
+        "description": "Anchors, navy and white stripes, and coastal d\u00e9cor with a maritime feel."
+      },
+      {
+        "name": "Coastal Chic",
+        "description": "Sophisticated seaside vibe with soft blues, white linens, and elegant minimalism."
+      }
+    ],
+    "Glamorous": [
+      {
+        "name": "Luxury",
+        "description": "Opulent design with upscale venues, high-end fashion, and gourmet food."
+      },
+      {
+        "name": "Hollywood Glam",
+        "description": "Inspired by red-carpet style with dramatic lighting, bold colors, and sparkle."
+      },
+      {
+        "name": "Gold & Glitz",
+        "description": "Metallics, sequins, and grandeur\u2014ideal for couples who want a show-stopping aesthetic."
+      },
+      {
+        "name": "Crystal Accents",
+        "description": "Elegant and sparkling with crystal chandeliers, tableware, and accessories."
+      }
+    ],
+    "Cultural & Themed": [
+      {
+        "name": "Cultural Fusion",
+        "description": "Blending traditions from multiple cultures into a meaningful, unified celebration."
+      },
+      {
+        "name": "Destination Wedding",
+        "description": "Weddings held abroad or in a dream location, combining ceremony and vacation."
+      },
+      {
+        "name": "Vintage Era",
+        "description": "Themed around specific decades like the Roaring '20s, Rockabilly '50s, or Groovy '70s."
+      },
+      {
+        "name": "Fantasy or Fandom Inspired",
+        "description": "Themed weddings based on books, movies, or games (e.g., Harry Potter, Star Wars)."
+      },
+      {
+        "name": "Traditional Ethnic",
+        "description": "Culturally rich weddings following traditions like Indian, Chinese, Jewish, Nigerian, etc."
+      }
+    ],
+    "Casual & Fun": [
+      {
+        "name": "Backyard Wedding",
+        "description": "Simple and intimate celebrations held in a private backyard with a cozy atmosphere."
+      },
+      {
+        "name": "Elopement",
+        "description": "A private, often spontaneous wedding with just the couple or a few close witnesses."
+      },
+      {
+        "name": "Brunch Wedding",
+        "description": "Morning or early afternoon wedding with breakfast-style food and a laid-back tone."
+      },
+      {
+        "name": "Pop-Up Wedding",
+        "description": "Short, affordable weddings with minimal planning, often in public or surprise locations."
+      },
+      {
+        "name": "DIY",
+        "description": "Hands-on and creative, with homemade decorations and personalized touches."
+      }
+    ],
+    "Seasonal": [
+      {
+        "name": "Spring Garden",
+        "description": "Lush flowers, pastel colors, and fresh seasonal d\u00e9cor set in a garden or greenhouse."
+      },
+      {
+        "name": "Summer Tropical",
+        "description": "Bright and vibrant with summer blooms, fruity cocktails, and outdoor ceremonies."
+      },
+      {
+        "name": "Autumn Harvest",
+        "description": "Warm tones, pumpkins, and rustic d\u00e9cor inspired by fall\u2019s colors and textures."
+      },
+      {
+        "name": "Winter Wonderland",
+        "description": "Cool tones, snow-inspired d\u00e9cor, candlelight, and cozy elements for a magical feel."
+      }
+    ]
+  }
+}

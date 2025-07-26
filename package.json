@@ -56,10 +56,19 @@
   "express": "^5.1.0",
   
     
+  "firebase": "^11.9.1",
+  
+    
   "ics": "^3.8.1",
   
     
   "libphonenumber-js": "^1.12.7",
+  
+    
+  "olical-color": "^1.0.1",
+  
+    
+  "react-hook-form": "^7.59.0",
   
     
   "react-icalendar-link": "^3.0.2",

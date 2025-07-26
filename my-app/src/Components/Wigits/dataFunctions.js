@@ -1,3 +1,6 @@
+import { getTaskIndexName, saveTaskList } from "./dataFunctions-taskList";
+import { getSupplierIndex, saveSupplierList } from "./dataFunctions-suppliers";
+
 
 const checkCapital = (str) => {
 
@@ -20,9 +23,29 @@ const checkCapital = (str) => {
 
 }
 
+function toProperCase(str) {
+
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+
+}
+
 const splitByCapitalNums = (Str) => {
 
-    let split = Str.split(/(?=[A-Z0-9&-])/).join(" ");
+    let split;
+
+    if(split !== "DJ"){
+
+        split = Str.split(/(?=[A-Z0-9&-])/).join(" ");
+
+    }else{
+
+       split = Str;
+
+    }
 
     return split;
 
@@ -80,5 +103,111 @@ const uuidv4 = () => {
 
 }
 
+const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user) => {
 
-export { checkCapital, titleCase, createClass, isEmpty, uuidv4, splitByCapitalNums }
+    const taskIndex = getTaskIndexName(taskList, taskName);
+
+    let taskState;
+    let taskActivity;
+    let newObject;
+    let newList;
+
+    newObject = taskList;
+
+    if(status === "Booked"){
+
+        taskState = "Completed";
+        taskActivity = "Selected";
+        newObject.list[taskIndex]["supplierID"] = UUID;
+
+    }else if(status === "Enquiry made"){
+
+        newList = taskList.list[taskIndex]["supplierID"];
+
+        if(!Array.isArray(newList)){
+
+            newList = [];
+
+        }
+
+        if (!newList.includes(UUID)) {
+        
+            newList.push(UUID);
+
+        }
+
+        taskState = "In-progress";
+        taskActivity = "Enquiry made";
+
+        newObject.list[taskIndex]["supplierID"] = newList;
+       
+
+    }else{
+
+        newList = taskList.list[taskIndex]["supplierID"];
+
+        if(!Array.isArray(newList)){
+
+            newList = [];
+
+        }
+        
+        if (!newList.includes(UUID)) {
+        
+            newList.push(UUID);
+
+        }
+
+        taskState = "In-progress";
+        taskActivity = "Researching";
+        newObject.list[taskIndex]["supplierID"] = newList;
+        
+    }
+
+    
+
+    newObject.list[taskIndex]["state"] = taskState;
+    newObject.list[taskIndex]["activity"] = taskActivity;
+    newObject.list[taskIndex]["updated"] = new Date();
+    newObject.list[taskIndex]["updatedBy"] = user.email;
+
+    saveTaskList(newObject);
+
+    let length = supplierList.length;
+
+    if(status === "Booked"){
+
+        for(let i = 0; i < length; i++){
+
+            let supplierID = supplierList.list[i].UUID;
+            let supplierType = supplierList.list[i].type;
+
+            if(supplierType === taskName && supplierID !== UUID){
+
+                supplierList.list[i].status = "Ruled out";
+                supplierList.list[i]["updated"] = new Date();
+                supplierList.list[i]["updatedBy"] = user.email;
+
+            }
+
+        }
+
+    }
+
+    return newObject;
+
+}
+
+
+export { 
+
+        checkCapital, 
+        titleCase, 
+        createClass, 
+        isEmpty, 
+        uuidv4, 
+        splitByCapitalNums, 
+        updateSupplierTask,
+        toProperCase
+
+ }

@@ -5,6 +5,7 @@ import '../Dashboard.css';
 export default function ListType(props){
 
     const setListType = props.setListType;
+    const listType = props.listType;
 
     const onClick = (e) => {
 
@@ -23,13 +24,32 @@ export default function ListType(props){
 
     }
 
+    const getActive = (button, listType) => {
+
+        let text;
+
+        if(listType === button){
+
+            text = "listSelectButton activeLS";
+
+        }else{
+
+            text = "listSelectButton";
+
+        }
+
+        return text;
+
+    }
+
     return (
 
         <div className="listSelectButtons"> 
 
-            <button className="listSelectButton activeLS" onClick={ onClick }>Primary guests</button>
-            <button className="listSelectButton" onClick={ onClick }>Guest list</button>
-            <button className="listSelectButton" onClick={ onClick }>Dietry list</button>
+            <button className={ getActive("Wedding party", listType) } onClick={ onClick }>Wedding party</button>
+            <button className={ getActive("Primary guests", listType) } onClick={ onClick }>Primary guests</button>
+            <button className={ getActive("Guest list", listType) } onClick={ onClick }>Guest list</button>
+            <button className={ getActive("Dietry list", listType) } onClick={ onClick }>Dietry list</button>
 
         </div>
 

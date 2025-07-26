@@ -4,7 +4,9 @@ import Logo from '../../PublicSite/Components/Logo/logo';
 import MobileMenu from './mobileMenu';
 import PublicLinks from './publiclinks';
 import UserLinks from './userlinks';
-import useToken from '../../App/useToken'
+import useToken from '../../App/useToken';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../Login/firebaseConfig';
 
 export default function Header(props){
 
@@ -13,56 +15,21 @@ export default function Header(props){
     const [activeSection, setActiveSection] = useState('');
     const [webPage, setWebpage] = useState(0);
     const { token, setToken } = useToken();
-    const displayPublic = props.displayPublic;
+    const user = props.user;
+    const setLoggedIn = props.setLoggedIn;
+    const loggedIn = props.loggedIn;
+    let logInPage = props.logInPage
+    let publicPage = props.publicPage;
 
-    const logoCanvasStyle = {
+    if(typeof logInPage === "undefined"){
 
-        "position": "relative",
-        "height": "50px",
-        "width": "80px",
-
-    }
-
-    const fNameStyle = {
-
-        "position": "absolute",
-        "top": "-1px",
-        "left": "-3px",
-        "fontFamily": "'Over the Rainbow', cursive",
-        "fontWeight": "400",
-        "fontStyle": "normal",
-        "fontSize": "15px",
-        "zIndex": "2",
+        logInPage = false;
 
     }
 
-    const sNameStyle = {
+    if(typeof publicPage === "undefined"){
 
-        "position": "absolute",
-        "bottom": "-1px",
-        "left": "17px",
-        "fontFamily": "'Over the Rainbow', cursive",
-        "fontWeight": "400",
-        "fontStyle": "normal",
-        "fontSize": "15px",
-        "zIndex": "2",
-
-    }
-
-    const andStyle = {
-
-        "position": "absolute",
-        "top": "50%",
-        "left": "50%",
-        "transform": "translate(-50%, -50%)",
-        "fontFamily": "'Anton', sans-serif",
-        "fontWeight": "400",
-        "fontStyle": "normal",
-        "fontSize": "50px",
-        "color": "rgb(185, 185, 185)",
-        "zIndex": "1",
-        "opacity": "0.6",
-
+        publicPage = false;
 
     }
 
@@ -92,6 +59,7 @@ export default function Header(props){
 
         }
 
+ 
     }
 
     const showMenu = (e) => {
@@ -189,12 +157,19 @@ export default function Header(props){
 
       }, []);
 
-    let logOut = () => {
+    const handleLogout = async () => {
 
-        localStorage.removeItem('token');
-        setToken(false);
-    
-    }
+        try {
+
+            await signOut(auth);
+            setLoggedIn(false);
+
+        } catch (error) {
+
+            console.error('Logout error:', error);
+
+        }
+    };
 
     const setPage = () => {
 
@@ -212,6 +187,20 @@ export default function Header(props){
 
     }
 
+    const getLogInPage = () => {
+
+        let object = "";
+
+        if(!logInPage && publicPage === true){
+
+            object = <PublicLinks onClickMenuItem={ onClickMenuItem } activeSection={ activeSection } token={ token } webPage={ webPage } onClickPage={ setPage } user={ user } loggedIn={ loggedIn } setLoggedIn={ setLoggedIn }/>
+
+        }
+
+        return object;
+
+    }
+
     return(
 
         <div className="header">
@@ -220,7 +209,7 @@ export default function Header(props){
         
                 <div className="headerLogo">
 
-                    <a href="/" className="logo"><Logo canvasStyle={logoCanvasStyle} fName={props.fName} sName={props.sName} fNameStyle={fNameStyle} sNameStyle={sNameStyle} andStyle={andStyle}/></a>
+                    <a href="/" className="logo"><Logo fName={props.fName} sName={ props.sName }/></a>
                 
                 </div>
                 
@@ -228,9 +217,9 @@ export default function Header(props){
                 
                     <div className="linksGroup">
 
-                        { displayPublic ? <PublicLinks onClickMenuItem={ onClickMenuItem } activeSection={ activeSection } token={ token } webPage={ webPage } logOut={ logOut } onClickPage={ setPage }/> : "" }
+                        { loggedIn ? getLogInPage() : getLogInPage() }
 
-                        { displayPublic ? "" : <UserLinks token={ token } setToken={ setToken } logOut={ logOut } onClick={ setPage }/> }
+                        { loggedIn && publicPage === false ? <UserLinks token={ token } setToken={ setToken } logOut={ handleLogout } onClick={ setPage } loggedIn={ loggedIn } setLoggedIn={ setLoggedIn }/> : "" }
 
                     </div>
 

@@ -8,16 +8,79 @@ import { isEmpty } from '../../Wigits/dataFunctions';
 import Header from '../../Wigits/Header/header';
 import { useState, useEffect } from 'react';
 import AddTask from './addTask.js';
+import Loading from '../../PublicSite/Components/loading/loading';
 
 export default function Tasks(props){
+
+    const user = props.user;
+    const setUser = props.setUser;
+    const loading = props.loading;
+    const setLoading = props.setLoading;
+    const loggedIn = props.loggedIn;
+    const setLoggedin = props.setLoggedin;
+
+    const pathName = window.location.search;
+    let filterName;
+
+    if(pathName !== ""){
+
+      const url = new URL(window.location.href);
+      url.search = ''; // Clear the search query
+      window.history.replaceState({}, document.title, url.toString());
+
+      console.log(pathName);
+
+      if(pathName === "?To-do"){
+
+        filterName = "To-do";
+
+      }else if(pathName === "?In-progress"){
+
+        filterName = "In-progress";
+
+      }else if(pathName === "?Completed"){
+
+        filterName = "Completed";
+
+      }else if(pathName === "?Not%20started"){
+
+        filterName = "Not started";
+
+      }else if(pathName === "?Planned"){
+
+        filterName = "Planned";
+
+      }else if(pathName === "?Researched"){
+
+        filterName = "Researched";
+
+      }else if(pathName === "?Enquiry%20Made"){
+
+        filterName = "Enquiry made";
+
+      }else if(pathName === "?Selected"){
+
+        filterName = "Selected";
+
+      }else{
+
+        filterName = "All";
+
+      }
+
+    }else{
+
+      filterName = "All";
+
+    }
   
-    const { token, setToken } = props.useToken();
+
     const bridalParty = props.bridalParty;
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
 
     const [taskListState, setTaskListState] = useState({});
-    const [taskFiltered, setTaskFiltered] = useState("All");
+    const [taskFiltered, setTaskFiltered] = useState(filterName);
     const [taskSortedBy, setTaskSortedBy] = useState("taskName");
     const [taskSorted, setTaskSorted] = useState("asc");
 
@@ -27,11 +90,9 @@ export default function Tasks(props){
       const itemValue = e.target.value;
       const itemSplit = itemName.split(" ");
       const currentDate = new Date();
-      const user = token.user;
       let state;
       let taskName;
       let activity;
-      let toDoDate;
       let note;
 
       if(itemSplit[itemSplit.length - 1] === "state"){
@@ -39,7 +100,6 @@ export default function Tasks(props){
           taskName = e.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText;
           state = itemValue;
           activity = e.target.parentNode.nextSibling.querySelector(".activity").value;
-          toDoDate  = e.target.parentNode.nextSibling.nextSibling.querySelector(".dateInput").value;
           const UUID = e.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.innerText;
           const index = getTaskIndex(taskList, UUID);
           let noteStructure;
@@ -92,7 +152,6 @@ export default function Tasks(props){
         taskName = e.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.innerText;
         state = e.target.parentNode.previousSibling.querySelector(".state").value;
         activity = itemValue;
-
 
         let noteStructure;
 
@@ -207,7 +266,6 @@ export default function Tasks(props){
         
       }
 
-      const user = token.user;
       const UUID = e.target.parentNode.nextSibling.nextSibling.innerText;
       const taskName = e.target.parentNode.nextSibling.nextSibling.nextSibling.innerText;
       const state = e.target.parentNode.previousSibling.previousSibling.querySelector(".state").value;
@@ -258,16 +316,16 @@ export default function Tasks(props){
         let activitySelector = e.target.parentElement.previousSibling.querySelector(".activity");
         activitySelector.value = "Planned";
         activity = "Planned";
-        saveTaskListItem(taskList, index, "toDoDate", itemDate);
+        saveTaskListItem(taskList, index, "toDoDate", toDoDate);
         saveTaskListItem(taskList, index, "state", "In-progress");
         saveTaskListItem(taskList, index, "activity", "Planned");
-        saveTaskListItem(taskList, index, "lastUpdatedBy", user);
+        saveTaskListItem(taskList, index, "lastUpdatedBy", user.email);
         saveTaskListItem(taskList, index, "lastUpdated", currentDate);
 
       }else{
 
-        saveTaskListItem(taskList, index, "toDoDate", itemDate);
-        saveTaskListItem(taskList, index, "lastUpdatedBy", user);
+        saveTaskListItem(taskList, index, "toDoDate", toDoDate);
+        saveTaskListItem(taskList, index, "lastUpdatedBy", user.email);
         saveTaskListItem(taskList, index, "lastUpdated", currentDate);
 
       }
@@ -278,8 +336,7 @@ export default function Tasks(props){
 
         state: state,
         activity: activity,
-        toDoDate: itemDate
-
+        toDoDate: toDoDate
 
       }
 
@@ -287,41 +344,49 @@ export default function Tasks(props){
 
     }
 
-    useEffect(() => {
-          
-      getTaskData();
+  const getTaskData = () =>{
+    
+    if(isEmpty(taskListState)){
 
-    });
+      let taskData = getTaskList();
 
-    if(!token) {
-  
-      return <Login setToken={ setToken } bridalParty={ bridalParty } />
-  
+      setTaskList(taskData);
+
     }
 
-    const getTaskData = () =>{
-      
-      if(isEmpty(taskListState)){
+  }
 
-        let getTaskData = getTaskList();
+  
 
-        setTaskList(getTaskData);
+    useEffect(() => {
 
-      }
+      getTaskData();
 
+    }, []);
+
+    if(loading){
+
+      return <Loading bridalParty={ bridalParty } user={ user }/>
+
+    }
+
+    if(user === null) {
+  
+      return <Login setUser={ setUser } loading={loading} setLoading={ setLoading } bridalParty={ bridalParty } />
+  
     }
 
     return(
 
       <div>
 
-        <Header fName={bridalParty.groom.fName} sName={bridalParty.bride.fName}/>
+         <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
 
         <div className="adminBody">
 
         <AddTask setTaskList={ setTaskList }/>
 
-        <TaskFilter setTaskFiltered={ setTaskFiltered }/>
+        <TaskFilter setTaskFiltered={ setTaskFiltered } filterName={ taskFiltered }/>
         <TaskSort setTaskSorted={ setTaskSorted } taskSorted={ taskSorted } setTaskSortedBy={ setTaskSortedBy } taskSortedBy={ taskSortedBy } />
 
         <div id='tasks'>

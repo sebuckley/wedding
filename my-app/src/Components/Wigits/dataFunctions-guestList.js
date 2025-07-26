@@ -15,6 +15,12 @@ const checkExistingGuest = (firstName, surname, email) =>{
     let surnameCheck = false;
     let emailCheck = false;
 
+    if(getList === null){
+
+        return [0, "no match", []];
+        
+    }
+
     for(let i = 0; i < getList.length; i++){
 
         if(getList.list[i].firstName === firstName){
@@ -96,7 +102,10 @@ const saveGuestList = (guestList) => {
 
 const saveGuestListItem = (guestList, index, key, value) => {
 
-    guestList.list[index][key] = value;
+    console.log("Saving guest list item:",guestList, index, key, value);
+
+        guestList.list[index][key] = value;
+    
     
     const set = saveGuestList(guestList);
 
@@ -144,6 +153,28 @@ const getGuestIndex = (guestList, personID) => {
 
 }
 
+const getGuestIndexRole = (guestList, role) => {
+
+    let index = -1;
+    let found = false;
+
+    for(let i = 0; i < guestList.length; i++){
+
+        if(guestList.list[i].role === role){
+
+            index = i;
+            found = true;
+            break;
+            
+        }
+
+    }
+
+    return [found, index];
+
+}
+
+
 const deleteGuestListItem = (guestList, index) => {
 
     guestList.list.splice(index, 1);
@@ -158,5 +189,5 @@ const deleteGuestListItem = (guestList, index) => {
 
 
 
-export { getGuestList,checkExistingGuest, saveGuestList, saveGuestListItem, saveGuestListItemGuest,  getGuestIndex, deleteGuestListItem } 
+export { getGuestList,checkExistingGuest, saveGuestList, saveGuestListItem, saveGuestListItemGuest,  getGuestIndex, getGuestIndexRole, deleteGuestListItem } 
   

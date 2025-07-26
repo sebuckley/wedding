@@ -1,75 +1,65 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import './Login.css';
 import Header from '../Wigits/Header/header';
-
-async function loginUser(credentials) {
-
-    return fetch('http://localhost:8080/login', {
-
-      method: 'POST',
-      headers: {
-
-        'Content-Type': 'application/json'
-        
-      },
-
-      body: JSON.stringify(credentials)
-
-    })
-      .then(data => data.json());
-
-}
+import { auth } from './firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login(props) {
 
-  const [username, setUserName] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const bridalParty = props.bridalParty;
-  const setToken = props.setToken;
+  const setUser = props.setUser;
+  const setLoading = props.setLoading;
+  const setLoggedIn = props.setLoggedIn;
 
-  const handleSubmit = async e => {
+  const handleLogin = async (e) => {
 
     e.preventDefault();
 
-    const token = await loginUser({username,password});
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // User signed in
+      const user = userCredential;
+      setUser(user);
+      setLoading(false);
+      setLoggedIn(true);
 
-    console.log(token);
+    })
+    .catch((error) => {
 
-    setToken(token);
+      console.error(error.message);
+      
+    });
 
-  }
+  };
   
   return(
 
     <div>
 
-      <Header fName={ bridalParty.groom.fName } sName={ bridalParty.bride.fName } displayPublic={ false } />
+      <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ true } logInPage={ true }/>
     
       <div className="login-wrapper">
 
         <h1 id="title">manange my wedding</h1>
         <div id="logIn">LOG IN</div>
 
-        <form onSubmit={ handleSubmit }>
+        <form onSubmit={ handleLogin }>
 
-          <label> 
+          <div className="row flexColumn">
+            <div className="col-12"> Username</div>
+            <div className="col-12"><input type="text" className="inputBox3" onChange={e => setEmail(e.target.value)}/></div>
+          </div>
 
-            <p>Username</p>
-            <input type="text" onChange={e => setUserName(e.target.value)}/>
+           <div className="row flexColumn">
+            <div className="col-12"> Password</div>
+            <div className="col-12"><input type="password" className="inputBox3" onChange={e => setPassword(e.target.value)}/></div>
+          </div>
 
-          </label>
+          <div className="row">
 
-          <label>
-
-            <p>Password</p>
-            <input type="password" onChange={e => setPassword(e.target.value)}/>
-
-          </label>
-
-          <div>
-
-            <button type="submit">Submit</button>
+            <button type="submit" className='button primary'>Login</button>
 
           </div>
 
@@ -82,9 +72,3 @@ export default function Login(props) {
   )
 
 }
-
-Login.propTypes = {
-
-  setToken: PropTypes.func.isRequired
-
-};

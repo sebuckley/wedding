@@ -73,7 +73,14 @@ export default function PictureWall(props){
                 
             <div className="std addP">SAVE THE DATE</div>
 
-            <Logo canvasStyle={logoCanvasStyle} fName={props.fName} sName={props.sName} fNameStyle={fNameStyle} sNameStyle={sNameStyle} andStyle={andStyle}/>
+            <Logo 
+                height={"200px"}
+                width={"300px"}
+                fName={props.fName} sName={props.sName} 
+                fontSize={"48px"}
+                andFontSize={"150px"}
+                postitionFromMargin={"10%"}
+            />
 
             <div className="date addP"> { getDateDayDMY(props.date).toUpperCase() } </div>
 

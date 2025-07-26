@@ -6,6 +6,7 @@ export default function GuestSort(props){
     const setGuestSorted = props.setGuestSorted;
     const guestSorted = props.guestSorted;
     const guestSortedBy = props.guestSortedBy;
+    const listType = props.listType;
 
     const onChange = (e) => {
 
@@ -35,8 +36,8 @@ export default function GuestSort(props){
 
                     <option value="First name">First name</option>
                     <option value="surname">Surname</option>
-                    <option value="maxGuests">Max Guests</option>
-                    <option value="rsvp">RSVP Status</option>
+                    { listType === "Primary guests" ? <option value="maxGuests">Max Guests</option> : "" }
+                    { listType === "Primary guests" ? <option value="rsvp">RSVP Status</option> : "" }
 
                 </select>
 

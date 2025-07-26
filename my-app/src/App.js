@@ -1,32 +1,112 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { isEmpty } from './Components/Wigits/dataFunctions';
-import { titleCase, createClass, uuidv4 } from './Components/Wigits/dataFunctions';
+import { titleCase, createClass, uuidv4, isEmpty } from './Components/Wigits/dataFunctions';
 import { getGuestList } from './Components/Wigits/dataFunctions-guestList';
 import { getTaskList, saveTaskList } from './Components/Wigits/dataFunctions-taskList';
+import { getBridalParty, saveBridalParty } from './Components/Wigits/dataFunctions-bridalParty';
+import { getSupplierList, saveSupplierList } from './Components/Wigits/dataFunctions-suppliers';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../src/Components/Login/firebaseConfig'
+import Header from './Components/Wigits/Header/header';
+import Loading from './Components/PublicSite/Components/loading/loading';
 
 import Dashboard from './Components/Dashboard/Dashboard';
-import Details from './Components/Dashboard/Details';
+import Details from './Components/Dashboard/Details/Details';
 import Guests from './Components/Dashboard/Guests/Guests';
 import Guest from './Components/Dashboard/Guests/Guest';
 import Tasks from './Components/Dashboard/Tasks/Tasks';
+import Suppliers from './Components/Dashboard/Suppliers/Suppliers';
+import Supplier from './Components/Dashboard/Suppliers/Supplier';
 import PublicSite from './Components/PublicSite/PublicSite';
 import RSVPForm from './Components/PublicSite/rsvpform';
 import PrivacyPolicy from './Components/Wigits/Privacy-Policy/privacy-policy';
-import useToken from './Components/App/useToken';
 import mainTaskData from './Components/App/mainData';
-import { bridalParty, wedding,  weddingVenue, faq, weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
+import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVenue, faq, weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
 
 function App() {
 
-  const {token, setToken} = useToken();
+const emptyBridal = {
+
+    first: { fName: "Partner 1" }, 
+    second: { fName:"Partner 2" }
+
+}
+
+const emptySuppliers = {
+
+    listID: uuidv4(), 
+    list: [],
+    length: 0
+
+}
+
+  const [user, setUser] = useState(null);
+  const [loggedIn, setLoggedin] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [guestList, setGuestList] = useState("");
   const [guestListChecked, setGuestListChecked] = useState(0);
   const [taskList, setTaskList] = useState("");
   const [taskListChecked, setTaskListChecked] = useState(0);
   const [guestData, setGuestData] = useState({});
   const [taskData, setTaskData] = useState({});
+  const [bridalParty, setBridalParty] = useState(emptyBridal);
+  const [bridalPartyChecked, setBridalPartyChecked] = useState(0);
+  const [supplierList, setSupplierList] = useState(emptySuppliers);
+  const [supplierListCheck, setSupplierListCheck] = useState(0);
+  const [wedding, setWedding] = useState({});
+
+  const supplierStatuses = ["Ruled out","Shortlisted", "Enquiry made", "Booked"];
+
+  useEffect(() => {
+
+    const unsubscribe = onAuthStateChanged(auth, (data) => {
+
+      if(typeof auth.currentUser !== "undefined"){
+
+        if(auth.currentUser !== null){
+
+          setUser(data);
+          setLoading(false);
+          setLoggedin(true);
+
+        }else{
+
+          setLoading(false);
+          setLoggedin(false);
+
+        }
+
+      }else{
+
+        setLoading(false);
+        setLoggedin(false);
+
+      }
+
+    });
+
+    return unsubscribe;
+
+  }, []);
+
+  useEffect(() => {
+
+  let checkSupplierList = getSupplierList();
+
+  if(checkSupplierList === null){
+
+    saveSupplierList(supplierList);
+    setSupplierListCheck(1);
+    
+  }else if(supplierListCheck === 0){
+
+    setSupplierList(checkSupplierList);
+    setSupplierListCheck(1);
+
+  }
+
+},[])
 
   if(getTaskList() === null){
 
@@ -45,9 +125,9 @@ function App() {
       newTask["state"] = "To-do";
       newTask["activity"] = "Not started";
       newTask["created"] = new Date();
-      newTask["createdBy"] = token.user;
-      newTask["lastUpdated"] = new Date();
-      newTask["lastUpdatedBy"] = token.user;
+      newTask["createdBy"] = "system";
+      newTask["updated"] = new Date();
+      newTask["updatedBy"] = "system";
       newTask["history"] = [];
 
       newList.push(newTask);
@@ -64,6 +144,12 @@ function App() {
 
     saveTaskList(mainList);
     setTaskList(mainList);
+
+  }
+
+  if(isEmpty(wedding)){
+
+    setWedding(weddingOriginal);
 
   }
 
@@ -95,7 +181,7 @@ function App() {
 
       if(taskList === "" && taskListChecked === 0){
 
-        const checkList = getTaskList();
+        const checkList = await getTaskList();
     
         if(checkList !== null){
 
@@ -116,275 +202,284 @@ function App() {
 
   useEffect(() => {
 
+  
+
     const getGuestData = (data) => {
 
-      let guestNumbers = 0;
-      let guestNotResponded = 0;
-      let notConfirmed = 0;
-      let confirmed = 0;
-      let declined = 0;
-      let adults = 0;
-      let children = 0;
-      let infants = 0;
-      let diet = 0;
-      let allergies = 0;
-      let dietList = [];
-      let allergiesList = [];
+      if(data !== ""){
 
-      // console.log(data.length);
+        let guestNumbers = 0;
+        let guestNotResponded = 0;
+        let notConfirmed = 0;
+        let confirmed = 0;
+        let declined = 0;
+        let adults = 0;
+        let children = 0;
+        let infants = 0;
+        let diet = 0;
+        let allergies = 0;
+        let dietList = [];
+        let allergiesList = [];
 
-      for(let i = 0; i < data.length; i++){
+        // console.log(data.length);
 
-          let UUID = data.list[i].UUID;
-          let state = data.list[i].rsvp;
-          let firstName = data.list[i].firstName;
-          let surname = data.list[i].surname;
-          let guestType = data.list[i].guestType;
-          let fullName = firstName + " " + surname;
-          let mainGuest = 1;
-          let maxAdditionalGuests = parseInt(data.list[i].maxGuests);
-          let addGuestSet = data.list[i].additionalGuestsSet;
-          let additionalGuests = data.list[i].additionalGuests;
-          let guestDiet = data.list[i].diet;
-          let guestAllergies = data.list[i].allergies;
-          let addGuestsNo;
-          let outstanding;
+        for(let i = 0; i < data.length; i++){
 
-          if(data.list[i].additionalGuestsNo === ""){
+            let UUID = data.list[i].UUID;
+            let state = data.list[i].rsvp;
+            let firstName = data.list[i].firstName;
+            let surname = data.list[i].surname;
+            let guestType = data.list[i].guestType;
+            let fullName = firstName + " " + surname;
+            let mainGuest = 1;
+            let maxAdditionalGuests = parseInt(data.list[i].maxGuests);
+            let addGuestSet = data.list[i].additionalGuestsSet;
+            let additionalGuests = data.list[i].additionalGuests;
+            let guestDiet = data.list[i].diet;
+            let guestAllergies = data.list[i].allergies;
+            let addGuestsNo;
+            let outstanding;
 
-            addGuestsNo = 0;
+            if(data.list[i].additionalGuestsNo === ""){
 
-          }else{
-
-            addGuestsNo = parseInt(data.list[i].additionalGuestsNo);
-
-          }
-
-          if(state === "Not confirmed"){
-
-            if(addGuestSet === false){
-
-              outstanding =  mainGuest + maxAdditionalGuests;
+              addGuestsNo = 0;
 
             }else{
 
-              outstanding =  mainGuest;
+              addGuestsNo = parseInt(data.list[i].additionalGuestsNo);
 
             }
 
-          }else{
+            if(state === "Not confirmed"){
 
-            outstanding = 0;
+              if(addGuestSet === false){
 
-          }
-          
-          let remainingGuests = maxAdditionalGuests - addGuestsNo;
+                outstanding =  mainGuest + maxAdditionalGuests;
 
-          guestNumbers += mainGuest + maxAdditionalGuests;
-          guestNotResponded +=  outstanding;
+              }else{
 
-          if(state === "Not confirmed"){
+                outstanding =  mainGuest;
 
-            notConfirmed += 1;
-      
-          }else if(state === "Confirmed"){
-      
-            confirmed += 1 + addGuestsNo;
-      
-          }else if(state === "Declined"){
+              }
 
-      
-            declined += 1;
+            }else{
+
+              outstanding = 0;
+
+            }
             
-          }
+            let remainingGuests = maxAdditionalGuests - addGuestsNo;
 
-          if(remainingGuests > 0){
+            guestNumbers += mainGuest + maxAdditionalGuests;
+            guestNotResponded +=  outstanding;
 
-            if(addGuestSet === true){
+            if(state === "Not confirmed"){
 
-              declined += remainingGuests;
+              notConfirmed += 1;
+        
+            }else if(state === "Confirmed"){
+        
+              confirmed += 1 + addGuestsNo;
+        
+            }else if(state === "Declined"){
 
+        
+              declined += 1;
+              
             }
 
-          }
+            if(remainingGuests > 0){
 
-          if(guestType === "Over 18"){
+              if(addGuestSet === true){
 
-            adults += 1;
+                declined += remainingGuests;
 
-          }else if(guestType === "Under 18"){
-
-            children += 1;
-
-          }else if(guestType === "Under 5"){
-
-            infants += 1;
-
-          }
-
-          if(guestDiet !== "No dietry requirements" && guestDiet !==""){
-
-            let dietry = [fullName, guestDiet, UUID];
-            diet += 1;
-            dietList.push(dietry);
-
-          }
-
-          if(guestAllergies !== "No allergies" && guestAllergies !==""){
-
-            let dietry = [fullName, allergies, UUID];
-            allergies += 1;
-            allergiesList.push(dietry);
-            
-          }
-
-          if(additionalGuests.length > 0){
-
-            for(let j = 0; j < additionalGuests.length; j++){
-
-
-              let firstName = additionalGuests[j].firstName;
-              let surname = data.list[i].surname;
-              let fullName = firstName + " " + surname;
-              let guestType2 = additionalGuests[j].guestType;
-              let diet1 = additionalGuests[j].diet;
-              let allergies1 = additionalGuests[j].allergies;
-
-              if(guestType2 === "Over 18"){
-
-                adults += 1;
-
-              }else if(guestType2 === "Under 18"){
-
-                children += 1;
-
-              }else if(guestType2 === "Under 5"){
-
-                infants += 1;
-
-              }
-
-              if(diet1 !== "No dietry requirements" && diet1 !== ""){
-
-                let dietry = [fullName, diet1, UUID];
-                diet += 1;
-                dietList.push(dietry);
-
-              }
-
-              if(allergies1 !== "No allergies" && allergies1 !== ""){
-
-                let dietry = [fullName, allergies1, UUID];
-                allergies += 1;
-                allergiesList.push(dietry);
-                
               }
 
             }
 
-          }
+            if(guestType === "Over 18"){
 
+              adults += 1;
+
+            }else if(guestType === "Under 18"){
+
+              children += 1;
+
+            }else if(guestType === "Under 5"){
+
+              infants += 1;
+
+            }
+
+            if(guestDiet !== "No dietry requirements" && guestDiet !==""){
+
+              let dietry = [fullName, guestDiet, UUID];
+              diet += 1;
+              dietList.push(dietry);
+
+            }
+
+            if(guestAllergies !== "No allergies" && guestAllergies !==""){
+
+              let dietry = [fullName, allergies, UUID];
+              allergies += 1;
+              allergiesList.push(dietry);
+              
+            }
+
+            if(additionalGuests.length > 0){
+
+              for(let j = 0; j < additionalGuests.length; j++){
+
+
+                let firstName = additionalGuests[j].firstName;
+                let surname = data.list[i].surname;
+                let fullName = firstName + " " + surname;
+                let guestType2 = additionalGuests[j].guestType;
+                let diet1 = additionalGuests[j].diet;
+                let allergies1 = additionalGuests[j].allergies;
+
+                if(guestType2 === "Over 18"){
+
+                  adults += 1;
+
+                }else if(guestType2 === "Under 18"){
+
+                  children += 1;
+
+                }else if(guestType2 === "Under 5"){
+
+                  infants += 1;
+
+                }
+
+                if(diet1 !== "No dietry requirements" && diet1 !== ""){
+
+                  let dietry = [fullName, diet1, UUID];
+                  diet += 1;
+                  dietList.push(dietry);
+
+                }
+
+                if(allergies1 !== "No allergies" && allergies1 !== ""){
+
+                  let dietry = [fullName, allergies1, UUID];
+                  allergies += 1;
+                  allergiesList.push(dietry);
+                  
+                }
+
+              }
+
+            }
+
+
+        }
+
+        const dataObject = {
+
+          guestNumbers: guestNumbers,
+          guestNotResponded:guestNotResponded,
+          notConfirmed: notConfirmed,
+          confirmed: confirmed,
+          declined: declined,
+          adults, adults,
+          children, children,
+          infants, infants,
+          diet: diet,
+          allergies: allergies,
+          dietList: dietList,
+          allergiesList: allergiesList
+
+        }
+
+        setGuestData(dataObject);
 
       }
-
-      const dataObject = {
-
-        guestNumbers: guestNumbers,
-        guestNotResponded:guestNotResponded,
-        notConfirmed: notConfirmed,
-        confirmed: confirmed,
-        declined: declined,
-        adults, adults,
-        children, children,
-        infants, infants,
-        diet: diet,
-        allergies: allergies,
-        dietList: dietList,
-        allergiesList: allergiesList
-
-      }
-
-      setGuestData(dataObject);
 
     }
 
     const getTaskData = (data) => {
 
-      let noTasks = 0;
-      let toDo = 0;
-      let inProgress = 0;
-      let completed = 0;
-      let notStarted = 0;
-      let planned = 0;
-      let researched = 0;
-      let enquiry = 0;
-      let selected = 0;
-      
+      if(data !== ""){
 
-      // console.log(data.length);
+        let noTasks = 0;
+        let toDo = 0;
+        let inProgress = 0;
+        let completed = 0;
+        let notStarted = 0;
+        let planned = 0;
+        let researched = 0;
+        let enquiry = 0;
+        let selected = 0;
 
-      for(let i = 0; i < data.list.length; i++){
+        // console.log(data.length);
 
-          let state = data.list[i].state;
-          let activity = data.list[i].activity;
+        for(let i = 0; i < data.length; i++){
 
-          // console.log(state);
+            let state = data.list[i].state;
+            let activity = data.list[i].activity;
 
-          noTasks += 1;
-          
-          if(state === "To-do"){
+            // console.log(state);
 
-            toDo += 1;
-      
-          }else if(state === "In-progress"){
-
-            inProgress += 1;
-
-          }else if(state === "Completed"){
-
-            completed += 1;
+            noTasks += 1;
             
-          }
+            if(state === "To-do"){
 
-          if(activity === "Not started" || activity === ""){
+              toDo += 1;
+        
+            }else if(state === "In-progress"){
 
-            notStarted += 1;
+              inProgress += 1;
 
-          }else if(activity === "Researched"){
-      
-            researched += 1;
-      
-          }else if(activity === "Enquiry made"){
-      
-            enquiry += 1;
-            
-          }else if(activity === "Selected"){
-      
-            selected += 1;
-            
-          }else if(activity === "Planned"){
-      
-            planned += 1;
-            
-          }
+            }else if(state === "Completed"){
+
+              completed += 1;
+              
+            }
+
+            if(activity === "Not started" || activity === ""){
+
+              notStarted += 1;
+
+            }else if(activity === "Researched"){
+        
+              researched += 1;
+        
+            }else if(activity === "Enquiry made"){
+        
+              enquiry += 1;
+              
+            }else if(activity === "Selected"){
+        
+              selected += 1;
+              
+            }else if(activity === "Planned"){
+        
+              planned += 1;
+              
+            }
+
+        }
+
+        const dataObject = {
+
+            noTasks: noTasks,
+            toDo: toDo,
+            inProgress: inProgress,
+            completed: completed,
+            notStarted: notStarted,
+            planned: planned,
+            researched: researched,
+            enquiry: enquiry,
+            selected: selected
+
+        }
+
+        setTaskData(dataObject);
 
       }
-
-      const dataObject = {
-
-          noTasks: noTasks,
-          toDo: toDo,
-          inProgress: inProgress,
-          completed: completed,
-          notStarted: notStarted,
-          planned: planned,
-          researched: researched,
-          enquiry: enquiry,
-          selected: selected
-
-      }
-
-      setTaskData(dataObject);
 
     }
 
@@ -402,6 +497,60 @@ function App() {
 
   }, [guestList, guestData, taskList, taskData]);
 
+  useEffect(() => {
+
+    const checkBridalParty = () => {
+
+      if(bridalParty.first.fName === "Partner 1" && bridalPartyChecked === 0){
+
+          const checkList = getBridalParty();
+
+          if(checkList === null){
+
+            setBridalParty(bridalOriginal);
+            saveBridalParty(bridalOriginal);
+            setBridalPartyChecked(1);
+
+          }else{
+
+            setBridalParty(checkList);
+            setBridalPartyChecked(1);
+
+          }
+
+      }
+
+    }
+
+    if(bridalParty.first.fName === "Partner 1"){
+
+      checkBridalParty();
+      setLoading(true);
+
+    }
+
+  }, []);
+
+  const getRoles = (items) =>{
+  
+    items.sort((a,b) => a[0] - b[0]);
+
+    const options = items.map((item) => {
+
+        if(item[2] === true){
+        
+            return <option>{ item[0] }</option> ;
+
+        }
+    
+    });
+
+    return options;
+  
+  }
+  
+
+
   return (
 
     <div className="wrapper">
@@ -410,12 +559,16 @@ function App() {
 
         <Routes>
 
-          <Route path="/managemywedding/" element={<Dashboard useToken={ useToken } bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData }/>} />
-          <Route path="/managemywedding/details" element={<Details useToken={ useToken } bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} />} />
-          <Route path="/managemywedding/guests" element={<Guests useToken={ useToken } bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList }/>} />
-          <Route path="/managemywedding/guest" element={<Guest useToken={ useToken } bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList }/>} />
-          <Route path="/managemywedding/tasks" element={<Tasks useToken={ useToken } bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList }/>} />
-          <Route path="/" element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faq } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } />} />
+          <Route path="/managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
+          <Route path="/managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
+          <Route path="/managemywedding/guests" element={<Guests loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
+          <Route path="/managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
+          <Route path="/managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
+          <Route path="/managemywedding/suppliers" element={<Suppliers loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
+           <Route path="/managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
+          
+          
+          <Route path="/" element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faq } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
           <Route path="/rsvp" element={<RSVPForm headerOn={true} bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue}/>} />
           <Route path="/privacy-policy" element={<PrivacyPolicy headerOn={true} bridalParty={bridalParty} />} />
 

@@ -5,6 +5,7 @@ export default function DietSection(props){
 
     const diet = props.diet;
     const allergies = props.allergies;
+    const bridal = props.bridal || false;
     const showGuest = props.showGuest;
     const onChange = props.onChange;
     const valueDiet = props.valueDiet;
@@ -51,13 +52,17 @@ export default function DietSection(props){
 
     }
 
-    const getClassName = (name, number="") => {
+    const getClassName = (name, bridal, number = "") => {
 
         let returnText;
 
-        if(number === ""){
+        if(number === "" && bridal === false){
 
             returnText = name;
+
+        } else if(number === "" && bridal){
+
+            returnText = name +" " + bridal;
 
         }else{
 
@@ -81,7 +86,7 @@ export default function DietSection(props){
                 
                     <label className="label">Diet:</label>
 
-                    <Select className={ getClassName("diet", arrayNumber)} name="diet" arrayList={ diet } onChange={ onChange } value={ valueDiet }/>
+                    <Select className={ getClassName("diet",bridal, arrayNumber)} name="diet" arrayList={ diet } onChange={ onChange } value={ valueDiet }/>
 
                 </div>
 
@@ -89,7 +94,7 @@ export default function DietSection(props){
 
                     <label className="label">Allergies:</label>
 
-                    <Select className={ getClassName("allergies", arrayNumber)} name="allergies" arrayList={ allergies }  onChange={ onChange } value={ valueAllergies } />
+                    <Select className={ getClassName("allergies",bridal, arrayNumber)} name="allergies" arrayList={ allergies }  onChange={ onChange } value={ valueAllergies } />
 
                 </div>
 

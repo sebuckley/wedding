@@ -148,7 +148,6 @@ export default function AddTask(props){
             clearState();
             localStorage.removeItem("newTask");
 
-
         }else{
 
             let string = "Please resolve issues! \n";

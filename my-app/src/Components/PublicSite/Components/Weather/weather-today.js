@@ -22,8 +22,6 @@ export default function WeatherToday(props){
             let data = await response.json();
             setWeatherData(data);
 
-            console.log(data);
-
           } catch (e) {
 
             setIsError(true)
@@ -63,7 +61,6 @@ export default function WeatherToday(props){
 
                     <div className="weather">
 
-                        { console.log(weatherData)}
                         <div> <img src={'https://openweathermap.org/img/wn/' + weatherData.weather[0].icon + '@2x.png' } alt={weatherData.weather[0].icon}/> </div>
                         <div> { weatherData.weather[0].main } </div>
                         <div> { weatherData.main.temp.toFixed(0) } &deg;C</div>

@@ -77,6 +77,20 @@ const getTaskIndex = (taskList, UUID) => {
 
 }
 
+const getTaskIndexName = (taskList, name) => {
+
+    for(let i = 0; i < taskList.list.length; i++){
+
+        if(taskList.list[i].taskName === name){
+
+            return i;
+
+        }
+
+    }
+
+}
+
 const deleteTaskListItem = (taskList, index) =>{
 
     taskList.list.splice(index, 1);
@@ -90,5 +104,5 @@ const deleteTaskListItem = (taskList, index) =>{
 
 
 
-export { getTaskList, checkExistingTask, saveTaskList, saveTaskListItem, getTaskIndex, deleteTaskListItem } 
+export { getTaskList, checkExistingTask, saveTaskList, saveTaskListItem, getTaskIndex, deleteTaskListItem, getTaskIndexName } 
   

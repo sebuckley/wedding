@@ -2,20 +2,50 @@ import './Dashboard.css';
 import Login from '../Login/Login';
 import Header from '../Wigits/Header/header';
 import ValueBox from "./Dashboard Wigits/valueBox";
+import Loading from '../PublicSite/Components/loading/loading'
 // import Link from "./Dashboard Wigits/link";
 
 export default function Dashboard(props){
   
-    const { token, setToken } = props.useToken();
+    const user = props.user;
+    const loggedIn = props.loggedIn;
+    const setLoggedin = props.setLoggedin;
+    const setUser = props.setUser;
+    const loading = props.loading;
+    const setLoading = props.setLoading;
 
     const guestData = props.guestData;
     const taskData = props.taskData;
     const isEmpty = props.isEmpty;
     const bridalParty = props.bridalParty;
 
-    if(!token) {
+    const getStatus = () => {
+
+      let text;
+
+      if(loading){
+
+        text = "loading...";
+
+      }else{
+
+        text = "please add guests";
+
+      }
+
+      return text;
+
+    }
+
+    if(loading){
   
-      return <Login setToken={ setToken } bridalParty={ bridalParty } />
+        return <Loading bridalParty={ bridalParty } user={ user }/>
+  
+    }
+  
+    if(user === null) {
+  
+      return <Login setUser={ setUser } loading={loading} setLoading={ setLoading } bridalParty={ bridalParty } />
   
     }
 
@@ -23,7 +53,7 @@ export default function Dashboard(props){
 
       <div>
 
-        <Header fName={ bridalParty.groom.fName } sName={ bridalParty.bride.fName } displayPublic={ false }/>
+        <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
 
         <div className="adminBody">
 
@@ -33,7 +63,7 @@ export default function Dashboard(props){
 
             <div>
 
-              { isEmpty(guestData) ? "Loading" : <ValueBox title={ "Total invited" } value={ guestData.guestNumbers } href={"managemywedding/guests"}/> }
+              { isEmpty(guestData) ? getStatus() : <ValueBox title={ "Total invited" } value={ guestData.guestNumbers } href={"managemywedding/guests"}/> }
               { isEmpty(guestData) ? "" : <ValueBox title={ "Outstanding responses" } value={ guestData.guestNotResponded } href={"managemywedding/guests"}/> }
               { isEmpty(guestData) ? "" : <ValueBox title={ "Confirmed" } value={ guestData.confirmed } href={"managemywedding/guests"}/> }
               { isEmpty(guestData) ? "" : <ValueBox title={ "Declined" } value={ guestData.declined } href={"managemywedding/guests"}/> }
@@ -56,7 +86,7 @@ export default function Dashboard(props){
 
               
 
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Task Numbers" } value={ taskData.noTasks } href={"managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "Loading..." : <ValueBox title={ "Task Numbers" } value={ taskData.noTasks } href={"managemywedding/tasks"}/> }
               { isEmpty(taskData) ? "" : <ValueBox title={ "To-do" } value={ taskData.toDo } href={"managemywedding/tasks"}/> }
               { isEmpty(taskData) ? "" : <ValueBox title={ "In-progress" } value={ taskData.inProgress } href={"managemywedding/tasks"}/> }
               { isEmpty(taskData) ? "" : <ValueBox title={ "Completed" } value={ taskData.completed } href={"managemywedding/tasks"}/> }

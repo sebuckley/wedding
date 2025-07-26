@@ -1,0 +1,118 @@
+{
+  "Spring": [
+    {
+      "name": "Blush Pink",
+      "hex": "#FADADD",
+      "description": "Soft and romantic, ideal for spring florals and airy decor.",
+      "accents": [
+        { "name": "Gold", "hex": "#D4AF37" },
+        { "name": "Ivory", "hex": "#FFFFF0" }
+      ]
+    },
+    {
+      "name": "Lavender",
+      "hex": "#CBAACB",
+      "description": "Whimsical and fresh, perfect for garden weddings.",
+      "accents": [
+        { "name": "Sage Green", "hex": "#B2AC88" },
+        { "name": "Silver", "hex": "#C0C0C0" }
+      ]
+    },
+    {
+      "name": "Mint Green",
+      "hex": "#98FF98",
+      "description": "Cool and refreshing, great for outdoor spring ceremonies.",
+      "accents": [
+        { "name": "Peach", "hex": "#FFDAB9" },
+        { "name": "White", "hex": "#FFFFFF" }
+      ]
+    }
+  ],
+  "Summer": [
+    {
+      "name": "Peach",
+      "hex": "#FFDAB9",
+      "description": "Warm and cheerful, perfect for sunny celebrations.",
+      "accents": [
+        { "name": "Coral", "hex": "#FF7F50" },
+        { "name": "Aqua", "hex": "#00FFFF" }
+      ]
+    },
+    {
+      "name": "Dusty Blue",
+      "hex": "#A8C3D1",
+      "description": "Elegant and airy, ideal for beach or coastal weddings.",
+      "accents": [
+        { "name": "Cream", "hex": "#FFFDD0" },
+        { "name": "Rose Gold", "hex": "#B76E79" }
+      ]
+    },
+    {
+      "name": "Sunflower Yellow",
+      "hex": "#FFD300",
+      "description": "Bright and joyful, great for outdoor summer events.",
+      "accents": [
+        { "name": "Navy Blue", "hex": "#2C3E50" },
+        { "name": "White", "hex": "#FFFFFF" }
+      ]
+    }
+  ],
+  "Autumn": [
+    {
+      "name": "Terracotta",
+      "hex": "#E2725B",
+      "description": "Earthy and rich, perfect for rustic fall weddings.",
+      "accents": [
+        { "name": "Cream", "hex": "#FFFDD0" },
+        { "name": "Olive Green", "hex": "#808000" }
+      ]
+    },
+    {
+      "name": "Burgundy",
+      "hex": "#800020",
+      "description": "Deep and romantic, ideal for cozy autumn vibes.",
+      "accents": [
+        { "name": "Blush Pink", "hex": "#FADADD" },
+        { "name": "Champagne", "hex": "#F7E7CE" }
+      ]
+    },
+    {
+      "name": "Burnt Orange",
+      "hex": "#CC5500",
+      "description": "Vibrant and festive, great for harvest-themed weddings.",
+      "accents": [
+        { "name": "Brown", "hex": "#8B4513" },
+        { "name": "Gold", "hex": "#D4AF37" }
+      ]
+    }
+  ],
+  "Winter": [
+    {
+      "name": "Emerald Green",
+      "hex": "#046307",
+      "description": "Luxurious and bold, perfect for winter elegance.",
+      "accents": [
+        { "name": "Gold", "hex": "#D4AF37" },
+        { "name": "White", "hex": "#FFFFFF" }
+      ]
+    },
+    {
+      "name": "Navy Blue",
+      "hex": "#2C3E50",
+      "description": "Classic and dramatic, ideal for formal winter weddings.",
+      "accents": [
+        { "name": "Silver", "hex": "#C0C0C0" },
+        { "name": "Ice Blue", "hex": "#AFDBF5" }
+      ]
+    },
+    {
+      "name": "Plum",
+      "hex": "#8E4585",
+      "description": "Rich and moody, great for cozy indoor celebrations.",
+      "accents": [
+        { "name": "Champagne", "hex": "#F7E7CE" },
+        { "name": "Ivory", "hex": "#FFFFF0" }
+      ]
+    }
+  ]
+}

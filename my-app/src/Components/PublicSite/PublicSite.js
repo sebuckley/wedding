@@ -18,6 +18,8 @@ export default function PublicSite(props){
     const faq = props.faq;
     const weddingDayInvite = props.weddingDayInvite;
     const weddingReceptionInvite = props.weddingReceptionInvite;
+    const loggedIn = props.loggedIn;
+    const setLoggedin = props.setLoggedin;
 
     const weddingDateSet = true;
     const weddingVenueSet = true;
@@ -27,17 +29,19 @@ export default function PublicSite(props){
 
         <div>
 
-            < Header fName={bridalParty.groom.fName} sName={bridalParty.bride.fName} displayPublic={ true }/>
+            {console.log(bridalParty)}
+
+             <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ true } loggedIn={ loggedIn } setLoggedin={ setLoggedin } publicPage={ true }/>
 
             <div className="publicBody">
             
-            < PictureWall fName={bridalParty.groom.fName} sName={bridalParty.bride.fName} date={wedding.date} weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite }/> 
-            { weddingVenueSet ? <Details headerOn={true} details={weddingVenue}/> : <NoVenue />}
-            <WeatherToday lon={ weddingVenue.longitude } lat={ weddingVenue.latitude } />
-           { weddingFAQSet ? <FAQ headerOn={ true } faq={ faq } wedding={ wedding }/> : <NoFAQ /> }
-           
-           { weddingDateSet ? <Countdown headerOn={ true } date={ wedding.date }/> :"" }
-           <CookieConsent />
+                < PictureWall fName={bridalParty.first.fName} sName={bridalParty.second.fName} date={wedding.date} weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite }/> 
+                { weddingVenueSet ? <Details headerOn={true} details={weddingVenue}/> : <NoVenue />}
+                <WeatherToday lon={ weddingVenue.longitude } lat={ weddingVenue.latitude } />
+                { weddingFAQSet ? <FAQ headerOn={ true } faq={ faq } wedding={ wedding }/> : <NoFAQ /> }
+            
+                { weddingDateSet ? <Countdown headerOn={ true } date={ wedding.date }/> :"" }
+                <CookieConsent />
 
             </div>
 
