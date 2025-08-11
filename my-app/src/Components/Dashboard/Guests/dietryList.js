@@ -1,6 +1,8 @@
 import { useState } from "react";
 import '../Dashboard.css';
 import { getGuestIndex, deleteGuestListItem } from '../../Wigits/dataFunctions-guestList';
+import { bridalParty } from "../../PublicSite/Components/Data/data";
+import GuestDataRow from "./guestRowData";
 
 export default function DietryList(props){
   
@@ -10,106 +12,7 @@ export default function DietryList(props){
     const guestFilter = props.guestFilter;
     const guestsSorted = props.guestSorted;
     const guestsSortedBy = props.guestSortedBy;
-  
-    const getPersonLink = (uuid) => {
-
-        return "guest/?personID=" + uuid;
-
-    }
-
-    const getAgeGroup = (str) => {
-
-        let returnText;
-
-        if(str === "Over 18"){
-
-            returnText = "Adult";
-
-        }else if(str === "Under 18"){
-
-            returnText = "Child";
-
-        }else if(str === "Under 5"){
-
-            returnText = "Infant";
-
-        }else if(str === ""){
-
-            returnText = "Unknown";
-
-        }
-
-        return returnText;
-
-
-    }
-
-    const getDiet = (str) => {
-
-        let returnText;
-
-        if(str === "No dietry requirements"){
-
-            returnText = "None";
-
-        }else if(str === ""){
-
-            returnText = "Unknown";
-
-        }else{
-
-            returnText = str;
-
-        }
-
-        return returnText;
-
-
-    }
-
-    const getAllergies = (str) => {
-
-        let returnText;
-
-        if(str === "No allergies"){
-
-            returnText = "None";
-
-
-        }else if(str === ""){
-
-            returnText = "Unknown";
-
-        }else{
-
-            returnText = str;
-
-        }
-
-        return returnText;
-
-
-    }
-
-    const checkName = (firstName, surname, guestSet) => {
-
-        let text;
-        let type = guestSet ? "(Guests Set)" : "(Guest not set)";
-
-
-        if(firstName === "" && surname === ""){
-
-            text = "Unknown " + type;
-
-        }else{
-
-            text = firstName + " " + surname;
-
-        }
-
-        return text;
-
-    }
+    const bridalParty = props.bridalParty;
 
     const loadAdditionalGuests = (guests, guestSet) => {
 
@@ -123,14 +26,21 @@ export default function DietryList(props){
 
                     addGuests.push(
 
-                        <div className={ "guestRow "} key={ i }>
+                        <GuestDataRow 
+            
+                            order={ 1 }
+                            wedding={ wedding }
+                            bridalPartyPerson={ false }
+                            displayBridalContact= { false } 
 
-                            <div className="col-3">{ checkName(guests[i].firstName, guests[i].surname, guestSet) }</div>
-                            <div className="col-3">Age Group: { getAgeGroup(guests[i].guestType) }</div>
-                            <div className="col-3">Dietry: { getDiet(guests[i].diet) }</div>
-                            <div className="col-3">Allergies: { getAllergies(guests[i].allergies) }</div>
+                            //the columns to be displayed
+                            person={ guests[i] }
+                            displayRole = { true }
+                            displayDiet={ true }
+                            displayAllergies={ true }
+                            
+                        />
 
-                        </div>
                     )
 
                 }
@@ -145,26 +55,32 @@ export default function DietryList(props){
 
     const checkMain = (item, index) => {
 
+        if(item.diet === "" && item.allergies === "") return null;
+
         if(item.diet !== "No dietry requirements" || item.allergies !== "No allergies"){
 
             return (
 
-                <div className={ "guestRow " + index} key={ item.UUID }>
+                  <GuestDataRow 
+                
+                    order={ 1 }
+                    wedding={ wedding }
+                    bridalPartyPerson={ false }
+                    displayBridalContact= { false } 
 
-                    <div className="col-3"><a href={ getPersonLink(item.UUID) }>{item.firstName + " " + item.surname } </a></div>
-                    <div className="col-3">Age Group: { getAgeGroup(item.guestType) }</div>
-                    <div className="col-3">Dietry: { getDiet(item.diet) }</div>
-                    <div className="col-3">Allergies: { getAllergies(item.allergies) }</div>
-
-                </div>
+                    //the columns to be displayed
+                    person={ item }
+                    displayRole = { true }
+                    displayDiet={ true }
+                    displayAllergies={ true }
+                    
+                />
 
             )
 
         }
 
     }
-
-
 
     const getList = (array) => {
 
@@ -200,15 +116,20 @@ export default function DietryList(props){
 
                         return (
 
-                            <div className={ "guestRow " + index} key={ item.UUID }>
+                            <GuestDataRow 
+                
+                                order={ index }
+                                wedding={ wedding }
+                                bridalPartyPerson={ true }
+                                displayBridalContact= { false } 
 
-                                <div className="col-3"><a href={ getPersonLink(item.UUID) }>{item.firstName + " " + item.surname } </a></div>
-                                <div className="col-3">Age Group: { getAgeGroup(item.guestType) }</div>
-                                <div className="col-3">Dietry: { getDiet(item.diet) }</div>
-                                <div className="col-3">Allergies: { getAllergies(item.allergies) }</div>
-
-
-                            </div>
+                                //the columns to be displayed
+                                person={ item }
+                                displayRole = { true }
+                                diet={ true }
+                                allergies={ true }
+                                
+                            />
 
                         )
 
@@ -230,7 +151,6 @@ export default function DietryList(props){
         
     }
     
-
     const sortGuestList = (array, sortBy="surname", type="asc") => {
 
         if(sortBy === "surname"){
@@ -288,6 +208,37 @@ export default function DietryList(props){
 
     }
 
+    const getBrideGroom = (selection) => {
+
+        const checkPerson = bridalParty[selection];
+
+        if(checkPerson.diet == "" && checkPerson.allergies === "") return null
+
+        if(checkPerson.diet !== "No dietry requirements" || checkPerson.allergies !== "No allergies"){
+
+            return (
+
+                 <GuestDataRow 
+                
+                    order={ 1 }
+                    wedding={ wedding }
+                    bridalPartyPerson={ true }
+                    displayBridalContact= { false } 
+
+                    //the columns to be displayed
+                    person={ checkPerson }
+                    displayRole = { true }
+                    diet={ true }
+                    allergies={ true }
+                    
+                />
+
+            )
+
+        }
+
+    }
+
     return(
 
         <section id="guestListSection">
@@ -297,6 +248,9 @@ export default function DietryList(props){
             { guestList === "" ? <p>No guests in the list</p> : "" }
 
             <div id="guestList">
+
+                { getBrideGroom("first") }
+                { getBrideGroom("second") }
 
                 { guestList !== "" ? getList(guestList.list) : "" }
             

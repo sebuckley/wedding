@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Select from '../../../Wigits/select'
 
 export default function DietSection(props){
@@ -12,6 +12,9 @@ export default function DietSection(props){
     const valueAllergies = props.valueAllergies;
     const titleType = props.titleType;
     const arrayNumber = props.arrayNumber;
+    const disableItem = props.disableItem;
+    let name = props.name;
+    const [display, setDisplay] = useState("none")
 
     const addRSVPButton = () => {
 
@@ -21,7 +24,7 @@ export default function DietSection(props){
 
                 <div className="inputGroupHalf">
 
-                    <label className='label'>Are you bringing a plus one:</label>
+                    <label className='label'>{ disableItem ? "Are you " : "Is " + name } bringing a plus one:</label>
                     <div className="btn-group" role="group" aria-label="Basic example">
                         <button type="button" className="btn btn-secondary btnLeft showGuest" onClick={ props.showGuest }>Yes</button>
                         <button type="button" className="btn btn-secondary btnRight hideGuest" onClick={ props.hideGuest }>No</button>
@@ -37,6 +40,8 @@ export default function DietSection(props){
     const getTitle = (type) => {
 
         let title;
+        let text = "Your ";
+        name = name + "'s"
 
         if(type === "guest"){
 
@@ -44,7 +49,7 @@ export default function DietSection(props){
 
         }else{
 
-            title = "Your dietry requirements";
+            title = disableItem ? text + " dietry requirements" : name + " dietry requirements";
 
         }
 
@@ -74,36 +79,58 @@ export default function DietSection(props){
 
     }
 
+    const displayDiet = () => {
+
+        const getIcon = document.getElementById("addDietIcon");
+
+        if(display === ""){
+
+            setDisplay("none");
+            getIcon.className = "fa fa-circle-plus iconHeader2";
+
+        }else{
+
+            setDisplay("");
+            getIcon.className = "fa fa-circle-minus iconHeader2";
+
+        }
+
+
+    }
+
     return(
 
-        <div className="dietRow">
+        <>
 
-            <h2>{ getTitle(titleType) }</h2>
-    
-            <div className="row">
+            <h2 style={{textAlign: "left",width:"100%"}}><i onClick={ displayDiet } id="addDietIcon" className="fa fa-circle-plus iconHeader2"></i>{ getTitle(titleType) }</h2>
 
-                <div className="inputGroupHalf">
-                
-                    <label className="label">Diet:</label>
+            <div className="dietRow" style={{display:display}}>
 
-                    <Select className={ getClassName("diet",bridal, arrayNumber)} name="diet" arrayList={ diet } onChange={ onChange } value={ valueDiet }/>
+                <div className="row">
+
+                    <div className="inputGroupHalf">
+                    
+                        <label className="label">Diet:</label>
+
+                        <Select className={ getClassName("diet",bridal, arrayNumber)} name="diet" arrayList={ diet } onChange={ onChange } value={ valueDiet }/>
+
+                    </div>
+
+                    <div className="inputGroupHalf">
+
+                        <label className="label">Allergies:</label>
+
+                        <Select className={ getClassName("allergies",bridal, arrayNumber)} name="allergies" arrayList={ allergies }  onChange={ onChange } value={ valueAllergies } />
+
+                    </div>
 
                 </div>
 
-                <div className="inputGroupHalf">
-
-                    <label className="label">Allergies:</label>
-
-                    <Select className={ getClassName("allergies",bridal, arrayNumber)} name="allergies" arrayList={ allergies }  onChange={ onChange } value={ valueAllergies } />
-
-                </div>
+            { showGuest !== "" ? addRSVPButton() : "" }
 
             </div>
 
-           { showGuest !== "" ? addRSVPButton() : "" }
-
-        </div>
-
+        </>
 
 
 

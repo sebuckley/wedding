@@ -377,6 +377,7 @@ const weddingClothingSizes = {
       }
     },
      "culturalAttire": {
+      
       "type": "object",
       "properties": {
         "religion": {
@@ -393,7 +394,6 @@ const weddingClothingSizes = {
           ],
           "description": "Associated religion for filtering cultural attire"
         },
-
         "sariLength": {
           "type": "string",
           "enum": ["5yd", "6yd", "9yd"],
@@ -415,7 +415,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Male", "Non-binary", "Unisex"],
           "religionFilter": ["Hindu", "Muslim"]
         },
-
         "kiltWaist": {
           "type": "string",
           "enum": ["28", "30", "32", "34", "36", "38", "40", "42"],
@@ -430,7 +429,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Male", "Non-binary", "Unisex"],
           "religionFilter": ["Christian", "Other"]
         },
-
         "thobeLength": {
           "type": "string",
           "enum": ["52", "54", "56", "58", "60"],
@@ -438,7 +436,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Male", "Non-binary", "Unisex"],
           "religionFilter": ["Muslim"]
         },
-
         "kimonoSize": {
           "type": "string",
           "enum": ["S", "M", "L", "XL"],
@@ -446,7 +443,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Female", "Non-binary", "Unisex"],
           "religionFilter": ["Buddhist", "Other"]
         },
-
         "hanbokSize": {
           "type": "string",
           "enum": ["S", "M", "L", "XL"],
@@ -454,7 +450,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Female", "Non-binary", "Unisex"],
           "religionFilter": ["Buddhist", "Other"]
         },
-
         "chutThaiSize": {
           "type": "string",
           "enum": ["S", "M", "L", "XL"],
@@ -462,7 +457,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Female", "Non-binary", "Unisex"],
           "religionFilter": ["Buddhist"]
         },
-
         "turbanSize": {
           "type": "string",
           "enum": ["Standard", "Custom"],
@@ -470,7 +464,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Male", "Non-binary", "Unisex"],
           "religionFilter": ["Sikh"]
         },
-
         "dupattaLength": {
           "type": "string",
           "enum": ["2m", "2.5m", "3m"],
@@ -478,7 +471,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Female", "Non-binary", "Unisex"],
           "religionFilter": ["Sikh", "Hindu"]
         },
-
         "headwrapPreference": {
           "type": "string",
           "enum": ["One-size", "Fitted"],
@@ -486,7 +478,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Female", "Non-binary", "Unisex"],
           "religionFilter": ["Jewish", "Muslim", "Christian", "Other"]
         },
-
         "yarmulkeSize": {
           "type": "string",
           "enum": ["S", "M", "L", "XL"],
@@ -494,7 +485,6 @@ const weddingClothingSizes = {
           "genderFilter": ["Male", "Non-binary", "Unisex"],
           "religionFilter": ["Jewish"]
         },
-
         "tallitSize": {
           "type": "string",
           "enum": ["Standard", "Tall", "Wide"],
@@ -502,11 +492,15 @@ const weddingClothingSizes = {
           "genderFilter": ["Male", "Non-binary", "Unisex"],
           "religionFilter": ["Jewish"]
         },
-
         "genderType": {
           "type": "string",
           "description": "Gender identity associated with this clothing section",
           "enum": ["Male", "Female", "Non-binary", "Unisex", "Custom"]
+        },
+        "religiousType": {
+          "type": "string",
+          "description": "Religious identity associated with this clothing section",
+          "enum": ['Christian','Jewish','Muslim','Hindu','Buddhist','Sikh','Interfaith','Other']
         }
       }
     },

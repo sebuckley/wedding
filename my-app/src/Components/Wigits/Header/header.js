@@ -209,7 +209,7 @@ export default function Header(props){
         
                 <div className="headerLogo">
 
-                    <a href="/" className="logo"><Logo fName={props.fName} sName={ props.sName }/></a>
+                    <a href="/" className="logo"><Logo fName={props.firstName} sName={ props.sName }/></a>
                 
                 </div>
                 

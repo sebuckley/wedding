@@ -13,12 +13,16 @@ export default function AddSuppliers(props) {
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
     const user = props.user;
+    const setDisplay = props.setDisplay;
+    const display = props.display;
+    const setType = props.setType;
+    const location = props.location;
 
 
     let object = {
 
         name: "",
-        type: "",
+        type: setType,
         email: "",
         phone: "",
         website: "",
@@ -27,7 +31,7 @@ export default function AddSuppliers(props) {
     };
 
     const [formData, setFormData] = useState(object);
-    const [display, setDisplay] = useState(false);
+ 
 
     const getData = () => {
 
@@ -271,8 +275,16 @@ export default function AddSuppliers(props) {
 
     }
 
-
     const toggleDisplay = () => setDisplay(prev => !prev);
+
+    const getSearchText = (data) => {
+
+        let searchName = splitByCapitalNums(data).split(" ").join("+");
+        searchName = searchName + "+" + location;
+
+        return searchName;
+
+    }
 
     return (
 
@@ -280,6 +292,8 @@ export default function AddSuppliers(props) {
 
             <i onClick={toggleDisplay} id="addSupplierIcon" className={`fa ${display ? "fa-circle-minus" : "fa-circle-plus"} iconHeader`}></i>
             <h1 onClick={toggleDisplay} id="addSupplierTitle">Add Supplier</h1>
+
+            { formData.type !== "" ? <a href={ "https://www.google.com/search?q=" + getSearchText(formData.type) } target="_blank" >Search for { splitByCapitalNums(formData.type) }</a> : "" }
 
             <form id="supplierForm" style={{ display: display ? "" : "none" }}>
                 <div className="row two">

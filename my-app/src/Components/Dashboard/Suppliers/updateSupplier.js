@@ -4,6 +4,7 @@ import { getSupplierIndex, updateSupplierObject, deleteSupplierListItem } from '
 import { splitByCapitalNums, updateSupplierTask } from '../../Wigits/dataFunctions';
 import Notes from './notes';
 import SupplierCostDetails from './supplierBooked';
+import currencyList from '../Details/currencyList';
 
 export default function UpdateSupplier(props){
 
@@ -15,6 +16,7 @@ export default function UpdateSupplier(props){
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
     const supplierStatuses = props.supplierStatuses;
+    const currency = props.currency;
 
     const object = {
 
@@ -158,12 +160,46 @@ export default function UpdateSupplier(props){
 
     }
 
+    const removeNonNumbers = (input) => {
+
+        return input.replace(/\D/g, ''); // \D matches any non-digit character
+
+    };
+
     const onInput = (e) =>{
 
         const name = e.target.getAttribute("name");
         const value = e.target.value.trim();
         let newObject = formData;
-        newObject[name] = value;
+
+        if(name === "quote" || name === "cost"){
+
+
+            if(parseInt(value)){
+
+                newObject[name] = parseFloat(value).toFixed(2).toString();
+
+            }else if(value === ""){
+
+                console.log("Empty cost input detected, setting to 0.00");
+
+                newObject[name] = "0.00";
+
+            }else{
+
+                let newValue = removeNonNumbers(value);
+                newObject[name] = parseFloat(newValue).toFixed(2).toString();
+
+            }
+
+        }else{
+
+
+            newObject[name] = value;
+
+        }
+
+        
         newObject["updated"] = new Date();
         newObject["updatedBy"] = user.email;
 
@@ -569,7 +605,7 @@ export default function UpdateSupplier(props){
 
                     </div>
 
-                    { formData.status === "Enquiry made"  ? <SupplierCostDetails type="quote" onInput={ onInput } value={ costValue }/> : "" }
+                    { formData.status === "Enquiry made"  ? <SupplierCostDetails type="quote" onInput={ onInput } value={ costValue } currency={ currency } currencyList={ currencyList }/> : "" }
 
                     <div className='row'>
 
@@ -587,7 +623,7 @@ export default function UpdateSupplier(props){
 
                     </div>
 
-                    { formData.status === "Booked"  ? <SupplierCostDetails type="booked" onInput={ onInput } value={ costValue }/> : "" }
+                    { formData.status === "Booked"  ? <SupplierCostDetails type="booked" onInput={ onInput } value={ costValue } currency={ currency } currencyList={ currencyList }/> : "" }
 
                     <div className='row'>
 

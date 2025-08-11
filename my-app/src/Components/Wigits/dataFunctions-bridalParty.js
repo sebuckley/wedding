@@ -44,6 +44,29 @@ const saveBridalPartyItem = (weddingParty, key, value) => {
 
 }
 
+const saveBridalPartyClothing = (bridalParty,selection, key, value) => {
+
+    const setValue = bridalParty[selection][key] = value;
+    
+    if(!setValue){
+
+        throw Error;
+
+    }
+    const set = saveBridalParty(bridalParty);
+
+    if(set){
+
+        return true;
+
+    }else{
+
+        return false;
+
+    }
+
+}
+
 const deleteBridalPartyItem = (weddingParty, key) =>{
 
     delete weddingParty[key];
@@ -54,5 +77,5 @@ const deleteBridalPartyItem = (weddingParty, key) =>{
 }
 
 
-export { getBridalParty, saveBridalParty, saveBridalPartyItem, deleteBridalPartyItem } 
+export { getBridalParty, saveBridalParty, saveBridalPartyItem, deleteBridalPartyItem, saveBridalPartyClothing } 
   

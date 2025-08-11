@@ -18,10 +18,13 @@ export default function Suppliers(props){
     const setLoggedin = props.setLoggedin;
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
+    const [setType, setSetType] = useState("");
 
     const pathName = window.location.search;
     let filterName;
     let filterName2;
+    let currentDisplay = false;
+    
 
     if(pathName !== ""){
 
@@ -29,6 +32,16 @@ export default function Suppliers(props){
       const params = new URLSearchParams(url.search);
       const firstKey = params.keys().next().value; // Get the first key
       const firstValue = params.get(firstKey);
+  
+      if(firstKey === "add"){
+
+        currentDisplay = true
+        setSetType(firstValue);
+     
+      }
+
+    
+
       url.search = ''; // Clear the search query
       window.history.replaceState({}, document.title, url.toString());
 
@@ -43,7 +56,7 @@ export default function Suppliers(props){
 
     }
 
-
+      console.log(setType);
 
     const bridalParty = props.bridalParty;
     const wedding = props.wedding;
@@ -54,17 +67,9 @@ export default function Suppliers(props){
     const [supplierFilter2, setSupplierFilter2] = useState(filterName2);
     const [supplierSortedBy, setSupplierSortedBy] = useState("name");
     const [supplierSorted, setSupplierSorted] = useState("asc");
+    const [display, setDisplay] = useState(currentDisplay);
 
     const [stateChange, setStateChange] = useState(0);
-
-
-    const onChangeSuppliers = (e) => {
-
-      const itemName = e.target.name;
-      const itemValue = e.target.value;
-      const personID = e.target.parentElement.nextSibling.nextSibling.innerText;
-    
-    }
 
     if(loading){
 
@@ -82,20 +87,35 @@ export default function Suppliers(props){
 
         <div>
 
-            <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
+            <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
 
             <div className="adminBody">
 
-              <AddSupplier setSupplierList={ setSupplierList } supplierList={ supplierList } taskList={ taskList } setTaskList={ setTaskList } setStateChange={ setStateChange } stateChange={ stateChange } supplierStatuses={ supplierStatuses } user={ user }/>
+              <AddSupplier setSupplierList={ setSupplierList } supplierList={ supplierList } taskList={ taskList } setTaskList={ setTaskList } setStateChange={ setStateChange } stateChange={ stateChange } supplierStatuses={ supplierStatuses } user={ user } display={ display } setDisplay={ setDisplay } setType={ setType } location={ bridalParty.weddingDetails.location }/>
 
               {/* <ListType setListType={ setListType } listType={ listType } /> */}
 
               <SupplierFilter setSupplierFilter={ setSupplierFilter } filterName={ supplierFilter }/>
-              <SupplierSort setSupplierSorted={ setSupplierSorted } supplierSorted={ supplierSorted } setSupplierSortedBy={ setSupplierSortedBy } supplierSortedBy={ supplierSortedBy } setSupplierFilter2={ setSupplierFilter2 } supplierFilter2={ supplierFilter2 }taskList={ taskList }/>
+              <SupplierSort setSupplierSorted={ setSupplierSorted } supplierSorted={ supplierSorted } setSupplierSortedBy={ setSupplierSortedBy } supplierSortedBy={ supplierSortedBy } setSupplierFilter2={ setSupplierFilter2 } supplierFilter2={ supplierFilter2 } taskList={ taskList }/>
               
 
               { supplierList.length === 0 ? "No suppliers in list": "" }
-              { supplierList.length > 0 ? <SupplierList wedding={ wedding } onChangeSuppliers={ onChangeSuppliers } setSupplierList={ setSupplierList } supplierList={ supplierList } supplierFilter={ supplierFilter } supplierFilter2={ supplierFilter2 } supplierSorted={ supplierSorted } supplierSortedBy={ supplierSortedBy } setStateChange={ setStateChange } stateChange={ stateChange } supplierStatuses={ supplierStatuses }/> : "" }
+              { supplierList.length > 0 ? <SupplierList 
+                                              wedding={ wedding } 
+                                              setSupplierList={ setSupplierList } 
+                                              supplierList={ supplierList } 
+                                              supplierFilter={ supplierFilter } 
+                                              supplierFilter2={ supplierFilter2 } 
+                                              supplierSorted={ supplierSorted } 
+                                              supplierSortedBy={ supplierSortedBy } 
+                                              setStateChange={ setStateChange } 
+                                              stateChange={ stateChange } 
+                                              supplierStatuses={ supplierStatuses }
+                                              user={ user }
+                                              setTaskList={ setTaskList }
+                                              taskList={ taskList }
+                                              setType={ setType }
+                                            /> : "" }
               
                
             </div>

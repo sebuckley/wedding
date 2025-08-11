@@ -26,20 +26,56 @@ import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVen
 
 function App() {
 
-const emptyBridal = {
+  const emptyBridal = {
 
-    first: { fName: "Partner 1" }, 
-    second: { fName:"Partner 2" }
+      first: { 
 
-}
+        firstName: "Partner 1" ,
+        surname: "",
+        role: "",
+        email: "",
+        mobile: "",
+        gender: "",
+        diet: "",
+        allergies: ""
+        
+      }, 
+      second: { 
 
-const emptySuppliers = {
+        firstName:"Partner 2",
+        surname: "",
+        role: "",
+        email: "",
+        mobile: "",
+        gender: "",
+        diet: "",
+        allergies: "" 
 
-    listID: uuidv4(), 
-    list: [],
-    length: 0
+      },
+      weddingDetails: {
 
-}
+        maxGuests: "",
+        dateTime: "",
+        currency: "",
+        country: "",
+        budget: "",
+        location: "",
+        weddingStyle: "",
+        sizeSystem: "",
+        mainColor: ""
+
+      }
+
+  }
+
+  const emptySuppliers = {
+
+      listID: uuidv4(), 
+      list: [],
+      length: 0,
+      checked: false
+
+  }
 
   const [user, setUser] = useState(null);
   const [loggedIn, setLoggedin] = useState(false);
@@ -50,6 +86,7 @@ const emptySuppliers = {
   const [taskListChecked, setTaskListChecked] = useState(0);
   const [guestData, setGuestData] = useState({});
   const [taskData, setTaskData] = useState({});
+  const [supplierData, setSupplierData] = useState({});
   const [bridalParty, setBridalParty] = useState(emptyBridal);
   const [bridalPartyChecked, setBridalPartyChecked] = useState(0);
   const [supplierList, setSupplierList] = useState(emptySuppliers);
@@ -90,23 +127,27 @@ const emptySuppliers = {
 
   }, []);
 
-  useEffect(() => {
+  const checkSupplierList = () => {
 
-  let checkSupplierList = getSupplierList();
+    if(supplierList.length === 0  && supplierListCheck === 0){
 
-  if(checkSupplierList === null){
+      const checkList = getSupplierList();
 
-    saveSupplierList(supplierList);
-    setSupplierListCheck(1);
-    
-  }else if(supplierListCheck === 0){
+      if(checkList === null){
 
-    setSupplierList(checkSupplierList);
-    setSupplierListCheck(1);
+        saveSupplierList(supplierList);
+        setSupplierListCheck(1);
+        
+      }else if(supplierListCheck === 0){
+
+        setSupplierList(checkList);
+        setSupplierListCheck(1);
+
+      }
+
+    }
 
   }
-
-},[])
 
   if(getTaskList() === null){
 
@@ -177,6 +218,12 @@ const emptySuppliers = {
 
   }
 
+  if(supplierList.length === 0 && supplierListCheck === 0){
+
+    checkSupplierList();
+
+  }
+
   const checkTaskList = async () => {
 
       if(taskList === "" && taskListChecked === 0){
@@ -201,8 +248,6 @@ const emptySuppliers = {
   }
 
   useEffect(() => {
-
-  
 
     const getGuestData = (data) => {
 
@@ -414,14 +459,10 @@ const emptySuppliers = {
         let enquiry = 0;
         let selected = 0;
 
-        // console.log(data.length);
-
-        for(let i = 0; i < data.length; i++){
+        for(let i = 0; i < data.list.length; i++){
 
             let state = data.list[i].state;
             let activity = data.list[i].activity;
-
-            // console.log(state);
 
             noTasks += 1;
             
@@ -443,7 +484,7 @@ const emptySuppliers = {
 
               notStarted += 1;
 
-            }else if(activity === "Researched"){
+            }else if(activity === "Researching"){
         
               researched += 1;
         
@@ -483,6 +524,136 @@ const emptySuppliers = {
 
     }
 
+    const getSupplierData = (data) => {
+
+      if(data !== ""){
+
+        let noSuppliers = 0;
+        let shortlisted = 0;
+        let enquiryMade = 0;
+        let booked = 0;
+        let ruledOut = 0;
+
+        let totalQuote = 0;
+        let quoteObject = {};
+        let totalCost = 0;
+        let costObject = {}; 
+
+        for(let i = 0; i < data.list.length; i++){
+
+          let name = data.list[i].name;
+          let uuid = data.list[i].UUID;
+          let type = data.list[i].type;
+          let state = data.list[i].status;
+          let quote = data.list[i].quote || 0;
+          let cost = data.list[i].cost || 0;
+
+          if(cost !== 0 && state === "Booked"){
+
+            costObject[type] = parseFloat(cost).toFixed(2);
+
+          }
+
+          if(quote !== 0 && state === "Enquiry made"){
+
+            let newObject = {
+
+              "uuid": uuid,
+              "quote": quote,
+              "name": name,
+
+            }
+            
+            if(quoteObject[type] === undefined){
+
+              quoteObject[type] = [ newObject ];    
+
+            }else{
+
+              quoteObject[type].push(newObject);
+
+            }
+
+          }
+
+          noSuppliers += 1;
+
+          if(state === "Shortlisted"){
+
+            shortlisted += 1;
+      
+          }else if(state === "Enquiry made"){
+
+            enquiryMade += 1;
+
+          }else if(state === "Booked"){
+
+            booked += 1;
+            
+          }else if(state === "Ruled out"){
+
+            ruledOut += 1;
+            
+          }
+
+
+        }
+
+        for(let key in quoteObject){
+ 
+          let highest; 
+        
+          for(let i = 0; i < quoteObject[key].length; i++){
+
+            if(i === 0){
+
+              highest = Number(quoteObject[key][i].quote);
+
+            }else{
+
+
+              if(Number(quoteObject[key][i].quote) > highest){
+
+                highest = Number(quoteObject[key][i].quote);
+
+              }
+
+            }
+
+          }
+
+          totalQuote += highest;
+
+
+        }
+
+        for(let key in costObject){
+
+          totalCost += Number(costObject[key]);
+
+        }
+
+
+        const dataObject = {
+
+          noSuppliers: noSuppliers,
+          shortlisted: shortlisted,
+          enquiryMade: enquiryMade,
+          booked: booked,
+          ruledOut: ruledOut,
+          totalQuote: parseFloat(totalQuote).toFixed(2),
+          quoteObject: quoteObject,
+          totalCost: parseFloat(totalCost).toFixed(2),
+          costObject: costObject
+
+        }
+
+        setSupplierData(dataObject);
+
+      }
+
+    }
+
     if(isEmpty(guestData)){
 
       getGuestData(guestList);
@@ -495,20 +666,26 @@ const emptySuppliers = {
 
     }
 
-  }, [guestList, guestData, taskList, taskData]);
+    if(isEmpty(supplierData)){
+
+      getSupplierData(supplierList);
+
+    }
+
+  }, [guestList, guestData, taskList, taskData, supplierList, supplierData]);
 
   useEffect(() => {
 
     const checkBridalParty = () => {
 
-      if(bridalParty.first.fName === "Partner 1" && bridalPartyChecked === 0){
+      if(bridalParty.first.firstName === "Partner 1" && bridalPartyChecked === 0){
 
           const checkList = getBridalParty();
 
           if(checkList === null){
 
-            setBridalParty(bridalOriginal);
-            saveBridalParty(bridalOriginal);
+            setBridalParty(emptyBridal);
+            saveBridalParty(emptyBridal);
             setBridalPartyChecked(1);
 
           }else{
@@ -522,7 +699,7 @@ const emptySuppliers = {
 
     }
 
-    if(bridalParty.first.fName === "Partner 1"){
+    if(bridalParty.first.firstName === "Partner 1"){
 
       checkBridalParty();
       setLoading(true);
@@ -548,8 +725,6 @@ const emptySuppliers = {
     return options;
   
   }
-  
-
 
   return (
 
@@ -559,13 +734,13 @@ const emptySuppliers = {
 
         <Routes>
 
-          <Route path="/managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
+          <Route path="/managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData } supplierData={ supplierData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
           <Route path="/managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
           <Route path="/managemywedding/guests" element={<Guests loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
           <Route path="/managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
           <Route path="/managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
           <Route path="/managemywedding/suppliers" element={<Suppliers loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
-           <Route path="/managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
+          <Route path="/managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
           
           
           <Route path="/" element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faq } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />

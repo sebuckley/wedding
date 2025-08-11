@@ -102,6 +102,26 @@ export default function PrimaryGuestList(props){
 
     }
 
+    const getNumberTitle = (num, fName, surname) => {
+
+        let text;
+
+        if(num  === ""){
+
+
+            text= "add number for " + fName + " " + surname;
+
+
+        }else{
+
+            text= "call " + fName + " " + surname;
+
+        }
+
+        return text;
+
+    }
+
     const getList = (array) => {
 
         array = sortGuestList(array, guestsSortedBy, guestsSorted);
@@ -120,14 +140,26 @@ export default function PrimaryGuestList(props){
                         <div className={ "guestRow " + index} key={ item.UUID }>
 
                             <div className="col-3"><a href={ getPersonLink(item.UUID) }>{item.firstName + " " + item.surname } </a></div>
-                            <div className="col-1"><a href={ getPhoneLink(item.mobile, item.UUID) }> { item.mobile === "" ? "Add number" : "Call" }</a></div>
-                            <div className="col-1"><a href={ getEmailLink(item.email, wedding, item.firstName) }>email</a></div>
-                            <div className="col-1"> { item.rsvp } </div>
+                            <div className="col-1"><a href={ getPhoneLink(item.mobile, item.UUID) } aria-label={ getNumberTitle(item.mobile, item.firstName, item.surname ) } title={ getNumberTitle(item.mobile, item.firstName, item.surname ) }> { item.mobile === "" ? <i className="fa-solid fa-circle-plus icon3"></i> : <i className="fa-solid fa-phone icon3"></i> }</a></div>
+                            <div className="col-1"><a href={ getEmailLink(item.email, wedding, item.firstName) } aria-label={ "email " + item.firstName + " " + item.surname } title={ "email " + item.firstName + " " + item.surname }><i className="fa-solid fa-envelope icon3"></i></a></div>
+                            <div className="col-1"> { item.rsvp === "Not confirmed" ? <i className="fa-solid fa-circle-minus iconMinus" aria-label="Not confirmed" title="Not confirmed"></i> : item.rsvp === "Confirmed" ?  <i className="fa-solid fa-circle-check iconCheck" aria-label="Confirmed" title="Confirmed"></i> : <i className="fa-solid fa-circle-xmark iconCross" aria-label="Declined" title="Declined"></i>} </div>
                             
-                            <div className="col-1">Max: { parseInt(item.maxGuests) + 1 }</div>
-                            <div className="col-2">Confirmed: { getConfirmed(item.rsvp, item.additionalGuestsSet, item.additionalGuestsNo, item.maxGuests) }</div>
-                            <div className="col-2">Declined: { getDeclined(item.rsvp, item.additionalGuestsSet, item.additionalGuestsNo, item.maxGuests) }</div>
-                            <div className="col-1">
+                            <div className="col-1 centered">
+                                <div className="centered"><i className="fa-solid fa-people-group icon4" aria-hidden="true" aria-label="Max guests" title="Max guests"></i></div>
+                                <div className="centered">:</div> 
+                                <div className="centered"> { parseInt(item.maxGuests) + 1 }</div>
+                            </div>
+                            <div className="col-1 centered">
+                                <div className="centered"><i className="fa-solid fa-circle-check iconCheck2" aria-hidden="true" aria-label="Number confirmed" title="Number confirmed"></i></div>
+                                <div className="centered">:</div> 
+                                <div className="centered">{ getConfirmed(item.rsvp, item.additionalGuestsSet, item.additionalGuestsNo, item.maxGuests) } </div>
+                            </div>
+                            <div className="col-1 centered">
+                                <div className="centered"><i className="fa-solid fa-circle-xmark iconCross2" aria-hidden="true" aria-label="Number declined" title="Number declined"></i></div>
+                                <div className="centered">:</div> 
+                                <div className="centered"> { getDeclined(item.rsvp, item.additionalGuestsSet, item.additionalGuestsNo, item.maxGuests) }</div>
+                            </div>
+                            <div className="col-2">
                                 <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
                             </div>
                             <div style={{display:"none"}}>
@@ -150,17 +182,17 @@ export default function PrimaryGuestList(props){
 
                         return (
 
-                            <div className={ "guestRow " + index} key={ item.UUID }>
+                           <div className={ "guestRow " + index} key={ item.UUID }>
 
                                 <div className="col-3"><a href={ getPersonLink(item.UUID) }>{item.firstName + " " + item.surname } </a></div>
-                                <div className="col-1"><a href={ getPhoneLink(item.mobile, item.UUID) }> { item.mobile === "" ? "Add number" : "Call" }</a></div>
-                                <div className="col-1"><a href={ getEmailLink(item.email, wedding, item.firstName) }>email</a></div>
-                                <div className="col-1"> { item.rsvp } </div>
+                                <div className="col-1"><a href={ getPhoneLink(item.mobile, item.UUID) } aria-label={ "add number for" + item.firstName + " " + item.surname }> { item.mobile === "" ? <i className="fa-solid fa-circle-plus icon3"></i> : <i className="fa-solid fa-phone icon3"></i> }</a></div>
+                                <div className="col-1"><a href={ getEmailLink(item.email, wedding, item.firstName) } aria-label={ "email " + item.firstName + " " + item.surname }><i className="fa-solid fa-envelope icon3"></i></a></div>
+                                <div className="col-1"> { item.rsvp === "Not confirmed" ? <i className="fa-solid fa-circle-minus iconMinus" aria-label="Not confirmed" title="Not confirmed"></i> : item.rsvp === "Confirmed" ?  <i className="fa-solid fa-circle-check iconCheck" aria-label="Confirmed" title="Confirmed"></i> : <i className="fa-solid fa-circle-xmark iconCross" aria-label="Declined" title="Declined"></i>} </div>
                                 
-                                <div className="col-1">Max: { parseInt(item.maxGuests) + 1 }</div>
-                                <div className="col-2">Confirmed: { getConfirmed(item.rsvp, item.additionalGuestsSet, item.additionalGuestsNo, item.maxGuests) }</div>
-                                <div className="col-2">Declined: { declinedGuests }</div>
-                                <div className="col-1">
+                                <div className="col-1"><i className="fa-solid fa-people-group icon4" aria-hidden="true" aria-label="Max guests" title="Max guests"></i>: { parseInt(item.maxGuests) + 1 }</div>
+                                <div className="col-1" style={{"display":"flex", "alignItems": "centre"}}><div><i className="fa-solid fa-circle-check iconCheck2" aria-hidden="true" aria-label="Number confirmed" title="Number confirmed"></i></div>: <div>{ getConfirmed(item.rsvp, item.additionalGuestsSet, item.additionalGuestsNo, item.maxGuests) } </div></div>
+                                <div className="col-1"><i className="fa-solid fa-circle-xmark iconCross2" aria-hidden="true" aria-label="Number declined" title="Number declined"></i>: { getDeclined(item.rsvp, item.additionalGuestsSet, item.additionalGuestsNo, item.maxGuests) }</div>
+                                <div className="col-2">
                                     <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
                                 </div>
                                 <div style={{display:"none"}}>

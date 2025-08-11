@@ -2,7 +2,7 @@ import '../Dashboard.css';
 import { useState, useEffect } from 'react';
 import { getGuestList, saveGuestList, checkExistingGuest } from '../../Wigits/dataFunctions-guestList';
 import { roles } from '../../App/mainData';
-import GenderDropdownWithDress from '../../Wigits/genderDropdown';
+import GenderDropdown from '../../Wigits/genderDropdown';
 // import { parsePhoneNumberFromString, isPossiblePhoneNumber, isValidPhoneNumber, validatePhoneNumberLength } from 'libphonenumber-js';
 
 export default function AddGuests(props){
@@ -285,12 +285,11 @@ export default function AddGuests(props){
 
             const user = JSON.parse(localStorage.getItem("token"));
 
-            console.log(user);
-
             newPerson["rsvp"] = "Not confirmed";
             newPerson["created"] = new Date();
             newPerson["createdBy"] = user.user;
             newPerson["UUID"] = personUUID;
+            newPerson["guestType"] = "Over 18";
             newPerson["additionalGuests"] = [];
             newPerson["additionalGuestsNo"] = 0;
             newPerson["additionalGuestsSet"] = false;
@@ -579,8 +578,9 @@ export default function AddGuests(props){
 
             <i onClick={ displayAddGuest } id="addGuestIcon" className="fa fa-circle-plus iconHeader"></i>
             <h1 onClick={ displayAddGuest } id="addGuestTitle">Add Guest</h1>
-
+            
             <form id='inputForm' style={ getCurrentDisplay() } target="_blank">
+                <p>Add a guest to your list, any guest addered here will be treated as an adult.  If you wish to add a bridesmade who is a child, please add the adult guest frist before selecting their guest (the child) as the bridesmade.</p>
 
                 <div className='row two'>
 
@@ -594,46 +594,19 @@ export default function AddGuests(props){
                     </div>
 
                 </div>
+                 
+                <GenderDropdown getColor={ getColor } onChange={ onInput } value={ gender }/>
 
                 <div className='row'>
 
                     <div className='inputGroup col-12'>
-
-                        <i className="fa-solid fa-venus-mars icon"></i>
-                        <GenderDropdownWithDress getColor={ getColor } onChange={ onInput } value={ gender }/>
-                       
-                    </div>
-
-                </div>
-
-                <div className='row'>
-
-                    <div className='inputGroup col-12'>
-                        { console.log(role) }
+                    
                         <i className="fa-solid fa-person-circle-question icon"></i>
                         <select id="guestRole" className='guestType' style={ getColor(role) } name='role' onChange={ onInput } value={ role }>
                             <option value="" hidden className="noOption">please select role... (required)</option>
                             <option>Guest</option>
                             { getRoles(roles) }
 
-                        </select>
-                       
-                    </div>
-
-                </div>
-
-                
-
-                <div className='row'>
-
-                    <div className='inputGroup col-12'>
-
-                        <i className="fa-solid fa-circle-info icon"></i>
-                        <select className='guestType' style={ getColor() } name='guestType' onChange={ onInput } value={ guestType }>
-                            <option value="" hidden className="noOption">please select age category... (required)</option>
-                            <option>Over 18</option>
-                            <option>Under 18</option>
-                            <option>Under 5</option>
                         </select>
                        
                     </div>
@@ -667,7 +640,7 @@ export default function AddGuests(props){
 
                     <div className='inputGroup col-12'>
                         <i className="fa-solid fa-person-circle-plus icon"></i>
-                        <input type='text' className='inputBox' onInput={ onInput } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests (required)' value={ maxGuests }></input>
+                        <input type='text' className='inputBox' onInput={ onInput } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='How many additional guests can they bring? (required)' value={ maxGuests }></input>
                     </div>
 
                 </div>

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import '../Dashboard.css';
-import { splitByCapitalNums } from '../../Wigits/dataFunctions';
+import { splitByCapitalNums, updateSupplierTask } from '../../Wigits/dataFunctions';
 import { getSupplierIndex, saveSupplierList, deleteSupplierListItem } from '../../Wigits/dataFunctions-suppliers';
 
 export default function SupplierListItem(props){
@@ -14,6 +14,9 @@ export default function SupplierListItem(props){
     const stateChange = props.stateChange;
     const setStateChange = props.setStateChange; 
     const supplierStatuses = props.supplierStatuses;
+    const setTaskList = props.setTaskList;
+    const taskList = props.taskList;
+    const user = props.user;
 
 
     const getSupplierLink = (a, name) => {
@@ -97,15 +100,24 @@ export default function SupplierListItem(props){
     const onChange = (e) => {
 
         const value = e.target.value;
+        const name = e.target.className;
         setStatus(value);
-        let UUID = e.target.parentElement.nextSibling.innerText
-        let index = getSupplierIndex(UUID);
-
-       
+        let supplierID = e.target.parentElement.nextSibling.innerText
+        let index = getSupplierIndex(supplierID);
 
         supplierList.list[index]["status"] = value;
         saveSupplierList(supplierList);
         setSupplierList(supplierList);
+
+        let newTaskList = updateSupplierTask(supplierList, supplierID, value, taskList, name, user);
+        setTaskList(newTaskList);
+
+        if(value === "Booked" || value === "Enquiry made"){
+
+            const reDirectString = "/managemywedding/supplier/?supplierID=" + supplierID;
+            window.location.replace(reDirectString);
+
+        }
 
 
     }
@@ -132,7 +144,7 @@ export default function SupplierListItem(props){
                 <div className="col-1" title="call">{ getPhone(item.phone, item.UUID) }</div>
                 <div className="col-1" title="website">{ getWebsite(item.website, item.UUID) }</div>
                 <div className="col-2" title={ item.status }>
-                    <select className="" name="status" value={status} onChange={ onChange }>
+                    <select className={ item.type } name="status" value={status} onChange={ onChange }>
                         <option value="">None</option>
                         {supplierStatuses.map((s, i) => (
                             <option key={i} value={s}>{s}</option>

@@ -90,16 +90,27 @@ form {
     justify-content: center;
     flex-wrap: wrap;
     flex-direction: row;
-    margin: 5px;
+    margin: 10px;
  
 
 }
 
 .dashboardBox {
 
- margin: 10px;
-
+    margin: 10px;
+    width: 120px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;  
+    margin: 10px;  
+    
 }
+
+
+
+
+
 
 .contentWrapper{
 
@@ -418,6 +429,17 @@ textarea{
 
 }
 
+.iconHeader2 {
+
+    color: var(--accent);
+    padding: 10px;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    font-size: 24px;
+    cursor: pointer;
+
+}
+
 .inputDateText {
 
     text-align: center;
@@ -451,6 +473,63 @@ textarea{
     
 }
 
+
+.iconCheck {
+
+    display: inline-block;
+    color: green;
+    padding: 15px;
+    font-size: 25px;
+    cursor: pointer;
+    
+}
+
+.iconCross {
+
+    display: inline-block;
+    color: red;
+    padding: 15px;
+    font-size: 25px;
+    cursor: pointer;
+    
+}
+
+.iconMinus {
+
+    display: inline-block;
+    color: orange;
+    padding: 15px;
+    font-size: 25px;
+    cursor: pointer;
+    
+}
+
+.icon4 {
+
+    display: inline-block;
+    color: var(--accent);
+    font-size: 25px;
+
+    
+}
+
+.iconCheck2 {
+
+    display: inline-block;
+    color: green;
+    font-size: 25px;
+
+    
+}
+
+.iconCross2 {
+
+    display: inline-block;
+    color: red;
+    font-size: 25px;
+  
+    
+}
 
 .inputBox {
 
@@ -734,9 +813,6 @@ textarea{
     margin: 5px;
     border: 1px solid var(--grey);
     border-radius: 9px;
-    cursor: pointer;
-
-
 
 }
 
@@ -761,7 +837,14 @@ textarea{
 
 }
 
+.centered {
 
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+    align-items: center;    /* Vertical centering */
+    margin: 1px;
+   
+}
 
 .guestType {
 
@@ -1139,6 +1222,49 @@ option {
 
 }
 
+.weddingfilterButton {
+
+  background-color: var(--primary);
+  border: none;
+  color: black;
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
+.weddingfilterButton:hover {
+
+  background-color: var(--primary);
+   color: black;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+
+}
+
+.activeWeddingFB {
+
+  background-color: var(--white);
+  border: none;
+  color:  var(--black);
+  border: 2px solid  var(--primary);
+  text-align: center;
+  height: 70px;
+  width: 130px;
+  padding: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+
+}
+
 .sortOptions {
 
     width: 60%;
@@ -1177,6 +1303,7 @@ option {
 .dashLink {
 
     text-decoration: none !important;
+    margin: 10px;
 
 }
 
@@ -1265,6 +1392,12 @@ option {
 
         width: 100%;
     
+    }
+
+    .detailsForm {
+
+        width: 100%;
+
     }
     
     .row {

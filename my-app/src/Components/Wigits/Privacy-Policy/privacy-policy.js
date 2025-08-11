@@ -12,7 +12,7 @@
     
         <div>
 
-            < Header location="privacy-policy" fName={bridalParty.groom.fName} sName={bridalParty.bride.fName} headerOn={ headerOn }/>
+            < Header location="privacy-policy" firstName={bridalParty.groom.firstName} sName={bridalParty.bride.firstName} headerOn={ headerOn }/>
 
             <div id="body">
 

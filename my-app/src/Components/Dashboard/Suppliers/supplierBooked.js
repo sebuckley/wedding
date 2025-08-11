@@ -2,7 +2,22 @@ export default function SupplierCostDetails(props){
 
     const type = props.type;
     const onInput = props.onInput;
-    const value = props.value;
+    const value = parseFloat(props.value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const currency = props.currency;
+    const currencyList = props.currencyList;
+
+    const formatNumber = (e) => {
+
+        if(e.target.value !== ""){
+
+            e.target.value = currencyList[currency].symbol +  parseFloat(e.target.value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        }else{
+
+            e.target.value = currencyList[currency].symbol + " 0.00";
+        }
+
+    }
 
     const getType = (info) => {
 
@@ -35,8 +50,8 @@ export default function SupplierCostDetails(props){
            <div className='row'>
 
                 <div className='inputGroup col-12'>
-                    <i className="fa-solid fa-sterling-sign icon"></i>
-                    <input type='number' className='inputBox' name={ getType("name") } min="0"  placeholder={ getType("placeholder")} step="0.01" onInput={ onInput } defaultValue={ value }></input>
+                    <i className="icon">{currencyList[currency].symbol}</i>
+                    <input type='text' className='inputBox' name={ getType("name") }  placeholder={ getType("placeholder")}  onChange={ onInput } defaultValue={ value } numeric="true" onBlur={ formatNumber }></input>
 
                 </div>
 

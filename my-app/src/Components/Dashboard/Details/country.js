@@ -1,5 +1,6 @@
 import { doc } from "firebase/firestore";
 import React, { useState } from "react";
+import Flag from "./flag"
 
 const countrySizePreferences = {
     // Americas
@@ -123,20 +124,7 @@ const countrySizePreferences = {
     "New Caledonia": { system: "AU", region: "Oceania", icon: "nc" },
 };
 
-function Flag({ countryCode = "ph", size = "28x21", alt = "Philippines Flag" }) {
-  const src = `https://flagcdn.com/${size}/${countryCode.toLowerCase()}.png`;
 
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className="icon"
-      width={size.split('x')[0]}
-      height={size.split('x')[1]}
-      style={{ borderRadius: 4 }}
-    />
-  );
-}
 
 
 
@@ -183,6 +171,9 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
     const [state, setState] = useState(0);
     const getColor = props.getColor;
     const handleChange = props.handleChange;
+    const countryEmpty = props.countryEmpty;
+    const checkEmpty = props.checkEmpty;
+    let initialEmptyCheck = props.initialEmptyCheck;
 
     // Sort countries but keep their original values as option values
     const sortedCountries = Object.keys(countrySizePreferences).sort();
@@ -199,7 +190,7 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
         setState(state + 1); // Trigger re-render
 
         // Ensure handleChange is called for sizeSystem when country changes
-        handleChange({ target: { value: sizeSystem, name: "sizeSystem", className: "weddingDetails" } });
+        checkEmpty(e.target);
 
     };
 
@@ -211,13 +202,44 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
         
     };
 
+    const getCountryStatus = () => {
+
+        let object;
+
+        if(typeof initialEmptyCheck === "undefined"){
+
+            initialEmptyCheck = false;
+
+        }
+
+        if(initialEmptyCheck === false){
+
+            object = "";
+
+        }else{
+
+            if(countryEmpty === 0){
+
+                object = <span className="countryCompleted completed">[Completed]</span>;
+            }else{
+
+                object = <span className="countryCompleted outstanding">[{ countryEmpty } Outstanding]</span>;
+            }
+        }
+
+        return object;
+
+    }
+
     const codes = selectedSystem ? sizeCodes[selectedSystem] || [] : [];
 
     return (
 
        <>
+
+      
             <h2 className="text-2xl font-bold mb-4">
-                Country & Clothing Sizing System
+                Country & Clothing Sizing System { getCountryStatus() }
             </h2>
             <div className="row">
                 <div className="inputGroup col-12">
@@ -226,7 +248,7 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
                     <div>
                         { selectedCountryName !== "" ? <Flag countryCode={countrySizePreferences[selectedCountryName].icon} alt={ selectedCountryName + " flag" }/> : <i className="fa-solid fa-earth icon"></i> } 
                         <select
-                            className="border px-3 py-2 rounded w-full guestType weddingDetails"
+                            className="border px-3 py-2 rounded w-full guestType countrySize weddingDetails"
                             value={selectedCountry}
                             onChange={handleCountryChange}
                             style={getColor(selectedCountry)}
@@ -234,11 +256,16 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
                         >
 
                             <option value="" hidden className="noOption">please select country... (required)</option>
-                            {sortedCountries.map((country) => (
-                                <option key={country} value={country}>
-                                    {country}
-                                </option>
-                            ))}
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="United States">United States</option>
+                            {sortedCountries.map((country) => {
+
+                                if(country !== "United Kingdom" && country !== "United States"){
+                                
+                                    return <option key={country} value={country}>{country}</option>
+
+                                }
+                            })}
                         </select>
                     </div>
                 </div>
@@ -255,7 +282,7 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
                             <i className="fa-solid fa-shirt icon"></i>
                             <select
                                 id="sizeSystem"
-                                className="border px-3 py-2 rounded w-full guestType weddingDetails"
+                                className="border px-3 py-2 rounded w-full guestType countrySize weddingDetails"
                                 value={selectedSystem}
                                 onChange={handleSystemChange}
                                 style={getColor(selectedSystem)}

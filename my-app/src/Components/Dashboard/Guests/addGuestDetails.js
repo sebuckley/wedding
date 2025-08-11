@@ -12,14 +12,17 @@ export default function NewGuest(props){
     const onInputGuests = props.onInputGuests;
     const onChangeOptionGuest = props.onChangeOptionGuest;
     const getColor = props.getColor;
+    const roles = props.roles;
+    const getRoles = props.getRoles;
+    const disableItem = props.disableItem;
+
+    const role = typeof additionalGuests[arrayNumber].role === "undefined" ? "Guest" : additionalGuests[arrayNumber].role;
 
     const getNumber = (text, number) => {
 
         return text + " " + number;
 
     }
-
-    
 
     return (
 
@@ -41,6 +44,22 @@ export default function NewGuest(props){
             </div>
 
             <div className='row'>
+            
+                <div className='inputGroup col-12'>
+                
+                    <i className="fa-solid fa-person-circle-question icon"></i>
+                    <select id="guestRole" className='guestType' style={ getColor(role) } name='role' onChange={ onChangeOptionGuest } value={ role } disabled={ disableItem } >
+                        <option value="" hidden className="noOption">please select role... (required)</option>
+                        <option>Guest</option>
+                        { getRoles(roles) }
+
+                    </select>
+                    
+                </div>
+
+            </div>
+
+            <div className='row'>
 
                 <div className='inputGroup col-12'>
 
@@ -48,8 +67,24 @@ export default function NewGuest(props){
                     <select className={ getNumber("guestType", arrayNumber) }  name='guestType' style={getColor(additionalGuests[arrayNumber].guestType)} onChange={ onChangeOptionGuest } value={ additionalGuests[arrayNumber].guestType }>
                         <option value="" hidden className="noOption">please select age category...</option>
                         <option>Over 18</option>
-                        <option>Under 18</option>
-                        <option>Under 5</option>
+                        <option>17</option>
+                        <option>16</option>
+                        <option>15</option>
+                        <option>14</option>
+                        <option>13</option>
+                        <option>12</option>
+                        <option>11</option>
+                        <option>10</option>
+                        <option>9</option>
+                        <option>8</option>
+                        <option>7</option>
+                        <option>6</option>
+                        <option>5</option>
+                        <option>4</option>
+                        <option>3</option>
+                        <option>2</option>
+                        <option>1</option>
+                        <option>Under 1</option>
                     </select>
                 
                 </div>

@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '../Dashboard.css';
 import Login from '../../Login/Login';
 import Loading from '../../PublicSite/Components/loading/loading';
 import Header from '../../Wigits/Header/header';
 import { saveBridalParty } from "../../Wigits/dataFunctions-bridalParty";
+import { uuidv4 } from "../../Wigits/dataFunctions";
 import BridalPerson from "./person";
 import WeddingPlans from "./wedding";
-
+import BridalFilter from "./bridalFilter";
 
 export default function Details(props){
   
@@ -19,6 +20,12 @@ export default function Details(props){
     let bridalParty = props.bridalParty;
     const setBridalParty = props.setBridalParty;
     const [listUpdated, setListUpdated] = useState(0);
+    const [weddingFilter, setWeddingFilter] = useState("Wedding Plans");
+    const [formEmpty, setFormEmpty] = useState(0);
+    const [countryEmpty, setCountryEmpty] = useState(0);
+    const [styleEmpty, setStyleEmpty] = useState(0);
+    const [colorEmpty, setColorEmpty] = useState(0);
+    const [initialEmptyCheck, setEmptyInitialCheck] = useState(false)
 
     const emptyDetails = {
 
@@ -35,21 +42,21 @@ export default function Details(props){
       role2: "",
 
     }
-    
 
     const handleChange = (e) => {
 
-      const { name, value } = e.target;
+      const name = e.target.name;
+      const value = e.target.value;
       const className = e.target.className;
 
-      console.log("Change detected:", name, value, className);
+      // console.log("Change detected:", name, value, className);
 
       const split = className.split(" ");
       const createName = split[split.length - 1];
 
-      if (!(createName in bridalParty)) {
+      if (!("UUID" in bridalParty[createName])) {
 
-        bridalParty[createName] = {};
+        bridalParty[createName]["UUID"] = uuidv4();
 
       }
 
@@ -64,8 +71,121 @@ export default function Details(props){
       setBridalParty(bridalParty);
       saveBridalParty(bridalParty);
       setListUpdated(listUpdated + 1);
+      checkEmptyWedding();
+      checkEmpty(e.target);
 
     };
+
+   
+
+    const checkEmptyWedding = () => {
+
+        if(initialEmptyCheck === false){
+
+          setEmptyInitialCheck(true);
+
+        }
+
+        const items = document.getElementsByClassName("checkDetails");
+
+        let empty = 0;
+
+        for(let i=0; i< items.length; i++){
+
+            let value = items[i].value;
+
+            console.log(value);
+            
+            if(value === ""){
+
+                empty += 1;
+                items[i].style.borderColor = "red";
+
+            }
+
+        }
+
+        setFormEmpty(empty);
+        checkEmptyCountry();
+        checkEmptyStyle();
+        checkEmptyColor();
+
+    }
+
+    const checkEmptyCountry = () => {
+
+        const items = document.getElementsByClassName("countrySize");
+
+        let empty = 0;
+
+        for(let i=0; i< items.length; i++){
+
+            let value = items[i].value;
+
+            console.log(value);
+            
+            if(value === ""){
+
+                empty += 1;
+                items[i].style.borderColor = "red";
+
+            }
+
+        }
+
+        setCountryEmpty(empty);
+
+    }
+
+    const checkEmptyStyle = () => {
+
+        const items = document.getElementsByClassName("style");
+
+        let empty = 0;
+
+        for(let i=0; i< items.length; i++){
+
+            let value = items[i].value;
+
+            console.log(value);
+            
+            if(value === ""){
+
+                empty += 1;
+                items[i].style.borderColor = "red";
+
+            }
+
+        }
+
+        setStyleEmpty(empty);
+
+    }
+
+    const checkEmptyColor = () => {
+
+        const items = document.getElementsByClassName("color");
+
+        let empty = 0;
+
+        for(let i=0; i< items.length; i++){
+
+            let value = items[i].value;
+
+            console.log(value);
+            
+            if(value === ""){
+
+                empty += 1;
+                items[i].style.borderColor = "red";
+
+            }
+
+        }
+
+        setColorEmpty(empty);
+
+    }
 
     const handleSubmit = (e) => {
 
@@ -144,7 +264,7 @@ export default function Details(props){
 
         let color;
 
-        if(role === ""){
+        if(role === "" || typeof role === "undefined"){
 
             color = { color: "var(--grey)"}
 
@@ -158,47 +278,52 @@ export default function Details(props){
 
     }
 
-    // const getChangeEnter = (e) => {
+    const disableItem = user ? false : true;
 
-    //   if(e.target.value === ""){
+    const checkEmpty = (item) => {
 
-    //     e.target.type = 'date';
-      
-    //   }
+        if(item.value !== ""){
 
-    // }
+            console.log(item)
 
-    // const getChangeExit = (e) => {
+            if(item.tagName === "SELECT"){
 
-    //   if(e.target.value === ""){
+                item.style.outline = "none";
+                item.style.borderColor = "var(--grey)";
 
-    //     e.target.type = 'text';
-      
-    //   }
-      
-    // }
+            }else{
+
+                item.style.borderColor = "var(--grey)";
+
+            }
+
+            item.style.color  = "var(--black)";
+
+        }
+
+    }
 
     const getName = (num) => {
 
       let text;
 
-      if(num === 1){
+      if(num === "first"){
         
-        text= "Partner 1";
+        text = "Partner 1";
 
-        if(bridalParty["first"].fName !== "" && bridalParty["first"].lName !== ""){
+        if(bridalParty["first"].firstName !== "" && bridalParty["first"].firstName !== "Partner 1"){
 
-          text = bridalParty["first"].fName + " " + bridalParty["first"].lName;
+          text = typeof bridalParty["first"].surname !== "undefiened" ?  bridalParty["first"].firstName + " " + bridalParty["first"].surname : bridalParty["first"].firstName;
 
         }
 
       }else{
 
-        text= "Partner 2";
+        text = "Partner 2";
         
-        if(bridalParty["second"].fName !== "" && bridalParty["second"].lName !== ""){
+        if(bridalParty["second"].firstName !== ""  && bridalParty["first"].firstName !== "Partner 2"){
 
-          text = bridalParty["second"].fName + " " + bridalParty["second"].lName;
+          text = typeof bridalParty["second"].surname !== "undefiened" ?  bridalParty["second"].firstName + " " + bridalParty["second"].surname : bridalParty["second"].firstName;
 
         }
 
@@ -242,6 +367,16 @@ export default function Details(props){
 
     }
 
+    useEffect(() => {
+
+      if(initialEmptyCheck === false){
+      
+        checkEmptyWedding();
+
+      }
+
+    }, []);
+
     if(loading){
 
       return <Loading bridalParty={ bridalParty } user={ user }/>
@@ -254,54 +389,85 @@ export default function Details(props){
   
     }
 
+ 
+    
+   
+  
+
     return(
 
       <div>
 
-        <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
+        <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
 
         <div className="adminBody">
+
+          <BridalFilter setWeddingFilter={ setWeddingFilter } filterName={ weddingFilter } />
+
 
           <form
             onSubmit={handleSubmit}
             id="detailsForm"
             className="detailsForm"
           >
+          
+           { weddingFilter === "Partner 1" ? <BridalPerson 
+
+                                                  handleChange={ handleChange } 
+                                                  getRoles={ getRoles } 
+                                                  selection={ "first" } 
+                                                  getName={ getName } 
+                                                  bridalParty={ bridalParty } 
+                                                  getColor={ getColor } 
+                                                  checkEmpty={ checkEmpty }
+                                                  
+
+                                                /> : ""
+
+            }
+
+            {
             
+            weddingFilter === "Partner 2" ? <BridalPerson 
+
+                                                handleChange={ handleChange } 
+                                                getRoles={ getRoles } 
+                                                selection={ "second" } 
+                                                getName={ getName } 
+                                                bridalParty={ bridalParty } 
+                                                getColor={ getColor } 
+                                                checkEmpty={ checkEmpty }
+
+                                              /> : ""
+
+            }
+
+            {
+
+            weddingFilter === "Wedding Plans" ? <WeddingPlans 
+
+                                                      handleChange={ handleChange } 
+                                                      getRoles={ getRoles } 
+                                                      getName={ getName } 
+                                                      bridalParty={ bridalParty } 
+                                                      getColor={ getColor } 
+                                                      setBridalParty = { setBridalParty }
+                                                      saveBridalParty = { saveBridalParty }
+                                                      setListUpdated = { setListUpdated }
+                                                      updated = { listUpdated }
+                                                      formEmpty={ formEmpty }
+                                                      checkEmpty={ checkEmpty }
+                                                      initialEmptyCheck={ initialEmptyCheck }
+                                                      countryEmpty={ countryEmpty }
+                                                      styleEmpty={ styleEmpty }
+                                                      colorEmpty={ colorEmpty }
+
+                                                    /> : ""
+
+            }
           
-            <BridalPerson 
-              handleChange={ handleChange } 
-              getRoles={ getRoles } 
-              selection={ "first" } 
-              getName={ getName } 
-              bridalParty={ bridalParty } 
-              getColor={ getColor } 
-            />
-
-            <BridalPerson 
-              handleChange={ handleChange } 
-              getRoles={ getRoles } 
-              selection={ "second" } 
-              getName={ getName } 
-              bridalParty={ bridalParty } 
-              getColor={ getColor } 
-            />
-
-            <WeddingPlans 
-              handleChange={ handleChange } 
-              getRoles={ getRoles } 
-              getName={ getName } 
-              bridalParty={ bridalParty } 
-              getColor={ getColor } 
-              setBridalParty = { setBridalParty }
-              saveBridalParty = { saveBridalParty }
-              setListUpdated = { setListUpdated }
-              updated = { listUpdated }
-
-            />
-          
-            <button type="submit" className="className='button primary">Save</button>
-            <button type='button' onClick={ clearNewForm } id='clearBtn' className='button secondary'>Clear form</button>
+            {/* <button type="submit" className="className='button primary">Save</button>
+            <button type='button' onClick={ clearNewForm } id='clearBtn' className='button secondary'>Clear form</button> */}
 
           </form>
 

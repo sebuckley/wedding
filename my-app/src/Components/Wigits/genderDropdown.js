@@ -133,7 +133,7 @@ export const genderIdentities = [
   }
 ];
 
-const GenderDropdownWithDress = (props) => {
+const GenderDropdown = (props) => {
 
     const getColor = props.getColor;
     const onChange = props.onChange;
@@ -141,26 +141,37 @@ const GenderDropdownWithDress = (props) => {
 
   return (
 
-    <div className="w-full">
-   
-      <select
-        id="gender"
-        name="gender"
-        style={ getColor(gender) }
-        value={gender}
-        onChange={onChange}
-        className="guestType"
-      >
-        <option value="" hidden className="noOption">please select gender... (required)</option>
-        {genderIdentities.map((gender) => (
-          <option key={gender.label} value={gender.label}>
-            {gender.label}
-          </option>
-        ))}
-      </select>
+    <div className='row'>
+
+      <div className='inputGroup col-12'>
+
+          <i className="fa-solid fa-venus-mars icon"></i>
+
+          <div className="w-full">
+        
+            <select
+              id="gender"
+              name="gender"
+              style={ getColor(gender) }
+              value={gender}
+              onChange={onChange}
+              className="guestType"
+            >
+              <option value="" hidden className="noOption">please select gender... (required)</option>
+              {genderIdentities.map((gender) => (
+                <option key={gender.label} value={gender.label}>
+                  {gender.label}
+                </option>
+              ))}
+            </select>
+
+          </div>
+
+      </div>
+
     </div>
 
   );
 };
 
-export default GenderDropdownWithDress;
+export default GenderDropdown;

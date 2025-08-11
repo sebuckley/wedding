@@ -268,53 +268,20 @@ export default function Tasks(props){
 
       const UUID = e.target.parentNode.nextSibling.nextSibling.innerText;
       const taskName = e.target.parentNode.nextSibling.nextSibling.nextSibling.innerText;
-      const state = e.target.parentNode.previousSibling.previousSibling.querySelector(".state").value;
-      let activity = e.target.parentNode.previousSibling.querySelector(".activity").value;
+      console.log(e.target.parentNode.previousSibling.previousSibling.innerText)
+      const state = e.target.parentNode.previousSibling.previousSibling.innerText;
+      let activity = e.target.parentNode.previousSibling.innerText;
       const toDoDate  = itemDate;
 
       const index = getTaskIndex(taskList, UUID);
       const currentState = taskList.list[index].state;
-      let note;
-      let noteStructure;
-
-      note = window.prompt("Enter a note:");
-
-      if(note){
-
-        noteStructure = {
-
-          date: new Date(),
-          note: note
-
-        }
-
-      }else{
-
-          noteStructure = {
-
-          date: new Date(),
-          note: "No note recorded"
-
-        }
-
-      }
-
-      let notes = taskList.list[index].notes;
-
-      if(typeof notes === "undefined"){
-
-        notes = [];
-
-      }
-
-      notes.push(noteStructure);
 
       if(currentState === "" || currentState === "To-do"){
 
-        let stateSelector = e.target.parentElement.previousSibling.previousSibling.querySelector(".state");
-        stateSelector.value = "In-progress";
-        let activitySelector = e.target.parentElement.previousSibling.querySelector(".activity");
-        activitySelector.value = "Planned";
+        let stateSelector = e.target.parentElement.previousSibling.previousSibling;
+        stateSelector.innerText = "In-progress";
+        let activitySelector = e.target.parentElement.previousSibling;
+        activitySelector.innerText = "Planned";
         activity = "Planned";
         saveTaskListItem(taskList, index, "toDoDate", toDoDate);
         saveTaskListItem(taskList, index, "state", "In-progress");
@@ -329,8 +296,6 @@ export default function Tasks(props){
         saveTaskListItem(taskList, index, "lastUpdated", currentDate);
 
       }
-
-      saveTaskListItem(taskList, index, "note", notes);
 
       let obj = {
 
@@ -380,7 +345,7 @@ export default function Tasks(props){
 
       <div>
 
-         <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
+         <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
 
         <div className="adminBody">
 

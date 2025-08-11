@@ -2,6 +2,7 @@ import { useState } from "react";
 import '../Dashboard.css';
 import { getGuestIndexRole } from '../../Wigits/dataFunctions-guestList';
 import { roles } from '../../App/mainData';
+import GuestDataRow from "./guestRowData";
 
 export default function WeddingParty(props){
   
@@ -12,11 +13,40 @@ export default function WeddingParty(props){
     const guestsSorted = props.guestSorted;
     const guestsSortedBy = props.guestSortedBy;
     const setRole = props.setRole;
+    const wedding = props.wedding;
 
 
     const getPersonLink = (uuid) => {
 
         return "guest/?personID=" + uuid;
+
+    }
+
+    const getPhoneLink = (mobile, uuid) => {
+
+        let link;
+
+        if(mobile === ""){
+
+            link = "guest/?personID=" + uuid;
+
+        }else{
+
+            link = "tel:" + mobile;
+
+        }
+
+        return link; 
+        
+    }
+
+    const getEmailLink = (email, wedding, firstName) => {
+
+        console.log(email)
+        console.log(wedding)
+        console.log(firstName)
+
+        return "mailto:" + email + "?subject=" + encodeURIComponent(wedding.name) + "&body=Hi " + firstName + ",";
 
     }
 
@@ -41,17 +71,17 @@ export default function WeddingParty(props){
 
     }
 
-    const getRoleLink = (role, UUID, fName, surname) => {
+    const getRoleLink = (role, UUID, firstName, surname) => {
 
             let link;
 
             if(role === "Bride" || role === "Groom"){
 
-                link =<a href="./managemywedding/details">{ fName + " " + surname }</a>;
+                link =<a href="./managemywedding/details">{ firstName + " " + surname }</a>;
 
             }else{
 
-                link =<a href={ getPersonLink(UUID) }>{ fName + " " + surname }</a>;
+                link =<a href={ getPersonLink(UUID) }>{ firstName + " " + surname }</a>;
 
             }
             
@@ -95,25 +125,23 @@ export default function WeddingParty(props){
 
                         if(found){
 
-                            let fName = guestList.list[index].firstName;
-                            let surname = guestList.list[index].surname;
-                            let role = guestList.list[index].role;
-                            let mobile = guestList.list[index].mobile;
-                            let email = guestList.list[index].email;
-                            let rsvp = guestList.list[index].rsvp;
-                            let UUID = guestList.list[index].UUID;
 
                             return (
 
-                                <div className={ "guestRow " + order} key={ UUID }>
+                                <GuestDataRow 
 
-                                    <div className="col-3">{ getRoleLink(role, UUID, fName, surname) }</div>
-                                    <div className="col-3"> { role } </div>
-                                    <div className="col-2">{ mobile }</div>
-                                    <div className="col-3">{ email }</div>
-                                    <div className="col-1"> { rsvp } </div>
+                                    order={ order }
+                                    wedding={ wedding }
 
-                                </div>
+                                    //the columns to be displayed
+                                    person={ guestList.list[index] }
+                                    displayRole = { true }
+                                    displayMobile={ true }
+                                    displayEmail={ true }
+                                    displayRSVP={ true }
+
+
+                                />
 
                             )
 
@@ -152,31 +180,44 @@ export default function WeddingParty(props){
 
             <h2>Wedding party</h2>
 
-            <div className={ "guestRow " + 1} key={ "first" }>
+             <div id="guestList">
 
-                <div className="col-3">{ bridalParty.first.fName + " " + bridalParty.first.lName } </div>
-                <div className="col-3"> { bridalParty.first.role } </div>
-                <div className="col-2"></div>
-                <div className="col-3">{ bridalParty.first.email  }</div>
-                <div className="col-1"></div>
+                <GuestDataRow 
 
-            </div>
+                    order={ 1 }
+                    wedding={ wedding }
+                    bridalPartyPerson={ true }
+                    displayBridalContact= { false } 
 
-            
-            <div className={ "guestRow " + 1} key={ "first" }>
+                    //the columns to be displayed
+                    person={ bridalParty.first }
+                    displayRole = { true }
+                    displayMobile={ true }
+                    displayEmail={ true }
+                    displayRSVP={ true }
 
-                <div className="col-3">{ bridalParty.second.fName + " " + bridalParty.second.lName } </div>
-                <div className="col-3"> { bridalParty.second.role } </div>
-                <div className="col-2"></div>
-                <div className="col-3">{ bridalParty.second.email  }</div>
-                <div className="col-1"></div>
 
-            </div>
+                />
+
+                
+                <GuestDataRow 
+
+                    order={ 1 }
+                    wedding={ wedding }
+                    bridalPartyPerson={ true }
+                    displayBridalContact= { false } 
+
+                    //the columns to be displayed
+                    person={ bridalParty.second }
+                    displayRole = { true }
+                    displayMobile={ true }
+                    displayEmail={ true }
+                    displayRSVP={ true }
+
+
+                />
 
           
-
-            <div id="guestList">
-
                 { getList(guestList.list) }
             
             </div>

@@ -14,6 +14,9 @@ export default function SupplierList(props){
     const stateChange = props.stateChange;
     const setStateChange = props.setStateChange;
     const supplierStatuses = props.supplierStatuses;
+    const setTaskList = props.setTaskList;
+    const taskList = props.taskList;
+    const user = props.user;
 
     const getList = (array) => {
 
@@ -29,7 +32,19 @@ export default function SupplierList(props){
 
                     return (
 
-                        <SupplierListItem item={ item } index={ index } setSupplierList={ setSupplierList } supplierList={ supplierList } key={index} stateChange={ stateChange } setStateChange={ setStateChange } supplierStatuses={ supplierStatuses }/>
+                        <SupplierListItem 
+                            item={ item } 
+                            index={ index } 
+                            setSupplierList={ setSupplierList } 
+                            supplierList={ supplierList } 
+                            key={index} 
+                            stateChange={ stateChange } 
+                            setStateChange={ setStateChange } 
+                            supplierStatuses={ supplierStatuses } 
+                            user={ user } 
+                            taskList={ taskList } 
+                            setTaskList= { setTaskList }
+                        />
 
                     )
 
@@ -46,7 +61,19 @@ export default function SupplierList(props){
                         
                             return (
 
-                                <SupplierListItem item={ item } index={ index } setSupplierList={ setSupplierList } supplierList={ supplierList } key={index} stateChange={ stateChange } setStateChange={ setStateChange } supplierStatuses={ supplierStatuses }/>
+                                  <SupplierListItem 
+                                    item={ item } 
+                                    index={ index } 
+                                    setSupplierList={ setSupplierList } 
+                                    supplierList={ supplierList } 
+                                    key={index} 
+                                    stateChange={ stateChange } 
+                                    setStateChange={ setStateChange } 
+                                    supplierStatuses={ supplierStatuses } 
+                                    user={ user } 
+                                    taskList={ taskList } 
+                                    setTaskList= { setTaskList }
+                                />
 
                             )
 
@@ -59,7 +86,19 @@ export default function SupplierList(props){
                         
                             return (
 
-                                <SupplierListItem item={ item } index={ index } setSupplierList={ setSupplierList } supplierList={ supplierList } key={index} stateChange={ stateChange } setStateChange={ setStateChange } supplierStatuses={ supplierStatuses }/>
+                                  <SupplierListItem 
+                                    item={ item } 
+                                    index={ index } 
+                                    setSupplierList={ setSupplierList } 
+                                    supplierList={ supplierList } 
+                                    key={index} 
+                                    stateChange={ stateChange } 
+                                    setStateChange={ setStateChange } 
+                                    supplierStatuses={ supplierStatuses } 
+                                    user={ user } 
+                                    taskList={ taskList } 
+                                    setTaskList= { setTaskList }
+                                />
 
                             )
 
@@ -69,7 +108,19 @@ export default function SupplierList(props){
 
                         return (
 
-                           <SupplierListItem item={ item } index={ index } setSupplierList={ setSupplierList } supplierList={ supplierList } key={index} stateChange={ stateChange } setStateChange={ setStateChange } supplierStatuses={ supplierStatuses }/>
+                             <SupplierListItem 
+                                item={ item } 
+                                index={ index } 
+                                setSupplierList={ setSupplierList } 
+                                supplierList={ supplierList } 
+                                key={index} 
+                                stateChange={ stateChange } 
+                                setStateChange={ setStateChange } 
+                                supplierStatuses={ supplierStatuses } 
+                                user={ user } 
+                                taskList={ taskList } 
+                                setTaskList= { setTaskList }
+                            />
 
                         )
 

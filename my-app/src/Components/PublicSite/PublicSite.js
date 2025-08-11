@@ -31,11 +31,11 @@ export default function PublicSite(props){
 
             {console.log(bridalParty)}
 
-             <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ true } loggedIn={ loggedIn } setLoggedin={ setLoggedin } publicPage={ true }/>
+             <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ true } loggedIn={ loggedIn } setLoggedin={ setLoggedin } publicPage={ true }/>
 
             <div className="publicBody">
             
-                < PictureWall fName={bridalParty.first.fName} sName={bridalParty.second.fName} date={wedding.date} weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite }/> 
+                < PictureWall firstName={bridalParty.first.firstName} sName={bridalParty.second.firstName} date={wedding.date} weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite }/> 
                 { weddingVenueSet ? <Details headerOn={true} details={weddingVenue}/> : <NoVenue />}
                 <WeatherToday lon={ weddingVenue.longitude } lat={ weddingVenue.latitude } />
                 { weddingFAQSet ? <FAQ headerOn={ true } faq={ faq } wedding={ wedding }/> : <NoFAQ /> }

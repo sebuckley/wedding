@@ -6,16 +6,18 @@ import DietSection from '../../PublicSite/Components/rsvp/dietrysection';
 import dietry from '../../PublicSite/Components/Data/dietry';
 import { roles } from '../../App/mainData';
 import WeddingClothingForm from './clothing';
-import GenderDropdownWithDress from '../../Wigits/genderDropdown';
+import GenderDropdown from '../../Wigits/genderDropdown';
+import { weddingClothingSizes } from '../../App/wedding_clothing_sizes_schema_with_gender';
 // import { parsePhoneNumberFromString, isPossiblePhoneNumber, isValidPhoneNumber, validatePhoneNumberLength } from 'libphonenumber-js';
 
 export default function UpdateGuest(props){
 
-    const personIDParam =  new URLSearchParams(window.location.search).get('personID');
+    const personIDParam =  props.personIDParam;
 
     const guestList = props.guestList;
     const setGuestList = props.setGuestList;
     const bridalParty = props.bridalParty;
+    const user = props.user;
  
     const [personID, setPersonID] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -43,6 +45,8 @@ export default function UpdateGuest(props){
     const [updated, setUpdated] = useState(0);
     const [totalEmptyState, setTotalEmptyState] = useState(0);
     const getRoles = props.getRoles;
+
+    const disableItem = user ? false : true;
 
     if(personID === ""){
 
@@ -80,7 +84,7 @@ export default function UpdateGuest(props){
 
                 object["firstName"] = "";
                 object["surname"] = "";
-                object["guestType"] = "";
+                object["guestType"] = "Guest";
                 object["diet"] = "";
                 object["allergies"] = "";
 
@@ -555,7 +559,7 @@ export default function UpdateGuest(props){
 
         for(let i =0; i < ListGuests; i++){
 
-            newList.push(<AddGuestDetails guestNumber={i} additionalGuests={ additionalGuests }  onInputGuests={ onInputGuests } onChangeOptionGuest={ onChangeOptionGuest } getColor={ getColor }/>);
+            newList.push(<AddGuestDetails guestNumber={i} additionalGuests={ additionalGuests }  onInputGuests={ onInputGuests } onChangeOptionGuest={ onChangeOptionGuest } getColor={ getColor } roles={ roles } getRoles={ getRoles } disableItem={ disableItem }/>);
 
         }
 
@@ -689,11 +693,14 @@ export default function UpdateGuest(props){
 
             <section id="updateGuestSection">
 
-                <h2>{ firstName + " " + surname}
+                <h2>{ firstName + " " + surname + " details"}
 
                     { maxGuests > 0 && additionalGuestsSet === false ? " " + checkEmptyFields() : "" }
 
                     { noAdditionalGuests > 0 && additionalGuestsSet === true ? checkEmptyFields() : "" }
+                    &nbsp;
+                    <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
+                    <div style={{display:"none"}}>{ UUID }</div>
 
                 </h2>
 
@@ -712,23 +719,15 @@ export default function UpdateGuest(props){
 
                     </div>
 
-                    <div className='row'>
+                    <GenderDropdown getColor={ getColor } guestList={ guestList } index={ index } value={ gender } onChange={ onChangeOption }/>
 
-                        <div className='inputGroup col-12'>
-
-                            <i className="fa-solid fa-venus-mars icon"></i>
-                            <GenderDropdownWithDress getColor={ getColor } guestList={ guestList } index={ index } value={ gender } onChange={ onChangeOption }/>
-                            
-                        </div>
-
-                    </div>
-
+                    {/* Role Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
 
                             <i className="fa-solid fa-person-circle-question icon"></i>
-                            <select className='guestType' style={ getColor() } name='role'  onChange={ onChangeOption } value={ role }>
+                            <select className='guestType' style={ getColor() } name='role'  onChange={ onChangeOption } value={ role } disabled={ disableItem }>
                                 <option value="" hidden className="noOption">please select role...</option>
                                 <option>Guest</option>
                                 { getRoles(roles) }
@@ -744,7 +743,7 @@ export default function UpdateGuest(props){
                         <div className='inputGroup col-12'>
 
                             <i className="fa-solid fa-circle-info icon"></i>
-                            <select className='guestType'  name='guestType' style={ getColor(guestType) } onChange={ onChangeOption } value={ guestType }>
+                            <select className='guestType'  name='guestType' style={ getColor(guestType) } onChange={ onChangeOption } value={ guestType } disabled> 
                                 <option value="" hidden className="noOption">please select age category...</option>
                                 <option>Over 18</option>
                                 <option>Under 18</option>
@@ -755,6 +754,7 @@ export default function UpdateGuest(props){
 
                     </div>
 
+                    {/* Email Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
@@ -768,6 +768,7 @@ export default function UpdateGuest(props){
 
                     </div>
 
+                    {/* Mobile Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
@@ -777,6 +778,8 @@ export default function UpdateGuest(props){
                         </div>
 
                     </div>
+
+                    {/* Address Section */}
 
                     <div className='row two'>
 
@@ -792,6 +795,7 @@ export default function UpdateGuest(props){
 
                     </div>
 
+                    {/* Town Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
@@ -801,7 +805,7 @@ export default function UpdateGuest(props){
 
                     </div>
 
-
+                    {/* Post code Section */}
                     <div className='row two'>
 
                         <div className='inputGroup col-2'>
@@ -815,16 +819,18 @@ export default function UpdateGuest(props){
 
                     </div>
 
+                    {/* Max guests Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
                         <i className="fa-solid fa-person-circle-plus icon"></i>
-                        <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests' value={ maxGuests }></input>
+                        <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests' value={ maxGuests } disabled={ disableItem }></input>
 
                         </div>
 
                     </div>
 
+                    {/* Select additional guests Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
@@ -835,6 +841,7 @@ export default function UpdateGuest(props){
 
                     </div>
 
+                    {/* RSVP Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
@@ -849,21 +856,21 @@ export default function UpdateGuest(props){
                     </div>
 
 
-                    { rsvp === "Confirmed" ? <DietSection diet={ dietry.dietry.diet } allergies={ dietry.dietry.allergies } showGuest={ "" } hideGuest={ "" } onChange={ onChangeOption } valueDiet={ valueDiet } valueAllergies={ valueAllergies }/> : ""}
+                    { rsvp === "Confirmed" ? <DietSection diet={ dietry.dietry.diet } allergies={ dietry.dietry.allergies } showGuest={ "" } hideGuest={ "" } onChange={ onChangeOption } valueDiet={ valueDiet } valueAllergies={ valueAllergies } disableItem={ disableItem } name={ firstName + " " + surname }/> : ""}
 
-                    { guestType !== "Guest" ? <WeddingClothingForm gender={ gender } getColor={ getColor } sizeSystem={ bridalParty["weddingDetails"].sizeSystem } religiousType={ bridalParty["weddingDetails"].religiousType } guestList={ guestList } index={ index } checkEmpty={ checkEmpty }/> : ""}
+                    { guestType !== "Guest" && rsvp === "Confirmed" && role !== "Guest" ?   <WeddingClothingForm 
 
-                    <div className='row'>
-                        <div className='inputGroup col-12'>
+                                                                                                gender={ gender } 
+                                                                                                getColor={ getColor } 
+                                                                                                sizeSystem={ bridalParty["weddingDetails"].sizeSystem } 
+                                                                                                religiousType={ bridalParty["weddingDetails"].religiousType } 
+                                                                                                guestList={ guestList } index={ index } 
+                                                                                                checkEmpty={ checkEmpty } 
+                                                                                                disableItem={ disableItem } 
+                                                                                                name={ firstName + " " + surname } 
+                                                                                                weddingClothingSizes={ weddingClothingSizes }
 
-                            <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
-                            <div style={{display:"none"}}>{ UUID }</div>
-
-                        </div>
-
-                    </div>
-
-
+                                                                                            /> : ""}
 
                 </form>
 
@@ -874,8 +881,6 @@ export default function UpdateGuest(props){
                 { !additionalGuestsSet ? <p style={{"text-align": "center"}}>Please confirm your additional guest.</p>: "" }
                 { noAdditionalGuests === 0 && additionalGuestsSet ? <p style={{"text-align": "center"}}>You have selected not to bring any additional guests with you.</p>: "" }
                 { noAdditionalGuests > 0 ? listAdditionalGuests(noAdditionalGuests) : "" }
-
-                
 
             </section>
 

@@ -119,7 +119,7 @@ export default function Guests(props){
 
         <div>
 
-            <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
+            <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
 
             <div className="adminBody">
 
@@ -133,8 +133,8 @@ export default function Guests(props){
               { guestList.length === 0 ? "No guests in list": "" }
               { listType === "Wedding party" ? <WeddingParty wedding={ wedding } onChangeGuests={ onChangeGuests } setGuestList={ setGuestList } guestList={ guestList } guestFilter={ guestFilter } guestSorted={ guestSorted } guestSortedBy={ guestSortedBy } setRole={ setRole } bridalParty={ bridalParty }/> : "" }
               { guestList.length > 0 && listType === "Primary guests" ? <PrimaryGuestList wedding={ wedding } onChangeGuests={ onChangeGuests } setGuestList={ setGuestList } guestList={ guestList } guestFilter={ guestFilter } guestSorted={ guestSorted } guestSortedBy={ guestSortedBy }/> : "" }
-              { guestList.length > 0 && listType === "Guest list" ? <GuestList wedding={ wedding } onChangeGuests={ onChangeGuests } setGuestList={ setGuestList } guestList={ guestList } guestFilter={ guestFilter } guestSorted={ guestSorted } guestSortedBy={ guestSortedBy }/> : "" }
-              { guestList.length > 0 && listType === "Dietry list" ? <DietryList wedding={ wedding } onChangeGuests={ onChangeGuests } setGuestList={ setGuestList } guestList={ guestList } guestFilter={ guestFilter } guestSorted={ guestSorted } guestSortedBy={ guestSortedBy }/> : "" }
+              { guestList.length > 0 && listType === "Guest list" ? <GuestList wedding={ wedding } onChangeGuests={ onChangeGuests } setGuestList={ setGuestList } guestList={ guestList } guestFilter={ guestFilter } guestSorted={ guestSorted } guestSortedBy={ guestSortedBy } bridalParty={ bridalParty }/> : "" }
+              { guestList.length > 0 && listType === "Dietry list" ? <DietryList wedding={ wedding } onChangeGuests={ onChangeGuests } setGuestList={ setGuestList } guestList={ guestList } guestFilter={ guestFilter } guestSorted={ guestSorted } guestSortedBy={ guestSortedBy } bridalParty={ bridalParty }/> : "" }
                
             </div>
 

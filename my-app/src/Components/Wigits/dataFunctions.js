@@ -167,6 +167,7 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user
     
 
     newObject.list[taskIndex]["state"] = taskState;
+
     newObject.list[taskIndex]["activity"] = taskActivity;
     newObject.list[taskIndex]["updated"] = new Date();
     newObject.list[taskIndex]["updatedBy"] = user.email;

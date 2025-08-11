@@ -134,7 +134,7 @@ export default function RSVPForm(props){
 
 
 
-            < Header location="rsvp" fName={bridalParty.groom.fName} sName={bridalParty.bride.fName}/>
+            < Header location="rsvp" firstName={bridalParty.groom.firstName} sName={bridalParty.bride.firstName}/>
         
             <section id="rsvp">
 
@@ -161,7 +161,7 @@ export default function RSVPForm(props){
                                 <div className="inputGroupHalf">
                                 
                                     <label className='label'>First name:</label>
-                                    <input type="text" className="firstName" name="fName"></input>
+                                    <input type="text" className="firstName" name="firstName"></input>
 
                                 </div>
 

@@ -118,6 +118,8 @@ const WeddingColorSelector = (props) => {
   const accentColor = props.accentColor;
   const getColor = props.getColor;
   const handleChange = props.handleChange;
+  const colorEmpty = props.colorEmpty;
+  const initialEmptyCheck = props.initialEmptyCheck;
   let mainSelect;
   let customSelect;
   let custom;
@@ -146,24 +148,49 @@ const WeddingColorSelector = (props) => {
 
   );
 
-  console.log(selectedColor)
-
   const selectedColorObj = allColors.find(c => c.hex === selectedColor);
 
-  console.log(selectedColorObj);
+   const getColorStatus = () => {
+
+        let object;
+
+        if(typeof initialEmptyCheck === "undefined"){
+
+            initialEmptyCheck = false;
+
+        }
+
+        if(initialEmptyCheck === false){
+
+            object = "";
+
+        }else{
+
+            if(colorEmpty === 0){
+
+                object = <span className="countryCompleted completed">[Completed]</span>;
+            }else{
+
+                object = <span className="countryCompleted outstanding">[{ colorEmpty } Outstanding]</span>;
+            }
+        }
+
+        return object;
+
+    }
 
 
   return (
 
     <div>
-      <h2>Wedding Color Selector</h2>
+      <h2>Wedding Color Selector { getColorStatus() }</h2>
 
         <div className='row'>
             <div className='inputGroup col-12'>
                 <i className="fa-solid fa-palette icon"></i>
                 <select
                     value={selectedColor}
-                    className='guestType weddingDetails'
+                    className='guestType color weddingDetails'
                     name="mainColor"
                     style={ getColor(selectedColor) }
                     onChange={(e) => {
@@ -226,7 +253,7 @@ const WeddingColorSelector = (props) => {
                     <div>
                         <input
                         type="color"
-                        className="inputColor weddingDetails"
+                        className="inputColor color weddingDetails"
                         name="mainColor"
                         value={customColorHex}
                         onChange={(e) => setCustomColorHex(e.target.value)}
@@ -268,7 +295,7 @@ const WeddingColorSelector = (props) => {
 
                     <h3>Main Color</h3>
 
-                    <div className="colorChart" style={{ backgroundColor: selectedColorObj.hex, padding: '10px', color: getContrastTextColor(selectedColorObj.hex), fontWeight: "bold" }}>
+                    <div className="color colorChart" style={{ backgroundColor: selectedColorObj.hex, padding: '10px', color: getContrastTextColor(selectedColorObj.hex), fontWeight: "bold" }}>
                         {selectedColorObj.name}
                     </div>
                     

@@ -23,7 +23,7 @@ export default function Guest(props){
 
     const index = props.index;
 
-
+    const personIDParam =  new URLSearchParams(window.location.search).get('personID');
 
     if(loading){
    
@@ -31,7 +31,7 @@ export default function Guest(props){
    
     }
 
-    if(user === null) {
+    if(user === null && !personIDParam) {
   
       return <Login setUser={ setUser } loading={loading} setLoading={ setLoading } bridalParty={ bridalParty } />
   
@@ -42,11 +42,27 @@ export default function Guest(props){
 
         <div>
 
-            <Header fName={ bridalParty.first.fName } sName={ bridalParty.second.fName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
+            <Header 
+              firstName={ bridalParty.first.firstName } 
+              sName={ bridalParty.second.firstName } 
+              displayPublic={ false } 
+              loggedIn={ loggedIn } 
+              setLoggedin={ setLoggedin }
+            />
 
             <div className="adminBody">
                
-              <UpdateGuest  setGuestList={ setGuestList } guestList={ guestList } index={ index } getRoles={ getRoles } bridalParty={ bridalParty } />
+              <UpdateGuest 
+
+                personIDParam={ personIDParam } 
+                setGuestList={ setGuestList } 
+                guestList={ guestList } 
+                index={ index } 
+                getRoles={ getRoles } 
+                bridalParty={ bridalParty } 
+                user={ user }
+
+              />
 
 
             

@@ -1,19 +1,29 @@
 import React, { useState } from "react";
-import { weddingClothingSizes } from "../../App/wedding_clothing_sizes_schema_with_gender";
 import { splitByCapitalNums, toProperCase } from "../../Wigits/dataFunctions";
 import { saveGuestListItem } from "../../Wigits/dataFunctions-guestList";
+import { saveBridalPartyClothing } from "../../Wigits/dataFunctions-bridalParty";
 
 const WeddingClothingForm = (props) => {
 
+  const [display, setDisplay] = useState("none");
   const sizeSystem = props.sizeSystem || "UK"; // Default to UK if not provided
   const gender = props.gender;
   const getColor = props.getColor;
   const religiousType = props.religiousType || 'Humanist';
   const role = props.role ? props.role.toLowerCase() : "";
   const guestList = props.guestList;
-  const index = props.index;
+  const index = parseInt(props.index);
   const checkEmpty = props.checkEmpty; // Fallback to a no-op if not provided
+  const bridalParty = props.bridalParty;
+  const selection = props.selection;
+ 
+  const disableItem = props.disableItem;
+
+  const location = props.location || "guests";
+  const weddingClothingSizes = props.weddingClothingSizes;
+
   let object;
+  let name = props.name;
 
   if(guestList === null || index === null) {
 
@@ -21,12 +31,21 @@ const WeddingClothingForm = (props) => {
 
   }else{
 
-    object = guestList.list[index].clothing || {};
+    if(location === "bridalParty"){
+
+      object = guestList.clothing || {};
+
+    }else{
+
+      object = guestList.list[index].clothing || {};
+
+    }
 
   }
 
   // Initialize formData with existing values or empty object
   const [formData, setFormData] = useState(object);
+  let filteredFieldsNum = 0;
 
 
   // Utility to extract fields by gender match
@@ -57,6 +76,7 @@ const WeddingClothingForm = (props) => {
         // Only add section if it has at least one field (other than genderType)
         if (Object.keys(filteredFields).some(f => f !== "genderType")) {
           filtered[sectionKey] = filteredFields;
+          filteredFieldsNum += 1;
         }
       }
     });
@@ -89,16 +109,52 @@ const WeddingClothingForm = (props) => {
       [field]: value,
     };
 
-    // Save the updated guest list item
-    saveGuestListItem(guestList, index, "clothing", newObject);
+    if(location === "bridalParty"){
+
+      saveBridalPartyClothing(bridalParty, selection, "clothing", newObject);
+
+    }else{
+
+      // Save the updated guest list item
+      saveGuestListItem(guestList, index, "clothing", newObject);
+
+    }
+
+    
+
+
     
    
   };
 
+  const displayClothing = () => {
+
+    const getIcon = document.getElementById("addClothingIcon");
+
+    if(display === ""){
+
+        setDisplay("none");
+        getIcon.className = "fa fa-circle-plus iconHeader2";
+
+    }else{
+
+        setDisplay("");
+        getIcon.className = "fa fa-circle-minus iconHeader2";
+
+    }
+
+
+  }
+
   return (
 
-    <form id="clothingForm">
-      <h2 style={{width: "100%"}}>Wedding Clothing Sizes</h2>
+    <>
+
+    <h2 onClick={ displayClothing } style={{width: "100%"}}><i onClick={ displayClothing } id="addClothingIcon" className="fa fa-circle-plus iconHeader2"></i>{ disableItem ? "Your wedding clothing sizes" : name + " wedding clothing sizes"}</h2>
+
+    <form id="clothingForm" style={{ display: display }}>
+
+      { filteredFieldsNum === 1 ? <p style={{width:"100%"}}>Please ensure that role and gender are set for clothing to be set.</p> : "" }
 
       {Object.entries(filteredSections).map(([section, fields]) => {
 
@@ -106,17 +162,19 @@ const WeddingClothingForm = (props) => {
         
         return(
           
-          <fieldset key={section}>
+          <fieldset key={section} style={{ display: display}}>
+
             <legend>{section}</legend>
 
             {Object.entries(fields).map(([field, config]) => {
 
-              if (field === "genderType" || field === "religion") return null;
+              if (field === "genderType" || field === "religion" || field === "religiousType") return null;
 
               // If this field is region-based (has properties for size systems)
               if (config.properties && ["US", "UK", "EU", "AU", "JP", "CN", "KR"].some(sys => config.properties[sys])) {
 
                 const sysConfig = config.properties[sizeSystem];
+            
                 if (!sysConfig) return null; // If no config for current sizeSystem, skip
 
                 return (
@@ -195,31 +253,33 @@ const WeddingClothingForm = (props) => {
 
               if(renderField === false) return null;
 
-              // Default to text input
-              const placeholder =
-                config.sizeSystem && config.sizeSystem[sizeSystem]
-                  ? `Enter ${splitByCapitalNums(field).toLowerCase()} (${sizeSystem})`
-                  : field + " " + (config.description || "");
+                // Default to text input
+                const placeholder =
+                  config.sizeSystem && config.sizeSystem[sizeSystem]
+                    ? `Enter ${splitByCapitalNums(field).toLowerCase()} (${sizeSystem})`
+                    : field + " " + (config.description || "");
 
-              return (
+                return (
 
-                <div key={field} style={{ width: "100%", marginBottom: "10px", marginTop: "10px" }}>
-                <label htmlFor={`${section}_${field}`} className="labelText">
-                  {toProperCase(splitByCapitalNums(field))} { (config.measurementType ? ` (${config.measurementType})` : "")}
-                </label>
-                <input
-                  type="text"
-                  id={`${section}_${field}`}
-                  className="inputBox3"
-                  placeholder={placeholder}
-                  value={formData[section]?.[field] || ""}
-                  onChange={(event) => handleChange(event, section, field)}
-                />
-                </div>
+                  <div key={field} style={{ width: "100%", marginBottom: "10px", marginTop: "10px" }}>
+                    <label htmlFor={`${section}_${field}`} className="labelText">
+                      {toProperCase(splitByCapitalNums(field))} { (config.measurementType ? ` (${config.measurementType})` : "")}
+                    </label>
+                    <input
+                      type="text"
+                      id={`${section}_${field}`}
+                      className="inputBox3"
+                      placeholder={placeholder}
+                      value={formData[section]?.[field] || ""}
+                      onChange={(event) => handleChange(event, section, field)}
+                    />
+                  </div>
 
-              );
+                );
 
-            })}
+              }
+
+            )}
 
           </fieldset>
 
@@ -227,6 +287,8 @@ const WeddingClothingForm = (props) => {
       }
 
     </form>
+
+    </>
 
   );
 };

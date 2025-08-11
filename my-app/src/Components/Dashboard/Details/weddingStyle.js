@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const weddingStyles = {
   Traditional: [
-    'Classic',
+    'Traditional',
     'Formal',
     'Black Tie',
     'Religious Ceremony',
@@ -88,6 +88,8 @@ export default function WeddingStyleDropdown(props) {
   const weddingStyleSelected = props.weddingStyle || '';
   const religousTypeSelected = props.religiousType || '';
   const getColor = props.getColor;
+  const styleEmpty = props.styleEmpty;
+  const initialEmptyCheck = props.initialEmptyCheck;
 
   // Local state to track religious ceremony type
   const [selectedStyle, setSelectedStyle] = useState(weddingStyleSelected || '');
@@ -109,9 +111,38 @@ export default function WeddingStyleDropdown(props) {
 
   };
 
+   const getStyleStatus = () => {
+
+        let object;
+
+        if(typeof initialEmptyCheck === "undefined"){
+
+            initialEmptyCheck = false;
+
+        }
+
+        if(initialEmptyCheck === false){
+
+            object = "";
+
+        }else{
+
+            if(styleEmpty === 0){
+
+                object = <span className="countryCompleted completed">[Completed]</span>;
+            }else{
+
+                object = <span className="countryCompleted outstanding">[{ styleEmpty } Outstanding]</span>;
+            }
+        }
+
+        return object;
+
+    }
+
   return (
     <>
-      <h2>Wedding Style</h2>
+      <h2>Wedding Style { getStyleStatus() }</h2>
 
       <div className="row2">
         <div className="inputGroup col-12">
@@ -121,7 +152,7 @@ export default function WeddingStyleDropdown(props) {
             <select
               id="wedding-style"
               style={getColor(selectedStyle)}
-              className="guestType weddingDetails"
+              className="guestType style weddingDetails"
               name="weddingStyle"
               onChange={onStyleChange}
               defaultValue={selectedStyle}
@@ -156,7 +187,7 @@ export default function WeddingStyleDropdown(props) {
                   <i className="fa-solid fa-church icon"></i>
                   <select
                     id="religious-type"
-                    className="guestType weddingDetails"
+                    className="guestType style weddingDetails"
                     name="religiousType"
                     
                     value={religiousType}

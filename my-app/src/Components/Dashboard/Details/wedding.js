@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import WeddingColorSelector from "./weddingColors";
 import WeddingStyleDropdown from "./weddingStyle";
 import SizePreferenceList from "./country";
+import CurrencySelector from "./currency"; 
+import currencyList from "./currencyList";
 
 export default function WeddingPlans(props){
 
@@ -12,7 +15,12 @@ export default function WeddingPlans(props){
     const details = bridalParty["weddingDetails"];
     const handleChange = props.handleChange;
     const getColor = props.getColor;
-    let budget;
+    const formEmpty = props.formEmpty;
+    const checkEmpty = props.checkEmpty;
+    const countryEmpty = props.countryEmpty;
+    const styleEmpty = props.styleEmpty;
+    const colorEmpty = props.colorEmpty;
+    let budget = 0;
     let country;
     let sizeSystem
     let location;
@@ -22,20 +30,26 @@ export default function WeddingPlans(props){
     let weddingStyle;
     let religiousType;
     let maxGuests;
+    let currency;
+    let disableItem = true;
+    let initialEmptyCheck;
 
     if(typeof details !== "undefined"){
 
         date = details.dateTime;
-       
-        budget = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(details.budget);
-        country = details.country;
-        sizeSystem = details.sizeSystem;
-        location = details.location;
-        mainColor = details.mainColor;
-        accentColor = details.mainColor;
-        weddingStyle = details.weddingStyle;
-        religiousType = details.religiousType;
-        maxGuests = details.maxGuests;
+        budget = typeof details.budget === "undefined" ? "" : details.budget;
+        country = details.country || "";
+        sizeSystem = details.sizeSystem || "";
+        location = details.location || "";
+        mainColor = details.mainColor || "";
+        accentColor = details.mainColor || "";
+        weddingStyle = details.weddingStyle || "";
+        religiousType = details.religiousType || "";
+        maxGuests = details.maxGuests  || "";
+        currency = typeof details.currency === "undefined" ? "" : details.currency;
+        disableItem = currency === "" ? true : false;
+        initialEmptyCheck = props.initialEmptyCheck;
+
 
     }else{
 
@@ -48,6 +62,14 @@ export default function WeddingPlans(props){
         weddingStyle = "";
         religiousType = "";
         maxGuests = "";
+        currency = "GBP";
+        initialEmptyCheck = props.initialEmptyCheck;
+
+    }
+
+    const parseCost = (num) => {
+
+        return currencyList[currency].symbol + parseFloat(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     }
 
@@ -77,6 +99,7 @@ export default function WeddingPlans(props){
         setBridalParty(bridalParty);
         saveBridalParty(bridalParty);
         setListUpdated(listUpdated + 1);
+        checkEmpty(e.target);
 
     }
 
@@ -84,7 +107,7 @@ export default function WeddingPlans(props){
 
         let returnValue = "";
 
-        if(date !== ""){
+        if(date !== ""  && typeof date !== "undefined"){
 
             returnValue = date;
 
@@ -150,20 +173,49 @@ export default function WeddingPlans(props){
             setBridalParty(bridalParty);
             saveBridalParty(bridalParty);
             setListUpdated(listUpdated + 1);
+            checkEmpty(e.target);
 
-            item[0].value = !isNaN(Number(currentValue))
-                                    ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(Number(currentValue))
-                                    : currentValue
+            item[0].value = !isNaN(Number(currentValue)) ? parseCost(currentValue) : currentValue
 
         }
 
     }
 
+    const getPlanStatus = () => {
+
+        let object;
+
+        if(typeof initialEmptyCheck === "undefined"){
+
+            initialEmptyCheck = false;
+
+        }
+
+        if(initialEmptyCheck === false){
+
+            object = "";
+
+        }else{
+
+            if(formEmpty === 0){
+
+                object = <span className="detailsCompleted completed">[Completed]</span>;
+            }else{
+
+                object = <span className="detailsCompleted outstanding">[{ formEmpty } Outstanding]</span>;
+            }
+        }
+
+        return object;
+
+    }
+
+
     return(
 
         <>
 
-            <h2 className="text-2xl font-semibold mb-4">Wedding Plans</h2>
+            <h2 className="text-2xl font-semibold mb-4">Wedding Plans { getPlanStatus() }</h2>
 
              <div className='row'>
 
@@ -173,11 +225,13 @@ export default function WeddingPlans(props){
                     </label>
                     <div>
                         <i className="fa-solid fa-calendar-day icon"></i>
-                        <input type={ checkType(date) } className='inputBox dateChange weddingDetails' name="dateTime" placeholder="Proposed date and time"   onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(date) }></input>
+                        <input type={ checkType(date) } className='inputBox dateChange checkDetails weddingDetails' style={ getColor(date) }name="dateTime" placeholder="Proposed date and time"   onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(date) }></input>
                     </div>
                 </div>
 
             </div>
+
+            <CurrencySelector getColor={ getColor } handleChange={ handleChange } value={ currency }/>
 
             <div className='row'>
 
@@ -186,21 +240,20 @@ export default function WeddingPlans(props){
                         Budget:
                     </label>
                     <div>
-                        <i className="fa-solid fa-sterling-sign icon"></i>
+                        { budget !== "" ? <i className="icon">{ currencyList[currency].symbol } </i>: <i className="fa-solid fa-sterling-sign icon"></i> }
+                     
                         <input
                             type='text'
-                            className='inputBox costChange weddingDetails'
+                            className='inputBox costChange checkDetails weddingDetails'
                             name="budget"
-                            placeholder="£10,000.00 (budget)"
-                            step="0.01"
+                            placeholder="£10,000.00 (budget) "
                             onBlur={changeToTextCost}
-                            
-                            numeric="true"
                             defaultValue={
-                                budget && !isNaN(Number(budget))
-                                    ? new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(Number(budget))
-                                    : budget
+
+                                budget === "" ? "" : parseCost(budget) 
+
                             }
+                            disabled={ disableItem }
                         />
                     </div>
                 </div>
@@ -215,7 +268,7 @@ export default function WeddingPlans(props){
                     </label>
                     <div>
                         <i className="fa-solid fa-location-arrow icon"></i>
-                        <input type='text' className='inputBox weddingDetails' name="location" onInput={ handleChange } placeholder="Preferred location" defaultValue={ location }></input>
+                        <input type='text' className='inputBox checkDetails weddingDetails' name="location" onInput={ handleChange } placeholder="Preferred location" defaultValue={ location }></input>
                     </div>
                 </div>
 
@@ -229,26 +282,24 @@ export default function WeddingPlans(props){
                     </label>
                     <div>
                         <i className="fa-solid fa-person-circle-question icon"></i>
-                        <input type='number' className='inputBox weddingDetails' name="maxGuests" onInput={ handleChange } placeholder="max guests" defaultValue={ maxGuests }></input>
+                        <input type='number' className='inputBox checkDetails weddingDetails' name="maxGuests" onInput={ handleChange } placeholder="max guests" defaultValue={ maxGuests }></input>
                     </div>
 
                 </div>
 
             </div>
 
-             <div className='row'>
+            <SizePreferenceList getColor={ getColor } handleChange={ handleChange } sizeSystem={ sizeSystem } country={ country } initialEmptyCheck={ initialEmptyCheck } countryEmpty={ countryEmpty } checkEmpty={ checkEmpty }/>
 
-                <div className='inputGroup col-12'>
-                   <SizePreferenceList getColor={ getColor } handleChange={ handleChange } sizeSystem={ sizeSystem } country={ country }/>
-                </div>
+            
+                                                      
+                                                      
+                                                      
+             
+            <WeddingStyleDropdown handleChange={ handleChange } getColor={ getColor } weddingStyle={ weddingStyle } religiousType={ religiousType } initialEmptyCheck={ initialEmptyCheck } styleEmpty={ styleEmpty }/>
 
-            </div>
+            <WeddingColorSelector getColor={ getColor } mainColor={ mainColor } accentColor={ accentColor } handleChange={ handleChange } initialEmptyCheck={ initialEmptyCheck } colorEmpty={ colorEmpty }/>
 
-            <WeddingStyleDropdown handleChange={ handleChange } getColor={ getColor } weddingStyle={ weddingStyle } religiousType={ religiousType }/>
-
-            <WeddingColorSelector getColor={ getColor } mainColor={ mainColor } accentColor={ accentColor } handleChange={ handleChange }/>
-
-          
         </>
 
     );

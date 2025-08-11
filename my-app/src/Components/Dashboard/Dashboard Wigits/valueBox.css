@@ -4,7 +4,7 @@
     color: var(--primary-text);
     border: 1px solid var(--primary);
     padding: 10px;
-    width:90px;
+    width:120px;
     text-align: center;
     min-height: 36px;
 
@@ -16,7 +16,7 @@
     color: var(--black);
     border: 1px solid var(--primary);
     height:100px;
-    width:90px;
+    width:120px;
     padding: 10px;
     font-size: 70px;
     border-radius: 0px 0px 10px 10px;

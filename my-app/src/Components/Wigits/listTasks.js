@@ -6,8 +6,7 @@ import { getSupplierName } from "./dataFunctions-suppliers";
 
 const ListTasks = (props) => {
 
-  const taskListState = props.taskListState;
-  const setTaskListState = props.setTaskListState;
+  // Destructure props for easier access
   const taskList = props.taskList;
   const setTaskList = props.setTaskList;
   const taskSorted = props.taskSorted;
@@ -203,11 +202,24 @@ const ListTasks = (props) => {
 
   }
 
-  const linkSuppliers = (a,name) => {
+  const linkSuppliers = (a,name, state, activity) => {
 
-    const link = "./suppliers/?filter=" + a;
+    let link;
+    let newName;
 
-    return <a href={link}>{name}</a>
+    if(state === "In-progress" && activity === "Planned"){
+
+      link = "./suppliers/?add=" + a;
+      newName = "Add suppliers for " + splitByCapitalNums(a);
+
+    }else{
+
+      link = "./suppliers/?filter=" + a;
+      newName = "Suppliers for " + splitByCapitalNums(a);
+
+    }
+
+    return <a href={ link }>{ newName }</a>
 
   }
 
@@ -241,21 +253,21 @@ const ListTasks = (props) => {
 
               <li key={ itemID }>
 
-                <div className="titleName col-3">
+                <div className="col-4">
                   
                   { taskNameSplit }:
 
                 </div>
 
-                <div className="state col-2">
+                <div className="state col-1 state">
               
-                  { selectOptionState(taskName  + " state", state) }
+                  { state }
                 
                 </div>
 
-                <div className="state col-2">
+                <div className="state col-1 activity">
               
-                  { selectOptionActivity(taskName + " activity", activity) }
+                  { activity }
                 
                 </div>
 
@@ -267,14 +279,14 @@ const ListTasks = (props) => {
 
                 <div className="inputDate col-2">
               
-                  { state !== "Completed" ? addDate(toDoDate, "input") : getSupplierLink(supplierID, "Supplier") }
+                  { state !== "Completed" ? addDate(toDoDate, "input") : getSupplierLink(supplierID, "Supplier Record") }
 
                 </div>
 
-                <div className="inputDelete col-1">
+                <div className="inputDelete col-2">
               
                   { state === "To-do" ? <button className="deleteButton" onClick={ deleteTaskItem }>Delete</button> : ""}
-                  { state === "In-progress" ? linkSuppliers(taskName, "Suppliers") : "" }
+                  { state === "In-progress" ? linkSuppliers(taskName, "Suppliers", state, activity) : "" }
 
                 </div>
 
@@ -325,13 +337,13 @@ const ListTasks = (props) => {
 
                   <div className="state col-2">
                 
-                    { selectOptionState(taskName  + " state", state) }
+                    { state }
                   
                   </div>
 
                   <div className="state col-2">
                 
-                    { selectOptionActivity(taskName + " activity", activity) }
+                    { activity }
                   
                   </div>
 
