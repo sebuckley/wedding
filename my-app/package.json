@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "homepage": "https://sebuckley.github.io/wedding",
   "description": "A React app for managing wedding details",
-  "main": "src/index.js",
+  "main": "index.js",
   "author": "Stephen Buckley",
   "license": "MIT",
   "private": false,
