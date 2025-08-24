@@ -48,13 +48,18 @@ export default function UpdateGuest(props){
 
     const disableItem = user ? false : true;
 
+    console.log(personID);
+
     if(personID === ""){
 
         setPersonID(personIDParam);
 
     }
 
+
     const index = getGuestIndex(guestList, personIDParam);
+
+    console.log(checkAdditionalGuestsSet);
 
     if(!checkAdditionalGuestsSet){
 
@@ -98,10 +103,6 @@ export default function UpdateGuest(props){
         setAdditionalGuestsState(true);
         guestList.list[index].additionalGuests = newArray;
         saveGuestList(guestList);
-
-    }else if (additionalGuestsState === false && additionalGuests.length > 0){
-
-        setAdditionalGuests(guestList.list[index].additionalGuests);
 
     }
 
@@ -207,6 +208,8 @@ export default function UpdateGuest(props){
 
     const getPersonData = (personID) => {
 
+        console.log(personID);
+    
         if(guestList !== null){
 
             if(typeof guestList.list[index]["firstName"] !== 'undefined'){
@@ -334,7 +337,7 @@ export default function UpdateGuest(props){
 
             setGuestList(data);
 
-            const reDirectString = "/managemywedding/guests";
+            const reDirectString = "/wedding/#/managemywedding/guests";
 
             window.location.replace(reDirectString);
 
@@ -878,8 +881,8 @@ export default function UpdateGuest(props){
 
             <section className="additionalGuests">
 
-                { !additionalGuestsSet ? <p style={{"text-align": "center"}}>Please confirm your additional guest.</p>: "" }
-                { noAdditionalGuests === 0 && additionalGuestsSet ? <p style={{"text-align": "center"}}>You have selected not to bring any additional guests with you.</p>: "" }
+                { !additionalGuestsSet ? <p style={{"textAlign": "center"}}>Please confirm your additional guest.</p>: "" }
+                { noAdditionalGuests === 0 && additionalGuestsSet ? <p style={{"textAlign": "center"}}>You have selected not to bring any additional guests with you.</p>: "" }
                 { noAdditionalGuests > 0 ? listAdditionalGuests(noAdditionalGuests) : "" }
 
             </section>

@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { Link  } from 'react-router-dom';
 import '../Dashboard.css';
 import { splitByCapitalNums, updateSupplierTask } from '../../Wigits/dataFunctions';
 import { getSupplierIndex, saveSupplierList, deleteSupplierListItem } from '../../Wigits/dataFunctions-suppliers';
@@ -21,9 +22,9 @@ export default function SupplierListItem(props){
 
     const getSupplierLink = (a, name) => {
 
-        const link = "./supplier/?supplierID=" + a;
+        const link = "/managemywedding/supplier/?supplierID=" + a;
 
-        return <a href={link}>{name}</a>
+        return <Link to={link}>{name}</Link>
 
     }
 
@@ -42,7 +43,7 @@ export default function SupplierListItem(props){
 
         if(a === ""){
 
-            link = "./supplier/?supplierID=" + UUID;
+            link = "managemywedding/supplier/?supplierID=" + UUID;
             href = <a href={link}><i className="fa-solid fa-circle-plus icon3"></i></a>;
 
         }else{
@@ -63,7 +64,7 @@ export default function SupplierListItem(props){
 
         if(a === ""){
 
-            link = "./supplier/?supplierID=" + UUID;
+            link = "managemywedding/supplier/?supplierID=" + UUID;
             href = <a href={link}><i className="fa-solid fa-circle-plus icon3"></i></a>;
 
         }else{
@@ -84,7 +85,7 @@ export default function SupplierListItem(props){
 
         if(typeof a === "undefined" || a === ""){
 
-            link = "./supplier/?supplierID=" + UUID;
+            link = "managemywedding/supplier/?supplierID=" + UUID;
             type = <a href={link}>add type</a>;
 
         }else{
@@ -125,7 +126,10 @@ export default function SupplierListItem(props){
     const deleteListItem = (e) => {
 
         let UUID = e.target.parentElement.previousSibling.innerText;
-        let index = getSupplierIndex(supplierList, UUID);
+
+
+        let index = getSupplierIndex(UUID);
+
         let newList = deleteSupplierListItem(supplierList, index);
         setSupplierList(newList);
         setStateChange((stateChange + 1));

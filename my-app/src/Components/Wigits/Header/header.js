@@ -1,5 +1,6 @@
 import './Header.css'; 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Logo from '../../PublicSite/Components/Logo/logo';
 import MobileMenu from './mobileMenu';
 import PublicLinks from './publiclinks';
@@ -35,29 +36,31 @@ export default function Header(props){
 
     let onClickMenuItem = (e) => {
 
-        let links = document.getElementsByClassName("menuActive");
+        console.log("here");
 
-        for(let i = 0; i < links.length; i ++){
+        // let links = document.getElementsByClassName("menuActive");
 
-            links[i].classList.remove("active");
+        // for(let i = 0; i < links.length; i ++){
 
-        }
+        //     links[i].classList.remove("active");
 
-        const elementID = e.target.innerHTML;
+        // }
 
-        setActiveSection(elementID);
+        // const elementID = e.target.innerHTML;
 
-        if(elementID !== "Countdown"){
+        // setActiveSection(elementID);
+
+        // if(elementID !== "Countdown"){
        
-            setTimeout(function () {
+        //     setTimeout(function () {
 
-                let windowPosition = window.scrollY - 100;
+        //         let windowPosition = window.scrollY - 100;
 
-                window.scrollTo(0,windowPosition);
+        //         window.scrollTo(0,windowPosition);
 
-            },2);
+        //     },2);
 
-        }
+        // }
 
  
     }
@@ -209,7 +212,7 @@ export default function Header(props){
         
                 <div className="headerLogo">
 
-                    <a href="/" className="logo"><Logo fName={props.firstName} sName={ props.sName }/></a>
+                    <Link to="/"><Logo fName={props.firstName} sName={ props.sName }/></Link>
                 
                 </div>
                 

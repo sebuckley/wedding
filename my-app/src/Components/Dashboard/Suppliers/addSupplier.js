@@ -293,7 +293,9 @@ export default function AddSuppliers(props) {
             <i onClick={toggleDisplay} id="addSupplierIcon" className={`fa ${display ? "fa-circle-minus" : "fa-circle-plus"} iconHeader`}></i>
             <h1 onClick={toggleDisplay} id="addSupplierTitle">Add Supplier</h1>
 
-            { formData.type !== "" ? <a href={ "https://www.google.com/search?q=" + getSearchText(formData.type) } target="_blank" >Search for { splitByCapitalNums(formData.type) }</a> : "" }
+            { console.log(formData.type) }
+
+            { formData.type !== "" ? <a href={ "https://www.google.com/search?q=" + getSearchText( formData.type) } target="_blank" >Search for { splitByCapitalNums(formData.type) }</a> : "" }
 
             <form id="supplierForm" style={{ display: display ? "" : "none" }}>
                 <div className="row two">

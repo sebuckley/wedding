@@ -1,4 +1,5 @@
 import '../Dashboard.css';
+import { useLocation  } from 'react-router-dom';
 import Login from '../../Login/Login';
 import Header from '../../Wigits/Header/header';
 import UpdateGuest from './updateGuest';
@@ -23,7 +24,9 @@ export default function Guest(props){
 
     const index = props.index;
 
-    const personIDParam =  new URLSearchParams(window.location.search).get('personID');
+    const location = useLocation();
+    const search = location.search; // e.g., #/path?param1=value1&param2=value2
+    const personIDParam = search.split("=")[1];
 
     if(loading){
    

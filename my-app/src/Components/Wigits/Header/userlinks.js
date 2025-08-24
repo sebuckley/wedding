@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function UserLinks(props){
 
@@ -6,13 +7,13 @@ export default function UserLinks(props){
 
         <nav className="userLinks">
 
-            <a className="menuActive" href="/managemywedding">Dashboard</a>
-            <a className="menuActive" href="/">Webpage</a>
-            <a className="menuActive" href="/managemywedding/details">Details</a>
-            <a className="menuActive" href="/managemywedding/guests">Guest List</a>
-            <a className="menuActive" href="/managemywedding/tasks">Task List</a>
-            <a className="menuActive" href="/managemywedding/suppliers">Suppliers</a>
-            <a className="menuActive" href="/" onClick={(e) => props.logOut() }>Log Out</a>
+            <Link to="/managemywedding">Dashboard</Link>
+            <Link to="/">Webpage</Link>
+            <Link to="/managemywedding/details">Details</Link>
+            <Link to="/managemywedding/guests">Guest List</Link>
+            <Link to="/managemywedding/tasks">Task List</Link>
+            <Link to="/managemywedding/suppliers">Suppliers</Link>
+            <Link to="/" onClick={(e) => props.logOut() }>Log Out</Link>
 
         </nav>
 

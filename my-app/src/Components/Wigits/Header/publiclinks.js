@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 export default function PublicLinks(props){
 
@@ -14,7 +16,7 @@ export default function PublicLinks(props){
 
     const dashboardLink = (onClickPage) => {
 
-        return <a href="/managemywedding" onClick={(e) => onClickPage(e) } >Dashboard</a>
+        return <Link to='/managemywedding/'> Dashboard</Link>
 
     }
 
@@ -28,11 +30,11 @@ export default function PublicLinks(props){
 
          <nav className="publicLinks">
 
-            <a className={ props.activeSection === 'Home' ? "menuActive active": "menuActive" } href="#Home" onClick={(e) => props.onClickMenuItem(e)}>Home</a>
-            <a className={ props.activeSection === 'Details' ? "menuActive active": "menuActive" } href="#Details" onClick={(e) => props.onClickMenuItem(e)}>Details</a>
-            <a className={ props.activeSection === 'Weather' ? "menuActive active": "menuActive" } href="#Weather" onClick={(e) => props.onClickMenuItem(e)}>Weather</a>
-            <a className={ props.activeSection === 'FAQ' ? "menuActive active": "menuActive" } href="#FAQ" onClick={(e) => props.onClickMenuItem(e)}>FAQ</a>
-            <a className={ props.activeSection === 'Countdown' ? "menuActive active": "menuActive" } href="#Countdown" onClick={(e) => props.onClickMenuItem(e)}>Countdown</a>
+            <HashLink className={ props.activeSection === 'Home' ? "menuActive active": "menuActive" } to="#Home" onClick={(e) => props.onClickMenuItem(e)}>Home</HashLink>
+            <HashLink className={ props.activeSection === 'Details' ? "menuActive active": "menuActive" } to="#Details" onClick={(e) => props.onClickMenuItem(e)}>Details</HashLink>
+            <HashLink className={ props.activeSection === 'Weather' ? "menuActive active": "menuActive" } to="#Weather" onClick={(e) => props.onClickMenuItem(e)}>Weather</HashLink>
+            <HashLink className={ props.activeSection === 'FAQ' ? "menuActive active": "menuActive" } to="#FAQ" onClick={(e) => props.onClickMenuItem(e)}>FAQ</HashLink>
+            <HashLink className={ props.activeSection === 'Countdown' ? "menuActive active": "menuActive" } to="#Countdown" onClick={(e) => props.onClickMenuItem(e)}>Countdown</HashLink>
 
             { displayRSVP ? rsvpLink() : "" }
             { loggedIn ? dashboardLink(onClickPage) : "" }

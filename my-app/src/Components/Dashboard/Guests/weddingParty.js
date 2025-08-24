@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link  } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import '../Dashboard.css';
 import { getGuestIndexRole } from '../../Wigits/dataFunctions-guestList';
 import { roles } from '../../App/mainData';
@@ -18,7 +20,7 @@ export default function WeddingParty(props){
 
     const getPersonLink = (uuid) => {
 
-        return "guest/?personID=" + uuid;
+        return "/managemywedding/guest/?personID=" + uuid;
 
     }
 
@@ -77,11 +79,11 @@ export default function WeddingParty(props){
 
             if(role === "Bride" || role === "Groom"){
 
-                link =<a href="./managemywedding/details">{ firstName + " " + surname }</a>;
+                link =<Link to="/managemywedding/details">{ firstName + " " + surname }</Link>;
 
             }else{
 
-                link =<a href={ getPersonLink(UUID) }>{ firstName + " " + surname }</a>;
+                link =<Link to={ getPersonLink(UUID) }>{ firstName + " " + surname }</Link>;
 
             }
             
@@ -96,11 +98,11 @@ export default function WeddingParty(props){
 
         if(role === "Bride" || role ==="Groom"){
 
-            link = <a href="./managemywedding/details">Please add...</a>;
+            link = <Link to="/managemywedding/details">Please add...</Link>;
 
         }else{
 
-            link = <a href="#addGuestSection" onClick={ addRole }>Please add...</a>;
+            link = <HashLink to="#addGuestSection" onClick={ addRole }>Please add...</HashLink>;
 
         }
 

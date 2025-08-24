@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function GuestDataRow(props){
 
     const bridalPartyPerson = props.bridalPartyPerson || false;
@@ -30,13 +32,13 @@ export default function GuestDataRow(props){
 
     const getBridalLink = (uuid) => {
 
-        return "details/?personID=" + uuid;
+        return "/managemywedding/details/?personID=" + uuid;
 
     }
    
     const getPersonLink = (uuid) => {
 
-        return "guest/?personID=" + uuid;
+        return "/managemywedding/guest/?personID=" + uuid;
 
     }
 
@@ -68,15 +70,15 @@ export default function GuestDataRow(props){
 
         }else if(bridalPartyPerson === true && role === "" && surname === ""){
 
-            object =<a href={getBridalLink(UUID)}>{ firstName }</a>;
+            object =<Link to={getBridalLink(UUID)}>{ firstName }</Link>;
 
         }else if(role === "Bride" || role === "Groom"){
 
-            object =<a href={getBridalLink(UUID)}>{ firstName + " " + surname }</a>;
+            object =<Link to={getBridalLink(UUID)}>{ firstName + " " + surname }</Link>;
 
         }else{
 
-            object =<a href={ getPersonLink(UUID) }>{ firstName + " " + surname }</a>;
+            object =<Link to={ getPersonLink(UUID) }>{ firstName + " " + surname }</Link>;
 
         }
         

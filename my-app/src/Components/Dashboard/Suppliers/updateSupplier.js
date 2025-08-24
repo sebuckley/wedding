@@ -1,5 +1,6 @@
 import '../Dashboard.css';
 import { useState, useEffect } from 'react';
+import { useLocation  } from 'react-router-dom';
 import { getSupplierIndex, updateSupplierObject, deleteSupplierListItem } from '../../Wigits/dataFunctions-suppliers';
 import { splitByCapitalNums, updateSupplierTask } from '../../Wigits/dataFunctions';
 import Notes from './notes';
@@ -8,7 +9,9 @@ import currencyList from '../Details/currencyList';
 
 export default function UpdateSupplier(props){
 
-    const supplierIDParam =  new URLSearchParams(window.location.search).get('supplierID');
+    const location = useLocation();
+    const search = location.search; // e.g., #/path?param1=value1&param2=value2
+    const supplierIDParam = search.split("=")[1];
 
     const user = props.user;
     const supplierList = props.supplierList;
@@ -181,8 +184,6 @@ export default function UpdateSupplier(props){
 
             }else if(value === ""){
 
-                console.log("Empty cost input detected, setting to 0.00");
-
                 newObject[name] = "0.00";
 
             }else{
@@ -238,7 +239,7 @@ export default function UpdateSupplier(props){
 
             event.preventDefault();
             deleteSupplierListItem(supplierList, index);
-            const reDirectString = "/managemywedding/supplier";
+            const reDirectString = "/wedding/#/managemywedding/suppliers";
             window.location.replace(reDirectString);
 
         }

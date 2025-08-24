@@ -6,9 +6,8 @@
   "main": "index.js",
   "author": "Stephen Buckley",
   "license": "MIT",
-  "private": false,
+  "private": true,
   "dependencies": {
- 
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "concurrently": "^9.1.0",
@@ -17,6 +16,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1",
+    "react-router-hash-link": "^2.4.3",
     "react-scripts": "^3.0.1",
     "web-vitals": "^2.1.4"
   },

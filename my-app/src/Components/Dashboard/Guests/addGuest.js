@@ -324,7 +324,7 @@ export default function AddGuests(props){
             resetIcons();
             clearState();
 
-            const reDirectString = "/managemywedding/guest/?personID=" + personUUID;
+            const reDirectString = "/wedding/#/managemywedding/guest/?personID=" + personUUID;
 
             window.location.replace(reDirectString);
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link  } from 'react-router-dom';
 import { splitByCapitalNums } from "./dataFunctions";
 import { getTaskIndex, deleteTaskListItem } from "./dataFunctions-taskList";
 import { getSupplierName } from "./dataFunctions-suppliers";
@@ -196,9 +197,9 @@ const ListTasks = (props) => {
   const getSupplierLink = (a) => {
 
     const name = getSupplierName(a);
-    const link = "./supplier/?supplierID=" + a;
+    const link = "/managemywedding/supplier/?supplierID=" + a;
 
-    return <a href={link}>{name}</a>
+    return <Link to={link}>{name}</Link>
 
   }
 
@@ -209,17 +210,17 @@ const ListTasks = (props) => {
 
     if(state === "In-progress" && activity === "Planned"){
 
-      link = "./suppliers/?add=" + a;
+      link = "/managemywedding/suppliers/?add=" + a;
       newName = "Add suppliers for " + splitByCapitalNums(a);
 
     }else{
 
-      link = "./suppliers/?filter=" + a;
+      link = "/managemywedding/suppliers/?filter=" + a;
       newName = "Suppliers for " + splitByCapitalNums(a);
 
     }
 
-    return <a href={ link }>{ newName }</a>
+    return <Link to={ link }>{ newName }</Link>
 
   }
 

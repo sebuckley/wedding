@@ -1,5 +1,6 @@
 import '../Dashboard.css';
 import { useState } from 'react';
+import { useLocation, useSearchParams  } from 'react-router-dom';
 import Login from '../../Login/Login';
 import Header from '../../Wigits/Header/header';
 import AddSupplier from './addSupplier';
@@ -9,7 +10,18 @@ import SupplierFilter from './supplierFilter';
 import SupplierSort from './supplierSort';
 
 export default function Suppliers(props){
-  
+
+    const location = useLocation();
+    const search = location.search; // e.g., #/path?param1=value1&param2=value2
+    let filterParam = search.split("=")[1];
+    let filterAdd = search.split("=")[0];
+
+    if(typeof filterParam === "undefined"){
+
+      filterParam = "";
+
+    }
+
     const user = props.user;
     const setUser = props.setUser;
     const loading = props.loading;
@@ -18,36 +30,21 @@ export default function Suppliers(props){
     const setLoggedin = props.setLoggedin;
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
-    const [setType, setSetType] = useState("");
+    const [setType, setSetType] = useState(filterParam);
 
-    const pathName = window.location.search;
+    const clearSearch = useSearchParams();
+
+     { console.log(setType)}
+
+
     let filterName;
     let filterName2;
     let currentDisplay = false;
-    
 
-    if(pathName !== ""){
-
-      const url = new URL(window.location.href);
-      const params = new URLSearchParams(url.search);
-      const firstKey = params.keys().next().value; // Get the first key
-      const firstValue = params.get(firstKey);
-  
-      if(firstKey === "add"){
-
-        currentDisplay = true
-        setSetType(firstValue);
-     
-      }
-
-    
-
-      url.search = ''; // Clear the search query
-      window.history.replaceState({}, document.title, url.toString());
+    if(setType !== ""){
 
       filterName = "All";
-      filterName2 = firstValue;
-
+      filterName2 = filterParam;
 
     }else{
 
@@ -56,7 +53,11 @@ export default function Suppliers(props){
 
     }
 
-      console.log(setType);
+    if(filterAdd === "?add"){
+
+      currentDisplay = true;
+
+    }
 
     const bridalParty = props.bridalParty;
     const wedding = props.wedding;
@@ -98,6 +99,7 @@ export default function Suppliers(props){
               <SupplierFilter setSupplierFilter={ setSupplierFilter } filterName={ supplierFilter }/>
               <SupplierSort setSupplierSorted={ setSupplierSorted } supplierSorted={ supplierSorted } setSupplierSortedBy={ setSupplierSortedBy } supplierSortedBy={ supplierSortedBy } setSupplierFilter2={ setSupplierFilter2 } supplierFilter2={ supplierFilter2 } taskList={ taskList }/>
               
+            
 
               { supplierList.length === 0 ? "No suppliers in list": "" }
               { supplierList.length > 0 ? <SupplierList 
@@ -114,7 +116,7 @@ export default function Suppliers(props){
                                               user={ user }
                                               setTaskList={ setTaskList }
                                               taskList={ taskList }
-                                              setType={ setType }
+                                              setType={ filterParam }
                                             /> : "" }
               
                

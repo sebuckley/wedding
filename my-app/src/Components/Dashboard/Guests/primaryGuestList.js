@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from 'react-router-dom';
 import '../Dashboard.css';
 import { getGuestIndex, deleteGuestListItem } from '../../Wigits/dataFunctions-guestList';
 
@@ -39,7 +40,7 @@ export default function PrimaryGuestList(props){
 
     const getPersonLink = (uuid) => {
 
-        return "guest/?personID=" + uuid;
+        return "/managemywedding/guest/?personID=" + uuid;
 
     }
 
@@ -139,7 +140,7 @@ export default function PrimaryGuestList(props){
 
                         <div className={ "guestRow " + index} key={ item.UUID }>
 
-                            <div className="col-3"><a href={ getPersonLink(item.UUID) }>{item.firstName + " " + item.surname } </a></div>
+                            <div className="col-3">{ <Link to={ getPersonLink(item.UUID) }>{item.firstName + " " + item.surname } </Link> }</div>
                             <div className="col-1"><a href={ getPhoneLink(item.mobile, item.UUID) } aria-label={ getNumberTitle(item.mobile, item.firstName, item.surname ) } title={ getNumberTitle(item.mobile, item.firstName, item.surname ) }> { item.mobile === "" ? <i className="fa-solid fa-circle-plus icon3"></i> : <i className="fa-solid fa-phone icon3"></i> }</a></div>
                             <div className="col-1"><a href={ getEmailLink(item.email, wedding, item.firstName) } aria-label={ "email " + item.firstName + " " + item.surname } title={ "email " + item.firstName + " " + item.surname }><i className="fa-solid fa-envelope icon3"></i></a></div>
                             <div className="col-1"> { item.rsvp === "Not confirmed" ? <i className="fa-solid fa-circle-minus iconMinus" aria-label="Not confirmed" title="Not confirmed"></i> : item.rsvp === "Confirmed" ?  <i className="fa-solid fa-circle-check iconCheck" aria-label="Confirmed" title="Confirmed"></i> : <i className="fa-solid fa-circle-xmark iconCross" aria-label="Declined" title="Declined"></i>} </div>
