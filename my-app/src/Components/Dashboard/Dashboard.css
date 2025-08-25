@@ -580,11 +580,6 @@ textarea{
 
 }
 
-.guestType {
-
-    outline: none;
-    
-}
 
 .guestType:focus {
 
@@ -850,14 +845,18 @@ textarea{
 
 .guestType {
 
+    outline: none;
     border: 1px solid var(--grey);
     height: 45px !important;
     border-radius:10px !important;
-    padding: 14px 10px 10px 50px !important;
+    padding: 14px 10px 10px 0px !important;
     font-family: Arial, sans-serif !important;
     font-size: 16px;
+    text-indent: 50px;
     margin: 0px !important;
     color: grey;
+    -webkit-appearance: none;
+    background-color: white;
 
 }
 
@@ -1515,6 +1514,7 @@ option {
         border-radius: 10px;
         padding-left: 50px;
         font-size: 16px;
+        height: 45px;
     
     
     }
