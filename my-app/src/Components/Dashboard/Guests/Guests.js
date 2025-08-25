@@ -123,7 +123,7 @@ export default function Guests(props){
 
             <div className="adminBody">
 
-              <AddGuest getRoles={ getRoles } role={ role } setRole={ setRole }/>
+              <AddGuest user={ user } getRoles={ getRoles } role={ role } setRole={ setRole }/>
 
               <ListType setListType={ setListType } listType={ listType } />
 

@@ -144,9 +144,12 @@ export default function WeddingStyleDropdown(props) {
     <>
       <h2>Wedding Style { getStyleStatus() }</h2>
 
-      <div className="row2">
+      <div className="row">
+
         <div className="inputGroup col-12">
+
           <label htmlFor="wedding-style">Select Wedding Style:</label>
+
           <div className="wedding-style-dropdown">
             <i className="fa-solid fa-person-dress icon"></i>
             <select
@@ -170,6 +173,7 @@ export default function WeddingStyleDropdown(props) {
                 </optgroup>
               ))}
             </select>
+
           </div>
         </div>
 
@@ -178,7 +182,7 @@ export default function WeddingStyleDropdown(props) {
         {selectedStyle === 'Religious Ceremony' && (
         
 
-          <div className='row2'>
+          <div className='row'>
 
             <div className='inputGroup col-12'>
                 

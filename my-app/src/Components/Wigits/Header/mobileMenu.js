@@ -5,7 +5,7 @@ export default function MobileMenu(props){
 
     const menuIcon = {
 
-        "backgroundImage": "url(/images/menu.png)",
+        "backgroundImage": "url(/wedding/images/menu.png)",
         "height": "39px",
         "width": "39px",
         "backgroundSize": "cover",
@@ -19,7 +19,7 @@ export default function MobileMenu(props){
 
     const closeMenuIcon = {
 
-        "backgroundImage": "url(/images/menuClose.png)",
+        "backgroundImage": "url(/wedding/images/menuClose.png)",
         "height": "39px",
         "width": "39px",
         "backgroundSize": "cover",

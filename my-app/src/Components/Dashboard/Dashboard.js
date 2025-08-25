@@ -1,6 +1,7 @@
 import './Dashboard.css';
 import Login from '../Login/Login';
 import Header from '../Wigits/Header/header';
+import { Link } from 'react-router-dom';
 import ValueBox from "./Dashboard Wigits/valueBox";
 import Loading from '../PublicSite/Components/loading/loading';
 import currencyList from './Details/currencyList';
@@ -35,7 +36,7 @@ export default function Dashboard(props){
 
       }else{
 
-        text = <a href="./managemywedding/guests">Please add guests...</a>;
+        text = <Link to="/managemywedding/guests/?add=guest">Please add guests...</Link>;
 
       }
 

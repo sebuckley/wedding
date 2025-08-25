@@ -18,6 +18,7 @@ export default function AddGuests(props){
     const [maxGuests, setMaxGuests] = useState('');
     const [display, setDisplay]  = useState(false);
     const getRoles = props.getRoles;
+    const user = props.user;
 
     const checkPhone = (number) => {
 
@@ -282,8 +283,6 @@ export default function AddGuests(props){
                 }
 
             }
-
-            const user = JSON.parse(localStorage.getItem("token"));
 
             newPerson["rsvp"] = "Not confirmed";
             newPerson["created"] = new Date();
