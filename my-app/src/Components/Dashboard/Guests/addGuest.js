@@ -579,7 +579,7 @@ export default function AddGuests(props){
             <h1 onClick={ displayAddGuest } id="addGuestTitle">Add Guest</h1>
             
             <form id='inputForm' style={ getCurrentDisplay() } target="_blank">
-                <p>Add a guest to your list, any guest addered here will be treated as an adult.  If you wish to add a bridesmade who is a child, please add the adult guest frist before selecting their guest (the child) as the bridesmade.</p>
+                <p>Add a guest to your list, any guest addered here will be treated as an adult.  If you wish to add a bridesmaid who is a child, please add the adult guest frist before selecting their guest (the child) as the bridesmaid.</p>
 
                 <div className='row two'>
 

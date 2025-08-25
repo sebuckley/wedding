@@ -1,10 +1,11 @@
 import './valueBox.css';
+import { Link } from 'react-router-dom';
 
 export default function ValueBox(props){
 
     return(
 
-        <a href={ props.href +"?" + props.title } className="dashLink">
+        <Link to={ props.href +"?" + props.title } className="dashLink">
 
             <div className="dashboardBox">
 
@@ -14,7 +15,7 @@ export default function ValueBox(props){
 
             </div>
 
-        </a>
+        </Link>
 
     );
 

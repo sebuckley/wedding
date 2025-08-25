@@ -225,7 +225,7 @@ export default function WeddingPlans(props){
                     </label>
                     <div>
                         <i className="fa-solid fa-calendar-day icon"></i>
-                        <input type={ checkType(date) } className='inputBox dateChange checkDetails weddingDetails' style={ getColor(date) }name="dateTime" placeholder="Proposed date and time"   onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(date) }></input>
+                        <input type={ checkType(date) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(date) }name="dateTime" placeholder="Proposed date and time"   onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(date) }></input>
                     </div>
                 </div>
 

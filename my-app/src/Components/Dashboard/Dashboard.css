@@ -1514,7 +1514,23 @@ option {
         border-radius: 10px;
         padding-left: 50px;
         font-size: 16px;
+    
+    
+    }
+
+    .dateBox {
+
+        display: inline-block;
+        width: calc(100% - 60px);
+        margin: 0px;
+        padding: 10px;
+        text-align: left;
+        border: 1px solid var(--grey);
+        border-radius: 10px;
+        padding-left: 50px;
+        font-size: 16px;
         height: 45px;
+        background-color: white;
     
     
     }
@@ -1523,7 +1539,7 @@ option {
     .inputBox3 {
 
         display: inline-block;
-        width: calc(100% - 80px);
+        width: calc(100% - 60px);
         margin: 0px;
         padding: 10px;
         text-align: left;
@@ -1537,7 +1553,7 @@ option {
 
     .checkIcon {
 
-        width: calc(88% - 60px);
+        width: calc(80% - 60px);
     
     }
 
