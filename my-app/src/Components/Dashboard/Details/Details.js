@@ -93,8 +93,6 @@ export default function Details(props){
         for(let i=0; i< items.length; i++){
 
             let value = items[i].value;
-
-            console.log(value);
             
             if(value === ""){
 

@@ -39,3 +39,13 @@ button:hover {
     justify-content: center;
     
 }
+
+
+@media screen and (max-width: 1150px) {
+
+form {
+
+    width: 80%;
+}
+
+}

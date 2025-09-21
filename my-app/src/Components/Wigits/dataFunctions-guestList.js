@@ -123,6 +123,8 @@ const saveGuestListItem = (guestList, index, key, value) => {
 
 const saveGuestListItemGuest = (guestList, index, guestIndex, key, value) => {
 
+    console.log("Saving add guest list item:",guestList, index, guestIndex, key, value);
+
     guestList.list[index]["additionalGuests"][guestIndex][key] = value;
     
     const set = saveGuestList(guestList);
@@ -156,11 +158,49 @@ const getGuestIndex = (guestList, personID) => {
 const getGuestIndexRole = (guestList, role) => {
 
     let index = -1;
+    let guestIndex = -1;
     let found = false;
 
     for(let i = 0; i < guestList.length; i++){
 
+        if(guestList.list[i].additionalGuests.length > 0){
+
+            let result = getGuestGuestIndexRole(guestList.list[i].additionalGuests, role);
+
+            if(result[0]){
+
+                index = i;
+                guestIndex = result[1];
+                found = true;
+                break;  
+
+            }
+           
+        }
+
         if(guestList.list[i].role === role){
+
+            index = i;
+            found = true;
+            break;
+            
+        }
+
+    }
+
+    return [found, index, guestIndex];
+
+}
+
+
+const getGuestGuestIndexRole = (additionalGuests, role) => {
+
+    let index = -1;
+    let found = false;
+
+    for(let i = 0; i < additionalGuests.length; i++){
+
+        if(additionalGuests[i].role === role){
 
             index = i;
             found = true;
@@ -173,7 +213,6 @@ const getGuestIndexRole = (guestList, role) => {
     return [found, index];
 
 }
-
 
 const deleteGuestListItem = (guestList, index) => {
 

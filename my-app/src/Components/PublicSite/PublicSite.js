@@ -21,7 +21,7 @@ export default function PublicSite(props){
     const loggedIn = props.loggedIn;
     const setLoggedin = props.setLoggedin;
 
-    const weddingDateSet = true;
+    const weddingDateSet = false;
     const weddingVenueSet = true;
     const weddingFAQSet = true;
 

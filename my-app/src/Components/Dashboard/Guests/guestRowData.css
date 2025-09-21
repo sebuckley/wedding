@@ -1,0 +1,99 @@
+
+.name {
+
+    width: 200px;
+    padding: 10px;
+
+}
+
+
+.role {
+
+    width: 200px;
+    padding: 10px;
+
+}
+
+.email {
+
+    padding: 10px;
+}
+
+.mobile {
+
+    padding: 10px;
+
+}
+
+.rsvpBox {
+
+    padding: 10px;
+
+}
+
+.age {
+
+    padding: 10px;
+    width: 200px;
+
+}
+
+.diet {
+
+    padding: 10px;
+    width: 200px;
+
+}
+
+.allergies {
+
+    padding: 10px;
+    width: 200px;
+
+}
+
+
+@media screen and (max-width: 1150px) {
+
+    .name {
+
+        width: 43%;
+
+    }
+
+
+    .role {
+
+        width: 43%;
+        padding: 10px;
+
+    }
+
+    .age {
+
+        width: 43%;
+        padding: 10px;
+
+    }
+
+    .rsvpBox {
+
+        width: 10%;
+        
+    }
+
+    .diet {
+
+        width: 43%;
+        padding: 10px;
+
+    }
+
+    .allergies {
+
+        width: 43%;
+        padding: 10px;
+
+    }
+
+}

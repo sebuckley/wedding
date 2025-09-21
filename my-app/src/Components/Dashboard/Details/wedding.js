@@ -5,6 +5,7 @@ import SizePreferenceList from "./country";
 import CurrencySelector from "./currency"; 
 import currencyList from "./currencyList";
 
+
 export default function WeddingPlans(props){
 
     const setBridalParty = props.setBridalParty;
@@ -25,6 +26,8 @@ export default function WeddingPlans(props){
     let sizeSystem
     let location;
     let date;
+    let receptionDate;
+    let rsvpDate;
     let mainColor;
     let accentColor;
     let weddingStyle;
@@ -37,6 +40,8 @@ export default function WeddingPlans(props){
     if(typeof details !== "undefined"){
 
         date = details.dateTime;
+        rsvpDate = details.dateTimeRSVP || "";
+        receptionDate = details.dateTimeReception || "";
         budget = typeof details.budget === "undefined" ? "" : details.budget;
         country = details.country || "";
         sizeSystem = details.sizeSystem || "";
@@ -54,6 +59,9 @@ export default function WeddingPlans(props){
     }else{
 
         budget = ""; 
+        date = "";
+        receptionDate = "";
+        rsvpDate = details.dateTimeRSVP || "";
         country = "";
         sizeSystem = ""
         location = "";   
@@ -77,6 +85,7 @@ export default function WeddingPlans(props){
 
         let item = document.getElementsByClassName("dateChange");
         item[0].type = 'datetime-local';
+        item[0].showPicker();
 
     }
 
@@ -114,6 +123,97 @@ export default function WeddingPlans(props){
         }
         
         return returnValue;
+
+    }
+
+    const getRSVPDateValue = (date) => {
+
+        let object;
+
+        if (date === "" || typeof date === "undefined"){
+
+            object = "";
+
+        }else{
+
+            if(rsvpDate === ""){
+
+                rsvpDate = new Date(date);
+                // Subtract 4 weeks (28 days)
+                const daysToSubtract = 28;
+                rsvpDate.setDate(rsvpDate.getDate() - daysToSubtract);
+                rsvpDate = rsvpDate.toISOString().slice(0, 16);
+
+                bridalParty["weddingDetails"]["dateTimeRSVP"] = rsvpDate;
+
+                setBridalParty(bridalParty);
+                saveBridalParty(bridalParty);
+                setListUpdated(listUpdated + 1);
+
+            }
+
+            object =  <div className='row'>
+
+                <div className='inputGroup col-12'>
+                    <label className="block mb-2 font-semibold">
+                        RSVP:
+                    </label>
+                    <div>
+                        <i className="fa-solid fa-calendar-day icon"></i>
+                        <input type={ checkType(rsvpDate) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(rsvpDate) } name="dateTimeRSVP" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(rsvpDate) }></input>
+                    </div>
+                </div>
+
+            </div>
+
+        }
+
+
+        return object;
+
+    }
+
+     const getReceptionDateValue = (date) => {
+
+        let object;
+
+        if (date === "" || typeof date === "undefined"){
+
+            object = "";
+
+        }else{
+
+            if(receptionDate === ""){
+
+                receptionDate = new Date(date);
+                receptionDate = receptionDate.toISOString().split('T')[0] + "T20:00";;
+
+                bridalParty["weddingDetails"]["dateTimeReception"] = rsvpDate;
+
+                setBridalParty(bridalParty);
+                saveBridalParty(bridalParty);
+                setListUpdated(listUpdated + 1);
+
+            }
+
+            object =  <div className='row'>
+
+                <div className='inputGroup col-12'>
+                    <label className="block mb-2 font-semibold">
+                        Reception Date & Time:
+                    </label>
+                    <div>
+                        <i className="fa-solid fa-calendar-day icon"></i>
+                        <input type={ checkType(receptionDate) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(receptionDate) } name="dateTimeRSVP" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(receptionDate) }></input>
+                    </div>
+                </div>
+
+            </div>
+
+        }
+
+
+        return object;
 
     }
 
@@ -217,7 +317,7 @@ export default function WeddingPlans(props){
 
             <h2 className="text-2xl font-semibold mb-4">Wedding Plans { getPlanStatus() }</h2>
 
-             <div className='row'>
+            <div className='row'>
 
                 <div className='inputGroup col-12'>
                     <label className="block mb-2 font-semibold">
@@ -225,11 +325,16 @@ export default function WeddingPlans(props){
                     </label>
                     <div>
                         <i className="fa-solid fa-calendar-day icon"></i>
-                        <input type={ checkType(date) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(date) }name="dateTime" placeholder="Proposed date and time"   onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(date) }></input>
+                        <input type={ checkType(date) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(date) } name="dateTime" placeholder="Proposed date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(date) }></input>
                     </div>
                 </div>
 
             </div>
+
+    
+            { getReceptionDateValue(date) }
+
+            { getRSVPDateValue(date) }
 
             <CurrencySelector getColor={ getColor } handleChange={ handleChange } value={ currency }/>
 

@@ -123,10 +123,10 @@ export default function WeddingParty(props){
 
                         order += 1;
 
-                        let [found, index] = getGuestIndexRole(guestList, item[0]);
+                        let [found, index, guestIndex] = getGuestIndexRole(guestList, item[0]);
 
-                        if(found){
-
+                       
+                        if(found && guestIndex === -1){
 
                             return (
 
@@ -141,6 +141,34 @@ export default function WeddingParty(props){
                                     displayMobile={ true }
                                     displayEmail={ true }
                                     displayRSVP={ true }
+                                    additionalGuest={ false }
+                                    additionalGuestDetails=""
+
+
+                                />
+
+                            )
+
+                        }else if(found && guestIndex > -1){
+
+                             console.log(item[0], found, index, guestIndex, guestList.list[index].additionalGuests[guestIndex]);
+                            return (
+
+                                <GuestDataRow 
+
+                                        order={ order }
+                                        wedding={ wedding }
+
+                                        //the columns to be displayed
+                                        person={ guestList.list[index] }
+                                        displayRole = { true }
+                                        displayMobile={ true }
+                                        displayEmail={ true }
+                                        displayRSVP={ true }
+                                        additionalGuest={ true }
+                                        additionalGuestDetails={ guestList.list[index].additionalGuests[guestIndex] }
+
+                                
 
 
                                 />
@@ -153,11 +181,11 @@ export default function WeddingParty(props){
 
                                 <div className={ "guestRow " + order} key={ item }>
 
-                                    <div className="col-3">{ getBlankRole(item[0]) }</div>
-                                    <div className="col-3">{ item[0] }</div>
-                                    <div className="col-2"></div>
-                                    <div className="col-3"></div>
-                                    <div className="col-1"> </div>
+                                    <div className="name">{ getBlankRole(item[0]) }</div>
+                                    <div className="role">{ item[0] }</div>
+                                    <div className="rsvpBox"></div>
+                                    <div className="mobile"></div>
+                                    <div className="email"> </div>
 
                                 </div>
 

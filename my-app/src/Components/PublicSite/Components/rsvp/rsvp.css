@@ -63,7 +63,7 @@
 
 .inputGroupHalf {
 
-    width: 48%;
+    width: 49%;
     margin: 10px;
 
 }
@@ -160,6 +160,13 @@ select {
         width : 100%;
         padding: 10px;
         
+    }
+
+    .inputGroupHalf {
+
+        width: 96%;
+        margin: 10px;
+
     }
 
 

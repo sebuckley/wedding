@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Link  } from 'react-router-dom';
-import { splitByCapitalNums } from "./dataFunctions";
+
 import { getTaskIndex, deleteTaskListItem } from "./dataFunctions-taskList";
 import { getSupplierName } from "./dataFunctions-suppliers";
+import { splitByCapitalNums } from "./dataFunctions";
+import TaskRow from "./taskRow";
 
 
 const ListTasks = (props) => {
@@ -17,115 +19,6 @@ const ListTasks = (props) => {
   const taskFiltered = props.taskFiltered;
   const [taskListUpdated, setThisListUpdated] = useState(0);
   
-  const selectOptionState = (className, state) => {
-
-    let currentState;
-
-    if(state ===""){
-
-      currentState = "To-do";
-
-    }else{
-  
-      currentState = state;
-
-    }
-
-    return(
-
-      <select className={ className } onChange={ onChange } defaultValue={ currentState }>
-
-        <option value="To-do">To-do</option>
-        <option value="In-progress">In-progress</option>
-        <option value="Completed">Completed</option>
-
-      </select>
-
-    )
-
-
-  }
-
-  const selectOptionActivity = (className, activity) => {
-
-    let currentState;
-
-    if(activity ===""){
-
-      currentState = "Not started";
-
-    }else{
-  
-      currentState = activity;
-
-    }
-
-    return(
-
-      <select className={ className } onChange={ onChange } defaultValue={ currentState }>
-
-        <option value="Not started">Not started</option>
-        <option value="Planned">Planned</option>
-        <option value="Researching">Researching</option>
-        <option value="Enquiry made">Enquiry made</option>
-        <option value="Selected">Selected</option>
-
-      </select>
-
-    )
-
-
-  }
-
-  const addDate = (date, type) => {
-
-    let returnObject;
-    let currentDate;
-
-    if (date === "" || date === null) {
-
-      currentDate = "";
-
-    }else{
-
-      if(type === "input"){
-
-        currentDate = new Date(date).toISOString().split('T')[0];
-
-      }else{
-
-        currentDate = new Date(date);
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth()+1;
-        let dt = currentDate.getDate();
-
-        if (dt < 10) {
-          dt = '0' + dt;
-        }
-        if (month < 10) {
-          month = '0' + month;
-        }
-        currentDate = dt + '/' + month + '/' + year;
-
-      }
-      
-    }
-
-    if(type === "input"){
-
-      
-      returnObject = <input type='date' onChange={ onChangeDate } className="dateInput inputBox2" value={ currentDate }></input>
-
-
-    }else{
-
-      returnObject = currentDate
-
-    }
-
-    return returnObject;
-
-  }
 
   const sortList = (array, sortBy="taskName", type="asc") => {
 
@@ -203,20 +96,20 @@ const ListTasks = (props) => {
 
   }
 
-  const linkSuppliers = (a,name, state, activity) => {
+  const linkSuppliers = (name, state, activity) => {
 
     let link;
     let newName;
 
     if(state === "In-progress" && activity === "Planned"){
 
-      link = "/managemywedding/suppliers/?add=" + a;
-      newName = "Add suppliers for " + splitByCapitalNums(a);
+      link = "/managemywedding/suppliers/?add=" + name;
+      newName = "Add suppliers for " + splitByCapitalNums(name);
 
     }else{
 
-      link = "/managemywedding/suppliers/?filter=" + a;
-      newName = "Suppliers for " + splitByCapitalNums(a);
+      link = "/managemywedding/suppliers/?filter=" + name;
+      newName = "Suppliers for " + splitByCapitalNums(name);
 
     }
 
@@ -252,59 +145,18 @@ const ListTasks = (props) => {
 
           return(
 
-              <li key={ itemID }>
-
-                <div className="col-4">
-                  
-                  { taskNameSplit }:
-
-                </div>
-
-                <div className="state col-1 state">
-              
-                  { state }
-                
-                </div>
-
-                <div className="state col-1 activity">
-              
-                  { activity }
-                
-                </div>
-
-                <div className="inputDateText col-2">
-              
-                  { addDate(updated,"text") }
-
-                </div>
-
-                <div className="inputDate col-2">
-              
-                  { state !== "Completed" ? addDate(toDoDate, "input") : getSupplierLink(supplierID, "Supplier Record") }
-
-                </div>
-
-                <div className="inputDelete col-2">
-              
-                  { state === "To-do" ? <button className="deleteButton" onClick={ deleteTaskItem }>Delete</button> : ""}
-                  { state === "In-progress" ? linkSuppliers(taskName, "Suppliers", state, activity) : "" }
-
-                </div>
-
-                <div className="inputID" style={{"display": "none"}}>
-              
-                  { itemID }
-
-                </div>
-
-                <div className="taskName" style={{"display": "none"}}>
-              
-                  { taskName }
-
-                </div>
-
-              </li>
-
+             <TaskRow itemID={ itemID }
+                      taskName={ taskName }
+                      state={ state }
+                      activity={ activity }
+                      toDoDate={ toDoDate }
+                      deleteTaskItem={ deleteTaskItem }
+                      onChangeDate={ onChangeDate }
+                      onChange={ onChange }
+                      linkSuppliers={ linkSuppliers}
+                      getSupplierLink= { getSupplierLink }
+                      supplierID={ supplierID }
+              ></TaskRow>
           )
 
       }else{
@@ -328,51 +180,17 @@ const ListTasks = (props) => {
 
             return(
 
-              <li key={ itemID }>
-
-                  <div className="titleName col-3">
-                    
-                    { splitByCapitalNums(taskName) }:
-
-                  </div>
-
-                  <div className="state col-2">
-                
-                    { state }
-                  
-                  </div>
-
-                  <div className="state col-2">
-                
-                    { activity }
-                  
-                  </div>
-
-                  <div className="inputDate col-2">
-                
-                    { addDate(toDoDate) }
-
-                  </div>
-
-                  <div className="inputDelete col-2">
-                
-                    <button className="deleteButton" onClick={ deleteTaskItem }>Delete</button>
-
-                  </div>
-
-                  <div className="inputID" style={{"display": "none"}}>
-                
-                    { itemID }
-
-                  </div>
-
-                  <div className="taskName" style={{"display": "none"}}>
-                
-                    { taskName }
-
-                  </div>
-
-                </li>
+             <TaskRow itemID={ itemID }
+                      taskName={ taskName }
+                      state={ state }
+                      activity={ activity }
+                      toDoDate={ toDoDate }
+                      deleteTaskItem={ deleteTaskItem }
+                      onChangeDate={ onChangeDate }
+                      onChange={ onChange }
+                      linkSuppliers={ linkSuppliers}
+                      getSupplierLink= { getSupplierLink }
+              ></TaskRow>
 
             )
 
@@ -384,51 +202,17 @@ const ListTasks = (props) => {
 
             return(
 
-              <li key={ itemID }>
-
-                  <div className="titleName col-3">
-                    
-                    { splitByCapitalNums(taskName) }:
-
-                  </div>
-
-                  <div className="state col-2">
-                
-                    { selectOptionState(taskName  + " state", state) }
-                  
-                  </div>
-
-                  <div className="state col-2">
-                
-                    { selectOptionActivity(taskName + " activity", activity) }
-                  
-                  </div>
-
-                  <div className="inputDate col-2">
-                
-                    { addDate(toDoDate) }
-
-                  </div>
-
-                  <div className="inputDelete col-2">
-                
-                    <button className="deleteButton" onClick={ deleteTaskItem }>Delete</button>
-
-                  </div>
-
-                  <div className="inputID" style={{"display": "none"}}>
-                
-                    { itemID }
-
-                  </div>
-
-                  <div className="taskName" style={{"display": "none"}}>
-                
-                    { taskName }
-
-                  </div>
-
-              </li>
+             <TaskRow itemID={ itemID }
+                      taskName={ taskName }
+                      state={ state }
+                      activity={ activity }
+                      toDoDate={ toDoDate }
+                      deleteTaskItem={ deleteTaskItem }
+                      onChangeDate={ onChangeDate }
+                      onChange={ onChange }
+                       linkSuppliers={ linkSuppliers}
+                      getSupplierLink= { getSupplierLink }
+              ></TaskRow>
 
             )
 
@@ -446,7 +230,7 @@ const ListTasks = (props) => {
    
   return (
 
-    <ul> { generateList(taskList) } </ul>
+    <div> { generateList(taskList) } </div>
 
   )
 

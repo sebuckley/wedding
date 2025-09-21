@@ -93,7 +93,7 @@ export default function GuestList(props){
 
                     return (
 
-                        <div>
+                        <div className='guestList'>
 
                             <GuestDataRow 
                                     
@@ -246,7 +246,7 @@ export default function GuestList(props){
 
                     <GuestDataRow 
                                     
-                        order={ 1 }
+                        order={ 2 }
                         wedding={ wedding }
                         bridalPartyPerson={ true }
                         displayBridalContact= { false } 

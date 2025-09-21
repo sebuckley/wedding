@@ -16,7 +16,7 @@ export default function PublicLinks(props){
 
     const dashboardLink = (onClickPage) => {
 
-        return <Link to='/managemywedding/'> Dashboard</Link>
+        return <Link to='managemywedding/'> Dashboard</Link>
 
     }
 

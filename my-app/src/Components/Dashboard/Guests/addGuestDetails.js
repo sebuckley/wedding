@@ -48,7 +48,7 @@ export default function NewGuest(props){
                 <div className='inputGroup col-12'>
                 
                     <i className="fa-solid fa-person-circle-question icon"></i>
-                    <select id="guestRole" className='guestType' style={ getColor(role) } name='role' onChange={ onChangeOptionGuest } value={ role } disabled={ disableItem } >
+                    <select id="guestRole" className={ getNumber("guestType", arrayNumber) }  style={ getColor(role) } name='role' onChange={ onChangeOptionGuest } value={ additionalGuests[arrayNumber].role } disabled={ disableItem } >
                         <option value="" hidden className="noOption">please select role... (required)</option>
                         <option>Guest</option>
                         { getRoles(roles) }

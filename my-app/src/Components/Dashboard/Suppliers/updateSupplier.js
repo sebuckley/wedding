@@ -5,6 +5,7 @@ import { getSupplierIndex, updateSupplierObject, deleteSupplierListItem } from '
 import { splitByCapitalNums, updateSupplierTask } from '../../Wigits/dataFunctions';
 import Notes from './notes';
 import SupplierCostDetails from './supplierBooked';
+import SupplierQuoteDetails from './supplierQuote';
 import currencyList from '../Details/currencyList';
 
 export default function UpdateSupplier(props){
@@ -12,6 +13,7 @@ export default function UpdateSupplier(props){
     const location = useLocation();
     const search = location.search; // e.g., #/path?param1=value1&param2=value2
     const supplierIDParam = search.split("=")[1];
+    const getSupplierDataUpdate = props.getSupplierData;
 
     const user = props.user;
     const supplierList = props.supplierList;
@@ -47,7 +49,19 @@ export default function UpdateSupplier(props){
     const [note, setNote] = useState('');
     const [formLength, setFormLength] = useState(0);
 
-    const costValue = formData.status === "Booked" ? formData.cost : formData.quote;
+    const quote = formData.quote || "";
+    const cost = formData.cost || "";
+    const dueDate = formData.dueDate || "";
+    const deposit = formData.deposit || "";
+    const depositDate = formData.depositDate || "";
+    const depositPaidBy = formData.depositPaidBy || "";
+    const depositPaymentType = formData.depositPaymentType || "";
+    const balancePaymentType = formData.balancePaymentType || "";
+    const balancePaidDate = formData.balancePaidDate || "";
+    const balancePaidBy = formData.balancePaidBy || "";
+    
+
+    const costValue = formData.status === "Booked" ? cost : quote;
 
     if(supplierID === ""){
 
@@ -177,7 +191,6 @@ export default function UpdateSupplier(props){
 
         if(name === "quote" || name === "cost"){
 
-
             if(parseInt(value)){
 
                 newObject[name] = parseFloat(value).toFixed(2).toString();
@@ -192,6 +205,8 @@ export default function UpdateSupplier(props){
                 newObject[name] = parseFloat(newValue).toFixed(2).toString();
 
             }
+
+            getSupplierDataUpdate(supplierList);
 
         }else{
 
@@ -250,7 +265,7 @@ export default function UpdateSupplier(props){
 
         let color;
 
-        if(value === "" || value === "Not confirmed"){
+        if(value === "" || value === "Not confirmed" || typeof value === "undefined"){
 
             color = { color: "var(--grey)"}
 
@@ -314,10 +329,33 @@ export default function UpdateSupplier(props){
 
     }
 
-    const getPhoneLink = (num) => {
+    const getPhoneLink = (num, type="input") => {
 
-        let href = "tel:" + num;
-        return <a href={href}> <i className="fa-solid fa-phone icon3"></i></a>
+        let itemName;
+        let item = num;
+
+         if(type === "input"){
+
+            itemName = "fa-solid fa-phone icon";
+
+        }else{
+
+            itemName = "fa-solid fa-phone icon3";
+
+        }
+
+         if(item !== "" && validPhone){
+
+            let href = "tel:" + num;
+            item = <a href={href}> <i className={ itemName }></i></a>
+
+        }else{
+
+            item = <i className={ itemName }></i>;
+
+        }
+
+        return item;
         
     }
 
@@ -336,7 +374,7 @@ export default function UpdateSupplier(props){
 
         }
 
-         if(item !== "" && !validWeb){
+         if(item !== "" && validEmail){
 
             let href = "mailto:" + email;
         
@@ -517,8 +555,6 @@ export default function UpdateSupplier(props){
 
                 <div className='row two'>
 
-                    
-
                     <div className='col-6'>
                     
                         <h2>{ formData.name }</h2>
@@ -527,7 +563,7 @@ export default function UpdateSupplier(props){
 
                     <div className='topLinks col-6'>
                         
-                        <div>{ formData.phone !== "" && validPhone ? getPhoneLink(formData.email) : "" }</div>
+                        <div>{ formData.phone !== "" && validPhone ? getPhoneLink(formData.email, "link") : "" }</div>
                         <div>{ formData.website !== "" && validWeb ? getWebLink(formData.website, "link") : "" }</div>
                         <div>{ formData.email !== "" && validEmail ? getEmailLink(formData.email, "link") : "" }</div>
                         <div><button className="deleteButton" onClick={ deleteListItem } >Delete</button></div>
@@ -580,7 +616,7 @@ export default function UpdateSupplier(props){
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            <i className="fa-solid fa-phone icon"></i>
+                            { getPhoneLink(formData.phone) }
                             <input type='text' className='inputBox checkIcon' name='phone' placeholder='phone' value={ formData.phone } onInput={ onInput }></input>
                             <i className="fa-solid fa-circle-minus icon2 phoneCheck"></i>
                         </div>
@@ -597,16 +633,45 @@ export default function UpdateSupplier(props){
 
                     </div>
 
-                    <div className='row'>
+                    {/* Address Section */}
 
-                        <div className='inputGroup col-12'>
+                    <div className='row two'>
+
+                        <div className='inputGroup col-4'>
                             <i className="fa-solid fa-house icon"></i>
-                            <input type='text' className='inputBox' name='number' placeholder='address' value={ formData.address } onInput={ onInput }></input>
+                            <input type='text' className='inputBox' onExit={ onInput } name='number' placeholder='Unit/number' value={ formData.number }></input>
+                        </div>
+
+                        <div className='inputGroup col-8'>
+                            <i className="fa-solid fa-road icon"></i>
+                            <input type='text' className='inputBox' onExit={ onInput }  name='roadName' placeholder='road name' value={ formData.road }></input>
                         </div>
 
                     </div>
 
-                    { formData.status === "Enquiry made"  ? <SupplierCostDetails type="quote" onInput={ onInput } value={ costValue } currency={ currency } currencyList={ currencyList }/> : "" }
+                    {/* Town Section */}
+                    <div className='row'>
+
+                        <div className='inputGroup col-12'>
+                            <i className="fa-solid fa-location-pin icon"></i>
+                            <input type='text' className='inputBox' onExit={ onInput } name='town' placeholder='town' value={ formData.town }></input>
+                        </div>
+
+                    </div>
+
+                    {/* Post code Section */}
+                    <div className='row two'>
+
+                        <div className='inputGroup col-2'>
+                            <i className="fa-solid fa-signs-post icon"></i>
+                            <input type='text' className='inputBox' onExit={ onInput } name='post-code-1' placeholder='post (xxxx)' maxLength='4' value={ formData.postCode1 }></input>
+                        </div>
+                        <div className='inputGroup col-3'>
+                            <i className="fa-solid fa-signs-post icon"></i>
+                            <input type='text' className='inputBox' onExit={ onInput }  name='post-code-2' placeholder='code (xxx)' maxLength='3' value={ formData.postCode2 }></input>
+                        </div>
+
+                    </div>
 
                     <div className='row'>
 
@@ -624,7 +689,43 @@ export default function UpdateSupplier(props){
 
                     </div>
 
-                    { formData.status === "Booked"  ? <SupplierCostDetails type="booked" onInput={ onInput } value={ costValue } currency={ currency } currencyList={ currencyList }/> : "" }
+                     {/* Latitude */}
+                    <div className='row'>
+
+                        <div className='inputGroup col-12'>
+                            <i className="fa-solid fa-location-crosshairs icon"></i>
+                            <input type='text' className='inputBox' onExit={ onInput } name='latitude' placeholder='latitude' value={ formData.latitude }></input>
+                        </div>
+
+                    </div>
+
+                     {/* Longitude */}
+                    <div className='row'>
+
+                        <div className='inputGroup col-12'>
+                            <i className="fa-solid fa-location-crosshairs icon"></i>
+                            <input type='text' className='inputBox' onExit={ onInput } name='longitude' placeholder='longitude' value={ formData.longitude }></input>
+                        </div>
+
+                    </div>
+
+                    { formData.status === "Enquiry made"  ? <SupplierQuoteDetails type="quote" onInput={ onInput } value={ costValue } currency={ currency } currencyList={ currencyList }/> : "" }
+                    { formData.status === "Booked"  ?   <SupplierCostDetails  type="booked" 
+                                                                            onInput={ onInput } 
+                                                                            value={ costValue } 
+                                                                            currency={ currency } 
+                                                                            currencyList={ currencyList } 
+                                                                            getColor={ getColor } 
+                                                                            deposit={ deposit } 
+                                                                            depositDate={ depositDate }
+                                                                            dueDate={ dueDate}
+                                                                            balancePaidBy={ formData.balancePaidBy }
+                                                                            depositPaidBy={ formData.depositPaidBy }
+                                                                            balancePaymentType={ balancePaymentType }
+                                                                            balancePaidDate={ balancePaidDate }
+                                                                            depositPaymentType={ depositPaymentType }
+
+                                                        /> : "" }
 
                     <div className='row'>
 

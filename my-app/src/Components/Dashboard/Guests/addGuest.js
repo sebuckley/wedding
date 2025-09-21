@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { getGuestList, saveGuestList, checkExistingGuest } from '../../Wigits/dataFunctions-guestList';
 import { roles } from '../../App/mainData';
 import GenderDropdown from '../../Wigits/genderDropdown';
+import { useNavigate } from 'react-router-dom';
+
 // import { parsePhoneNumberFromString, isPossiblePhoneNumber, isValidPhoneNumber, validatePhoneNumberLength } from 'libphonenumber-js';
 
 export default function AddGuests(props){
@@ -11,6 +13,7 @@ export default function AddGuests(props){
     const [surname, setSurname] = useState('');
     const role = props.role;
     const setRole = props.setRole;
+    const setGuestList = props.setGuestList;
     const [guestType, setguestType] = useState('');
     const [gender, setGender] = useState('');
     const [mobile, setMobile] = useState('');
@@ -19,6 +22,7 @@ export default function AddGuests(props){
     const [display, setDisplay]  = useState(false);
     const getRoles = props.getRoles;
     const user = props.user;
+    const navigate = useNavigate();
 
     const checkPhone = (number) => {
 
@@ -198,6 +202,7 @@ export default function AddGuests(props){
         const emptyInputs = checkForm();
         const validEmail = document.getElementsByClassName("emailCheck")[0].className.includes("fa-circle-plus");
         const validPhone = document.getElementsByClassName("phoneCheck");
+        
 
         let checkInputs = false;
 
@@ -317,15 +322,14 @@ export default function AddGuests(props){
             guestList.list.push(newPerson);
 
             saveGuestList(guestList);
+            setGuestList(guestList);
             
             clearLocalAddGuest();
             clearForm();
             resetIcons();
             clearState();
 
-            const reDirectString = "/wedding/#/managemywedding/guest/?personID=" + personUUID;
-
-            window.location.replace(reDirectString);
+            navigate(`/managemywedding/guest/?personID=${personUUID}`);
 
 
         }else{
@@ -579,7 +583,7 @@ export default function AddGuests(props){
             <h1 onClick={ displayAddGuest } id="addGuestTitle">Add Guest</h1>
             
             <form id='inputForm' style={ getCurrentDisplay() } target="_blank">
-                <p>Add a guest to your list, any guest addered here will be treated as an adult.  If you wish to add a bridesmaid who is a child, please add the adult guest frist before selecting their guest (the child) as the bridesmaid.</p>
+                <p>Guests added here will be listed as adults. If you're adding a child as a bridesmaid, please add their adult guest first, then add the child as the bridesmaid.</p>
 
                 <div className='row two'>
 

@@ -1,3 +1,4 @@
+import './guestRowData.css';
 import { Link } from 'react-router-dom';
 
 export default function GuestDataRow(props){
@@ -5,12 +6,16 @@ export default function GuestDataRow(props){
     const bridalPartyPerson = props.bridalPartyPerson || false;
     const displayBridalContact = props.displayBridalContact;
     const person = props.person;
+    const additionalGuest = props.additionalGuest;
+    const additionalGuestDetails = props.additionalGuestDetails;
+
+    console.log(additionalGuest, additionalGuestDetails);
 
     const UUID = person.UUID;
-    const firstName = person.firstName;
-    const surname = person.surname;
-    let guestType = person.guestType;
-    let role = person.role;
+    const firstName = additionalGuest ? additionalGuestDetails.firstName : person.firstName;
+    const surname = additionalGuest ? additionalGuestDetails.surname : person.surname;
+    let guestType =  additionalGuest ? additionalGuestDetails.guestType :person.guestType;
+    let role = additionalGuest ? additionalGuestDetails.role : person.role;
     const mobile = person.mobile;
     const email = person.email;
     let rsvp = role === "bride" || role === "groom" ? true : person.rsvp;
@@ -29,6 +34,14 @@ export default function GuestDataRow(props){
     const displayAgeGroup = props.displayAgeGroup || false;
     const displayDiet = props.displayDiet || false;
     const displayAllergies = props.displayDiet || false;
+
+    
+
+    if(role === "Flower Girl"){
+
+        console.log(firstName, surname, role, additionalGuest, additionalGuestDetails);
+
+    }
 
     const getBridalLink = (uuid) => {
 
@@ -192,7 +205,7 @@ export default function GuestDataRow(props){
         }
         
 
-        return <div className="col-3"> { role } </div>;
+        return <div className="role"> { role } </div>;
 
     }
 
@@ -202,19 +215,19 @@ export default function GuestDataRow(props){
 
         if(mobile !== ""){
 
-            object = <div className="col-2">{ <a href={ getPhoneLink(mobile, UUID) } aria-label={ "phone " + firstName + " " + surname } title={ "phone " + firstName + " " + surname }><i className="fa-solid fa-phone icon3"></i></a> }</div>
+            object = <div className="mobile">{ <a href={ getPhoneLink(mobile, UUID) } aria-label={ "phone " + firstName + " " + surname } title={ "phone " + firstName + " " + surname }><i className="fa-solid fa-phone icon3"></i></a> }</div>
 
         }else if (bridalPartyPerson === false){
 
-            object = <div className="col-2">{ <a href={ getPersonLink(UUID) } aria-label={ "add phone number for " + firstName + " " + surname } title={ "add phone number for " + firstName + " " + surname }><i className="fa-solid fa-circle-plus icon3"></i></a> }</div>
+            object = <div className="mobile">{ <a href={ getPersonLink(UUID) } aria-label={ "add phone number for " + firstName + " " + surname } title={ "add phone number for " + firstName + " " + surname }><i className="fa-solid fa-circle-plus icon3"></i></a> }</div>
 
         }else if (bridalPartyPerson === true && displayBridalContact === true){
 
-            object = <div className="col-2">{ <a href={ getBridalLink(UUID) } aria-label={ "add phone number for " + firstName + " " + surname } title={ "add phone number for " + firstName + " " + surname }><i className="fa-solid fa-circle-plus icon3"></i></a> }</div>
+            object = <div className="mobile">{ <a href={ getBridalLink(UUID) } aria-label={ "add phone number for " + firstName + " " + surname } title={ "add phone number for " + firstName + " " + surname }><i className="fa-solid fa-circle-plus icon3"></i></a> }</div>
         
         }else{
 
-            object = <div className="col-2"></div>
+            object = <div className="mobile"></div>;;
         
         }
 
@@ -228,25 +241,25 @@ export default function GuestDataRow(props){
 
         if(email !== "" && bridalPartyPerson === false){
 
-            object = <div className="col-3">{ <a href={ getEmailLink(email, wedding, firstName) } aria-label={ "email " + firstName + " " + surname } title={ "email " + firstName + " " + surname }><i className="fa-solid fa-envelope icon3"></i></a> }</div>
+            object = <div className="email">{ <a href={ getEmailLink(email, wedding, firstName) } aria-label={ "email " + firstName + " " + surname } title={ "email " + firstName + " " + surname }><i className="fa-solid fa-envelope icon3"></i></a> }</div>
         
 
         }else if (bridalPartyPerson === true && displayBridalContact === true){
 
             if(firstName === "Partner 1" || firstName === "Partner 2"){
 
-                object = <div className="col-3">{ <a href={ getBridalLink(UUID) } aria-label={ "add email for " + firstName + " " + surname } title={ "add email for " + firstName + " " + surname }><i className="fa-solid fa-circle-plus icon3"></i></a> }</div>
+                object = <div className="email">{ <a href={ getBridalLink(UUID) } aria-label={ "add email for " + firstName + " " + surname } title={ "add email for " + firstName + " " + surname }><i className="fa-solid fa-circle-plus icon3"></i></a> }</div>
 
             }else{
 
-                 object = <div className="col-3">{ <a href={ getEmailLink(email, wedding, firstName) } aria-label={ "email " + firstName + " " + surname } title={ "email " + firstName + " " + surname }><i className="fa-solid fa-envelope icon3"></i></a> }</div>
+                 object = <div className="email">{ <a href={ getEmailLink(email, wedding, firstName) } aria-label={ "email " + firstName + " " + surname } title={ "email " + firstName + " " + surname }><i className="fa-solid fa-envelope icon3"></i></a> }</div>
 
             }
 
         
         }else{
 
-            object = <div className="col-3"></div>
+            object = <div className="email empty"></div>;
         
         }
 
@@ -263,7 +276,7 @@ export default function GuestDataRow(props){
 
         }
 
-        return <div className="col-1"> { rsvp === "Not confirmed" ? <i className="fa-solid fa-circle-minus iconMinus"  title="Not confirmed" role="img" aria-label="Not confirmed"></i> : rsvp === "Confirmed" ?  <i className="fa-solid fa-circle-check iconCheck" title="Confirmed" role="img" aria-label="Confirmed"></i> : <i className="fa-solid fa-circle-xmark iconCross" title="Declined" role="img" aria-label="Declined"></i>} </div>
+        return <div className="rsvpBox"> { rsvp === "Not confirmed" ? <i className="fa-solid fa-circle-minus iconMinus"  title="Not confirmed" role="img" aria-label="Not confirmed"></i> : rsvp === "Confirmed" ?  <i className="fa-solid fa-circle-check iconCheck" title="Confirmed" role="img" aria-label="Confirmed"></i> : <i className="fa-solid fa-circle-xmark iconCross" title="Declined" role="img" aria-label="Declined"></i>} </div>
         
     }
 
@@ -273,15 +286,15 @@ export default function GuestDataRow(props){
 
         if(guestType === "" && bridalPartyPerson === false){
 
-            object = <div className="col-3">Age Group: unknown</div>
+            object = <div className="age">Age Group: unknown</div>
         
         }else if (bridalPartyPerson === true){
 
-             object = <div className="col-3">Age Group: Adult</div>
+             object = <div className="age">Age Group: Adult</div>
 
         }else{
 
-            object = <div className="col-3">Age Group: { getAgeGroup(guestType) }</div>
+            object = <div className="age">Age Group: { getAgeGroup(guestType) }</div>
 
         }
 
@@ -291,13 +304,13 @@ export default function GuestDataRow(props){
 
     const returnDiet = () => {
 
-        return  <div className="col-3">Dietry: { getDiet(diet) }</div>
+        return  <div className="diet">Dietry: { getDiet(diet) }</div>
                             
     }
 
     const returnAllergies = () => {
 
-        return <div className="col-3">Allergies: { getAllergies(allergies) }</div>
+        return <div className="allergies">Allergies: { getAllergies(allergies) }</div>
         
     }
 
@@ -305,15 +318,15 @@ export default function GuestDataRow(props){
 
         <div className={ "guestRow " + (order + 2)} key={ UUID }>
 
-            <div className="col-3">{ getRoleLink(role, UUID, firstName, surname) }</div>
+            <div className="name">{ getRoleLink(role, UUID, firstName, surname) }</div>
 
             { displayRole ? returnRole() : "" }
+
+            { displayRSVP ? returnRSVP() : "" }
             
             { displayMobile ? returnMobile(mobile) : "" }
 
             { displayEmail ? returnEmail() : "" }
-
-            { displayRSVP ? returnRSVP() : "" }
 
             { displayAgeGroup ? returnAgeGroup() : "" }
 

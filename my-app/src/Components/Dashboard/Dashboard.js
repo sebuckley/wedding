@@ -104,21 +104,21 @@ export default function Dashboard(props){
             <div>
 
               
-              { isEmpty(guestData) ? getStatus() : <ValueBox title={ "Total invited" } value={ guestData.guestNumbers } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Outstanding responses" } value={ guestData.guestNotResponded } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Confirmed" } value={ guestData.confirmed } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Declined" } value={ guestData.declined } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Remaining Guests" } value={ bridalParty.weddingDetails.maxGuests - guestData.guestNumbers } href={"managemywedding/guests"}/> }
+              { isEmpty(guestData) ? getStatus() : <ValueBox title={ "Total invited" } value={ guestData.guestNumbers } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Outstanding responses" } value={ guestData.guestNotResponded } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Confirmed" } value={ guestData.confirmed } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Declined" } value={ guestData.declined } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Remaining Guests" } value={ bridalParty.weddingDetails.maxGuests - guestData.guestNumbers } href={"/managemywedding/guests"}/> }
 
             </div>
 
              <div>
 
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Adults" } value={ guestData.adults } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Children" } value={ guestData.children } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Infants" } value={ guestData.infants } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Dietry Needs" } value={ guestData.diet } href={"managemywedding/guests"}/> }
-              { isEmpty(guestData) ? "" : <ValueBox title={ "Allergies" } value={ guestData.allergies } href={"managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Adults" } value={ guestData.adults } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Children" } value={ guestData.children } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Infants" } value={ guestData.infants } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Dietry Needs" } value={ guestData.diet } href={"/managemywedding/guests"}/> }
+              { isEmpty(guestData) ? "" : <ValueBox title={ "Allergies" } value={ guestData.allergies } href={"/managemywedding/guests"}/> }
 
             </div>
 
@@ -128,21 +128,21 @@ export default function Dashboard(props){
 
               
 
-              { isEmpty(taskData) ? "Loading..." : <ValueBox title={ "Task Numbers" } value={ taskData.noTasks } href={"managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "To-do" } value={ taskData.toDo } href={"managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "In-progress" } value={ taskData.inProgress } href={"managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Completed" } value={ taskData.completed } href={"managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "Loading..." : <ValueBox title={ "Task Numbers" } value={ taskData.noTasks } href={"/managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "To-do" } value={ taskData.toDo } href={"/managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "In-progress" } value={ taskData.inProgress } href={"/managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "Completed" } value={ taskData.completed } href={"/managemywedding/tasks"}/> }
            
 
             </div>
 
             <div>
 
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Not started" } value={ taskData.notStarted } href={"managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Planned Activity" } value={ taskData.planned } href={"managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Researching" } value={ taskData.researched } href={"managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Enquiry Made" } value={ taskData.enquiry } href={"managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Booked" } value={ taskData.selected } href={"managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "Not started" } value={ taskData.notStarted } href={"/managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "Planned Activity" } value={ taskData.planned } href={"/managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "Researching" } value={ taskData.researched } href={"/managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "Enquiry Made" } value={ taskData.enquiry } href={"/managemywedding/tasks"}/> }
+              { isEmpty(taskData) ? "" : <ValueBox title={ "Booked" } value={ taskData.selected } href={"/managemywedding/tasks"}/> }
 
             </div>
          

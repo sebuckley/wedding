@@ -194,6 +194,7 @@ function App() {
 
   }
 
+
   const checkGuestList = async () => {
 
       if(guestList === "" && guestListChecked === 0){
@@ -247,9 +248,7 @@ function App() {
 
   }
 
-  useEffect(() => {
-
-    const getGuestData = (data) => {
+  const getGuestData = (data) => {
 
       if(data !== ""){
 
@@ -443,216 +442,218 @@ function App() {
 
       }
 
-    }
+  }
 
-    const getTaskData = (data) => {
+  const getTaskData = (data) => {
 
-      if(data !== ""){
+    if(data !== ""){
 
-        let noTasks = 0;
-        let toDo = 0;
-        let inProgress = 0;
-        let completed = 0;
-        let notStarted = 0;
-        let planned = 0;
-        let researched = 0;
-        let enquiry = 0;
-        let selected = 0;
+      let noTasks = 0;
+      let toDo = 0;
+      let inProgress = 0;
+      let completed = 0;
+      let notStarted = 0;
+      let planned = 0;
+      let researched = 0;
+      let enquiry = 0;
+      let selected = 0;
 
-        for(let i = 0; i < data.list.length; i++){
+      for(let i = 0; i < data.list.length; i++){
 
-            let state = data.list[i].state;
-            let activity = data.list[i].activity;
+          let state = data.list[i].state;
+          let activity = data.list[i].activity;
 
-            noTasks += 1;
+          noTasks += 1;
+          
+          if(state === "To-do"){
+
+            toDo += 1;
+      
+          }else if(state === "In-progress"){
+
+            inProgress += 1;
+
+          }else if(state === "Completed"){
+
+            completed += 1;
             
-            if(state === "To-do"){
+          }
 
-              toDo += 1;
-        
-            }else if(state === "In-progress"){
+          if(activity === "Not started" || activity === ""){
 
-              inProgress += 1;
+            notStarted += 1;
 
-            }else if(state === "Completed"){
-
-              completed += 1;
-              
-            }
-
-            if(activity === "Not started" || activity === ""){
-
-              notStarted += 1;
-
-            }else if(activity === "Researching"){
-        
-              researched += 1;
-        
-            }else if(activity === "Enquiry made"){
-        
-              enquiry += 1;
-              
-            }else if(activity === "Selected"){
-        
-              selected += 1;
-              
-            }else if(activity === "Planned"){
-        
-              planned += 1;
-              
-            }
-
-        }
-
-        const dataObject = {
-
-            noTasks: noTasks,
-            toDo: toDo,
-            inProgress: inProgress,
-            completed: completed,
-            notStarted: notStarted,
-            planned: planned,
-            researched: researched,
-            enquiry: enquiry,
-            selected: selected
-
-        }
-
-        setTaskData(dataObject);
+          }else if(activity === "Researching"){
+      
+            researched += 1;
+      
+          }else if(activity === "Enquiry made"){
+      
+            enquiry += 1;
+            
+          }else if(activity === "Selected"){
+      
+            selected += 1;
+            
+          }else if(activity === "Planned"){
+      
+            planned += 1;
+            
+          }
 
       }
 
+      const dataObject = {
+
+          noTasks: noTasks,
+          toDo: toDo,
+          inProgress: inProgress,
+          completed: completed,
+          notStarted: notStarted,
+          planned: planned,
+          researched: researched,
+          enquiry: enquiry,
+          selected: selected
+
+      }
+
+      setTaskData(dataObject);
+
     }
 
-    const getSupplierData = (data) => {
+  }
 
-      if(data !== ""){
+  const getSupplierData = (data) => {
 
-        let noSuppliers = 0;
-        let shortlisted = 0;
-        let enquiryMade = 0;
-        let booked = 0;
-        let ruledOut = 0;
+    if(data !== ""){
 
-        let totalQuote = 0;
-        let quoteObject = {};
-        let totalCost = 0;
-        let costObject = {}; 
+      let noSuppliers = 0;
+      let shortlisted = 0;
+      let enquiryMade = 0;
+      let booked = 0;
+      let ruledOut = 0;
 
-        for(let i = 0; i < data.list.length; i++){
+      let totalQuote = 0;
+      let quoteObject = {};
+      let totalCost = 0;
+      let costObject = {}; 
 
-          let name = data.list[i].name;
-          let uuid = data.list[i].UUID;
-          let type = data.list[i].type;
-          let state = data.list[i].status;
-          let quote = data.list[i].quote || 0;
-          let cost = data.list[i].cost || 0;
+      for(let i = 0; i < data.list.length; i++){
 
-          if(cost !== 0 && state === "Booked"){
+        let name = data.list[i].name;
+        let uuid = data.list[i].UUID;
+        let type = data.list[i].type;
+        let state = data.list[i].status;
+        let quote = parseInt(data.list[i].quote) || 0;
+        let cost = parseInt(data.list[i].cost) || 0;
 
-            costObject[type] = parseFloat(cost).toFixed(2);
+        if(cost !== 0 && state === "Booked"){
 
-          }
-
-          if(quote !== 0 && state === "Enquiry made"){
-
-            let newObject = {
-
-              "uuid": uuid,
-              "quote": quote,
-              "name": name,
-
-            }
-            
-            if(quoteObject[type] === undefined){
-
-              quoteObject[type] = [ newObject ];    
-
-            }else{
-
-              quoteObject[type].push(newObject);
-
-            }
-
-          }
-
-          noSuppliers += 1;
-
-          if(state === "Shortlisted"){
-
-            shortlisted += 1;
-      
-          }else if(state === "Enquiry made"){
-
-            enquiryMade += 1;
-
-          }else if(state === "Booked"){
-
-            booked += 1;
-            
-          }else if(state === "Ruled out"){
-
-            ruledOut += 1;
-            
-          }
-
+          costObject[type] = parseFloat(cost).toFixed(2);
 
         }
 
-        for(let key in quoteObject){
- 
-          let highest; 
-        
-          for(let i = 0; i < quoteObject[key].length; i++){
+        if(quote !== 0 && state === "Enquiry made"){
 
-            if(i === 0){
+          let newObject = {
+
+            "uuid": uuid,
+            "quote": quote,
+            "name": name,
+
+          }
+          
+          if(quoteObject[type] === undefined){
+
+            quoteObject[type] = [ newObject ];    
+
+          }else{
+
+            quoteObject[type].push(newObject);
+
+          }
+
+        }
+
+        noSuppliers += 1;
+
+        if(state === "Shortlisted"){
+
+          shortlisted += 1;
+    
+        }else if(state === "Enquiry made"){
+
+          enquiryMade += 1;
+
+        }else if(state === "Booked"){
+
+          booked += 1;
+          
+        }else if(state === "Ruled out"){
+
+          ruledOut += 1;
+          
+        }
+
+
+      }
+
+      for(let key in quoteObject){
+
+        let highest; 
+      
+        for(let i = 0; i < quoteObject[key].length; i++){
+
+          if(i === 0){
+
+            highest = Number(quoteObject[key][i].quote);
+
+          }else{
+
+
+            if(Number(quoteObject[key][i].quote) > highest){
 
               highest = Number(quoteObject[key][i].quote);
 
-            }else{
-
-
-              if(Number(quoteObject[key][i].quote) > highest){
-
-                highest = Number(quoteObject[key][i].quote);
-
-              }
-
             }
 
           }
 
-          totalQuote += highest;
-
-
         }
 
-        for(let key in costObject){
+        totalQuote += highest;
 
-          totalCost += Number(costObject[key]);
-
-        }
-
-
-        const dataObject = {
-
-          noSuppliers: noSuppliers,
-          shortlisted: shortlisted,
-          enquiryMade: enquiryMade,
-          booked: booked,
-          ruledOut: ruledOut,
-          totalQuote: parseFloat(totalQuote).toFixed(2),
-          quoteObject: quoteObject,
-          totalCost: parseFloat(totalCost).toFixed(2),
-          costObject: costObject
-
-        }
-
-        setSupplierData(dataObject);
 
       }
 
+      for(let key in costObject){
+
+        totalCost += Number(costObject[key]);
+
+      }
+
+
+      const dataObject = {
+
+        noSuppliers: noSuppliers,
+        shortlisted: shortlisted,
+        enquiryMade: enquiryMade,
+        booked: booked,
+        ruledOut: ruledOut,
+        totalQuote: parseFloat(totalQuote).toFixed(2),
+        quoteObject: quoteObject,
+        totalCost: parseFloat(totalCost).toFixed(2),
+        costObject: costObject
+
+      }
+
+      setSupplierData(dataObject);
+
     }
+
+  }
+
+  useEffect(() => {
 
     if(isEmpty(guestData)){
 
@@ -672,7 +673,7 @@ function App() {
 
     }
 
-  }, [guestList, guestData, taskList, taskData, supplierList, supplierData]);
+  }, [getTaskData, getTaskData, getSupplierData, guestList, guestData, taskList, taskData, supplierList, supplierData]);
 
   useEffect(() => {
 
@@ -744,7 +745,7 @@ function App() {
             <Route path="managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
             <Route path="managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
             <Route path="managemywedding/suppliers" element={<Suppliers loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
-            <Route path="managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
+            <Route path="managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }  getSupplierData={ getSupplierData}/>} />
             <Route path="wedding/rsvp" element={<RSVPForm headerOn={true} bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue}/>} />
             <Route path="wedding/privacy-policy" element={<PrivacyPolicy headerOn={true} bridalParty={bridalParty} />} />
 

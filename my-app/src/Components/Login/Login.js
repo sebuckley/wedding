@@ -54,12 +54,16 @@ export default function Login(props) {
 
            <div className="row flexColumn">
             <div className="col-12"> Password</div>
-            <div className="col-12"><input type="password" className="inputBox3" onChange={e => setPassword(e.target.value)}/></div>
+            <div className="col-12">
+              <input type="password" className="inputBox3" onChange={e => setPassword(e.target.value)}/>
+            </div>
           </div>
 
           <div className="row">
 
-            <button type="submit" className='button primary'>Login</button>
+            <div className="col-12">
+              <button type="submit" className='button primary'>Login</button>
+            </div>
 
           </div>
 

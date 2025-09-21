@@ -13,6 +13,7 @@ export default function Supplier(props){
     const loggedIn = props.loggedIn;
     const setLoggedin = props.setLoggedin;
     const supplierStatuses = props.supplierStatuses;
+    const getSupplierData = props.getSupplierData;
 
     const bridalParty = props.bridalParty;
     const supplierList = props.supplierList;
@@ -44,7 +45,7 @@ export default function Supplier(props){
 
             <div className="adminBody">
                
-              <UpdateSupplier  setSupplierList={ setSupplierList } supplierList={ supplierList } index={ index } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses } user={ user } currency={ bridalParty.weddingDetails.currency }/>
+              <UpdateSupplier  setSupplierList={ setSupplierList } supplierList={ supplierList } index={ index } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses } user={ user } currency={ bridalParty.weddingDetails.currency } getSupplierData={ getSupplierData }/>
             
               {/* <FamilyList listObject={ listObject } wedding={ wedding } checkExists={ checkExists }/> */}
                

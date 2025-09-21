@@ -37,13 +37,29 @@ const splitByCapitalNums = (Str) => {
 
     let split;
 
-    if(split !== "DJ"){
+    console.log(Str)
 
-        split = Str.split(/(?=[A-Z0-9&-])/).join(" ");
+    if(Str !== "DJ" && Str !== "GuestBookorAlternative"){
+
+        split = Str.split(/(?=\b(?:or|for)\b)|(?=[A-Z0-9&\-\/(]())/).join(" ");
+
+        if(split.includes("for")){
+
+            split = split.replace(/for/gi, ' for ')
+            
+        }
 
     }else{
 
-       split = Str;
+      if(Str === "GuestBookorAlternative"){
+
+         split = "Guest Book or Alternative";
+
+      }else{
+
+        split = Str;
+
+      }
 
     }
 

@@ -13,6 +13,8 @@ import { weddingClothingSizes } from '../../App/wedding_clothing_sizes_schema_wi
 export default function UpdateGuest(props){
 
     const personIDParam =  props.personIDParam;
+    const loading = props.loading;
+    const setLoading = props.setLoading;
 
     const guestList = props.guestList;
     const setGuestList = props.setGuestList;
@@ -33,7 +35,7 @@ export default function UpdateGuest(props){
     const [postCode1, setPostCode1] = useState('');
     const [postCode2, setPostCode2] = useState('');
     const [rsvp, setRSVP] = useState('');
-    const [maxGuests, setMaxGuests] = useState('');
+    const [maxGuests, setMaxGuests] = useState(0);
     const [additionalGuests, setAdditionalGuests] = useState([]);
     const [additionalGuestsState, setAdditionalGuestsState] = useState(false);
     const [noAdditionalGuests, setNoAdditionalGuests] = useState('');
@@ -44,11 +46,11 @@ export default function UpdateGuest(props){
     const [UUID, setUUID] = useState('');
     const [updated, setUpdated] = useState(0);
     const [totalEmptyState, setTotalEmptyState] = useState(0);
+    const [validEmail, setValidEmail] = useState(false);
+    const [validPhone, setValidPhone] = useState(false);
     const getRoles = props.getRoles;
 
     const disableItem = user ? false : true;
-
-    console.log(personID);
 
     if(personID === ""){
 
@@ -56,159 +58,9 @@ export default function UpdateGuest(props){
 
     }
 
-
-    const index = getGuestIndex(guestList, personIDParam);
-
-    console.log(checkAdditionalGuestsSet);
-
-    if(!checkAdditionalGuestsSet){
-
-        setAdditionalGuestsSet(guestList.list[index].additionalGuestsSet);
-        setCheckAdditionalGuestsSet(true);
-
-    }
-
-    if(additionalGuests.length === 0 && checkAdditionalGuestsSet === true && noAdditionalGuests > 0 && additionalGuestsState === false){
-
-        let newArray = additionalGuests;
-
-        for(let i = 0; i < noAdditionalGuests; i++){
-
-            let checkExists = guestList.list[index].additionalGuests[i];
-            let object = {};
-
-            if(typeof checkExists !== "undefined"){
-
-                object["firstName"] = guestList.list[index].additionalGuests[i].firstName;
-                object["surname"] = guestList.list[index].additionalGuests[i].surname;
-                object["guestType"] = guestList.list[index].additionalGuests[i].guestType;
-                object["diet"] = guestList.list[index].additionalGuests[i].diet;
-                object["allergies"] = guestList.list[index].additionalGuests[i].allergies;
-
-            }else{
-
-                object["firstName"] = "";
-                object["surname"] = "";
-                object["guestType"] = "Guest";
-                object["diet"] = "";
-                object["allergies"] = "";
-
-            }
-
-            newArray.push(object);
-
-        }
-
-        setAdditionalGuests(newArray);
-        setAdditionalGuestsState(true);
-        guestList.list[index].additionalGuests = newArray;
-        saveGuestList(guestList);
-
-    }
-
-    const checkPhone = (number) => {
-
-        const char = number.length;
-        let phoneNumber = number;
-        let validNumber = false;
-    
-        if( isNaN(phoneNumber) === false && phoneNumber.length === 11){
-
-            validNumber = true;
-
-        }
-        
-        const getIcon = document.getElementsByClassName("phoneCheck")[0];
-
-        // console.log(getIcon);
-
-        if(validNumber){
-
-            getIcon.style.color = "var(--green)";
-            getIcon.className = "fa-solid fa-circle-check icon2 phoneCheck";
-
-        }else if(char > 0){
-
-            getIcon.style.color = "var(--red)";
-            getIcon.className = "fa-solid fa-circle-xmark icon2 phoneCheck";
-
-        }else{
-
-            getIcon.style.color = "var(--grey)";
-            getIcon.className = "fa-solid fa-circle-minus icon2 phoneCheck";
-
-        }
-
-    }
-
-    const checkEmail = (email) => {
-
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        const char = email.length;
-        const regexResult = regex.test(email);
-
-        const getIcon = document.getElementsByClassName("emailCheck")[0];
-
-        if(regexResult){
-
-            getIcon.style.color = "var(--green)";
-            getIcon.className = "fa-solid fa-circle-check icon2 emailCheck";
-
-        }else if(char > 0){
-
-            getIcon.style.color = "var(--red)";
-            getIcon.className = "fa-solid fa-circle-xmark icon2 emailCheck";
-
-        }else{
-
-            getIcon.style.color = "var(--grey)";
-            getIcon.className = "fa-solid fa-circle-minus icon2 emailCheck";
-
-        }
-
-    }
-
-    const onInputMainGuest = (e) =>{
-
-        const itemName = e.target.getAttribute("name");
-        const itemValue = e.target.value.trim();
-
-        if(itemName === "email"){
-
-            checkEmail(itemValue);
-
-        }
-
-        if(itemName === "mobile"){
-
-            checkPhone(itemValue);
-
-        }
-
-        saveGuestListItem(guestList, index, itemName, itemValue);
-        checkEmpty(e.target);
-
-    }
-
-    const onInputGuests = (e) =>{
-
-        const itemName = e.target.getAttribute("name");
-        const itemValue = e.target.value.trim();
-        const className = e.target.className.split(" ");
-        const guestIndex = className[className.length - 1];
-
-        saveGuestListItemGuest(guestList, index, guestIndex, itemName, itemValue);
-
-        let currentList = additionalGuests;
-        currentList[itemName] = itemValue;
-        setAdditionalGuests(currentList);
-        setUpdated(updated + 1);
-
-    }
-
     const getPersonData = (personID) => {
 
-        console.log(personID);
+
     
         if(guestList !== null){
 
@@ -323,8 +175,178 @@ export default function UpdateGuest(props){
             }
 
         }
+
+        setLoading(false);
+        
     }
 
+    useEffect(() => {
+
+        setLoading(true);
+        console.log('Getting person data for ID:', personID);
+
+        getPersonData(personID);
+
+    }, [ getPersonData, personID ]);
+
+    const index = getGuestIndex(guestList, personIDParam);
+
+    console.log(index);
+
+    if(!checkAdditionalGuestsSet){
+
+        setAdditionalGuestsSet(guestList.list[index]?.additionalGuestsSet);
+        setCheckAdditionalGuestsSet(true);
+
+    }
+
+    if(additionalGuests.length === 0 && checkAdditionalGuestsSet === true && noAdditionalGuests > 0 && additionalGuestsState === false){
+
+        let newArray = additionalGuests;
+
+        for(let i = 0; i < noAdditionalGuests; i++){
+
+            let checkExists = guestList.list[index].additionalGuests[i];
+            let object = {};
+
+            if(typeof checkExists !== "undefined"){
+
+                object["firstName"] = guestList.list[index].additionalGuests[i].firstName;
+                object["surname"] = guestList.list[index].additionalGuests[i].surname;
+                object["guestType"] = guestList.list[index].additionalGuests[i].guestType;
+                object["role"] = guestList.list[index].additionalGuests[i].role;
+                object["diet"] = guestList.list[index].additionalGuests[i].diet;
+                object["allergies"] = guestList.list[index].additionalGuests[i].allergies;
+
+            }else{
+
+                object["firstName"] = "";
+                object["surname"] = "";
+                object["guestType"] = "";
+                object["role"] = "Guest";
+                object["diet"] = "";
+                object["allergies"] = "";
+
+            }
+
+            newArray.push(object);
+
+        }
+
+        setAdditionalGuests(newArray);
+        setAdditionalGuestsState(true);
+        guestList.list[index].additionalGuests = newArray;
+        saveGuestList(guestList);
+
+    }
+
+    const checkPhone = (number) => {
+
+        const char = number.length;
+        let phoneNumber = number;
+        let validNumber = false;
+    
+        if( isNaN(phoneNumber) === false && phoneNumber.length === 11){
+
+            validNumber = true;
+
+        }
+        
+        const getIcon = document.getElementsByClassName("phoneCheck")[0];
+
+        // console.log(getIcon);
+
+        if(validNumber){
+
+            getIcon.style.color = "var(--green)";
+            getIcon.className = "fa-solid fa-circle-check icon2 phoneCheck";
+            setValidPhone(true);
+
+        }else if(char > 0){
+
+            getIcon.style.color = "var(--red)";
+            getIcon.className = "fa-solid fa-circle-xmark icon2 phoneCheck";
+            setValidPhone(false);
+
+        }else{
+
+            getIcon.style.color = "var(--grey)";
+            getIcon.className = "fa-solid fa-circle-minus icon2 phoneCheck";
+            setValidPhone(false);
+
+        }
+
+    }
+
+    const checkEmail = (email) => {
+
+        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const char = email.length;
+        const regexResult = regex.test(email);
+
+        const getIcon = document.getElementsByClassName("emailCheck")[0];
+
+        if(regexResult){
+
+            getIcon.style.color = "var(--green)";
+            getIcon.className = "fa-solid fa-circle-check icon2 emailCheck";
+            setValidEmail(true);
+
+        }else if(char > 0){
+
+            getIcon.style.color = "var(--red)";
+            getIcon.className = "fa-solid fa-circle-xmark icon2 emailCheck";
+            setValidEmail(false);
+
+        }else{
+
+            getIcon.style.color = "var(--grey)";
+            getIcon.className = "fa-solid fa-circle-minus icon2 emailCheck";
+            setValidEmail(false);
+
+        }
+
+    }
+
+    const onInputMainGuest = (e) =>{
+
+        const itemName = e.target.getAttribute("name");
+        const itemValue = e.target.value.trim();
+
+        if(itemName === "email"){
+
+            checkEmail(itemValue);
+
+        }
+
+        if(itemName === "mobile"){
+
+            checkPhone(itemValue);
+
+        }
+
+        saveGuestListItem(guestList, index, itemName, itemValue);
+        checkEmpty(e.target);
+
+    }
+
+    const onInputGuests = (e) =>{
+
+        const itemName = e.target.getAttribute("name");
+        const itemValue = e.target.value.trim();
+        const className = e.target.className.split(" ");
+        const guestIndex = className[className.length - 1];
+
+        saveGuestListItemGuest(guestList, index, guestIndex, itemName, itemValue);
+
+        let currentList = additionalGuests;
+        currentList[itemName] = itemValue;
+        setAdditionalGuests(currentList);
+        setUpdated(updated + 1);
+
+    }
+
+   
     const deleteListItem = (event) => {
 
         const checkAction = window.confirm("Are you sure you want to delete the guest?");
@@ -386,11 +408,6 @@ export default function UpdateGuest(props){
 
     }
 
-    useEffect(() => {
-
-        getPersonData(personID);
-
-    }, [ getPersonData, personID ]);
 
     const addGuest = (event) => {
 
@@ -523,9 +540,15 @@ export default function UpdateGuest(props){
 
     const additionalGuestsOption = () => {
 
-        let maxGuests = guestList.list[index].maxGuests;
+        let maxGuests = guestList.list[index]?.maxGuests || 0;
         let iconNumber;
         let selectValue;
+
+        if(maxGuests === "" || isNaN(maxGuests) || parseInt(maxGuests) <= 0){
+
+            return;
+
+        }
 
         if(guestList.list[index].additionalGuestsSet === false){
 
@@ -541,13 +564,21 @@ export default function UpdateGuest(props){
 
         return  (
 
-            <div>
+            <div className='row'>
+
+                        <div className='inputGroup col-12'>
+
+                            <div>
+                            
+                                <i className={getClassNameAdd( iconNumber )}></i>
+                                <select className='guestAdd'  name='guestAdd' style={ getColor(selectValue) } onChange={ addGuest } value={ selectValue }>
+                                    <option value="" hidden className="noOption">please confirm additional guests...</option>
+                                    { createAddList( maxGuests ) }
+                                </select>
+
+                            </div>
             
-                <i className={getClassNameAdd( iconNumber )}></i>
-                <select className='guestAdd'  name='guestAdd' style={ getColor(selectValue) } onChange={ addGuest } value={ selectValue }>
-                    <option value="" hidden className="noOption">please confirm additional guests...</option>
-                    { createAddList( maxGuests ) }
-                </select>
+                        </div>
 
             </div>
 
@@ -690,22 +721,104 @@ export default function UpdateGuest(props){
 
     }
 
+    const getPhoneLink = (num, type="input") => {
+
+        let itemName;
+        let item = num;
+
+         if(type === "input"){
+
+            itemName = "fa-solid fa-phone icon";
+
+        }else{
+
+            itemName = "fa-solid fa-phone icon3";
+
+        }
+
+         if(item !== "" && validPhone){
+
+            let href = "tel:" + num;
+            item = <a href={href}> <i className={ itemName }></i></a>
+
+        }else{
+
+            item = <i className={ itemName }></i>;
+
+        }
+
+        return item;
+        
+    }
+
+    const getEmailLink = (email, type="input") => {
+
+        let itemName;
+        let item;
+
+        if(type === "input"){
+
+            itemName = "fa-solid fa-envelope icon";
+
+        }else{
+
+            itemName = "fa-solid fa-envelope icon3";
+
+        }
+
+         if(item !== "" && validEmail){
+
+            let href = "mailto:" + email;
+        
+            item = <a href={href}> <i className={ itemName }></i></a>;
+
+        }else{
+
+            item = <i className={ itemName }></i>;
+
+        }
+
+        return  item;
+        
+    }
+
     return(
 
         <div className='contentWrapper'>
 
             <section id="updateGuestSection">
 
-                <h2>{ firstName + " " + surname + " details"}
+               
+                    <div className='row two'>
+                    
+                        <div className='col-6'>
 
-                    { maxGuests > 0 && additionalGuestsSet === false ? " " + checkEmptyFields() : "" }
+                            <h2>
 
-                    { noAdditionalGuests > 0 && additionalGuestsSet === true ? checkEmptyFields() : "" }
-                    &nbsp;
-                    <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
-                    <div style={{display:"none"}}>{ UUID }</div>
+                            { firstName + " " + surname + " details"}
 
-                </h2>
+                            { maxGuests > 0 && additionalGuestsSet === false ? " " + checkEmptyFields() : "" }
+
+                            { noAdditionalGuests > 0 && additionalGuestsSet === true ? checkEmptyFields() : "" }
+
+                            </h2>
+
+                        </div>
+                        <div className='col-6 topLinks'> 
+
+                            <div>{ mobile !== "" && validPhone ? getPhoneLink(mobile, "link") : "" }</div>
+                            <div>{ email !== "" && validEmail ? getEmailLink(email, "link") : "" }</div>
+
+                            <div>
+                                <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
+                                <div style={{display:"none"}}>{ UUID }</div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+        
 
                 <form id='inputForm'>
 
@@ -713,11 +826,11 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-6'>
                             <i className="fa fa-user icon"></i>
-                            <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setFirstName( e.target.value )} name='firstName' placeholder='first name' value={ firstName }></input>
+                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setFirstName( e.target.value )} name='firstName' placeholder='first name' value={ firstName }></input>
                         </div>
                         <div className='inputGroup col-6'>
                             <i className="fa fa-user icon"></i>
-                            <input type='text' className='inputBox' onInput={ onInputMainGuest }  onChange={ e => setSurname( e.target.value )} name='surname' placeholder='surname' value={ surname }></input>
+                            <input type='text' className='inputBox' onExit={ onInputMainGuest }  onChange={ e => setSurname( e.target.value )} name='surname' placeholder='surname' value={ surname }></input>
                         </div>
 
                     </div>
@@ -762,9 +875,8 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-12'>
 
-                            <i className="fa-solid fa-envelope icon"></i>
-                        
-                            <input type='email' className='inputBox checkIcon' onInput={ onInputMainGuest } onChange={ e => setEmail( e.target.value )} name='email' placeholder='email' value={ email }></input>
+                            { getEmailLink(email) }
+                            <input type='email' className='inputBox checkIcon' onExit={ onInputMainGuest } onChange={ e => setEmail( e.target.value )} name='email' placeholder='email' value={ email }></input>
                             <i className="fa-solid fa-circle-minus icon2 emailCheck"></i>
                         
                         </div>
@@ -775,8 +887,9 @@ export default function UpdateGuest(props){
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            <i className="fa-solid fa-phone icon"></i>
-                            <input type='text' className='inputBox checkIcon' onInput={ onInputMainGuest } onChange={ e => setMobile( e.target.value )} name='mobile' placeholder='mobile' value={ mobile }></input>
+
+                            { getPhoneLink(mobile) }
+                            <input type='text' className='inputBox checkIcon' onExit={ onInputMainGuest } onChange={ e => setMobile( e.target.value )} name='mobile' placeholder='mobile' value={ mobile }></input>
                             <i className="fa-solid fa-circle-minus icon2 phoneCheck"></i>
                         </div>
 
@@ -788,12 +901,12 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-4'>
                             <i className="fa-solid fa-house icon"></i>
-                            <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setNumber( e.target.value )} name='number' placeholder='house name/number' value={ number }></input>
+                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setNumber( e.target.value )} name='number' placeholder='house name/number' value={ number }></input>
                         </div>
 
                         <div className='inputGroup col-8'>
                             <i className="fa-solid fa-road icon"></i>
-                            <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setRoad( e.target.value )} name='roadName' placeholder='road name' value={ road }></input>
+                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setRoad( e.target.value )} name='roadName' placeholder='road name' value={ road }></input>
                         </div>
 
                     </div>
@@ -803,7 +916,7 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-12'>
                             <i className="fa-solid fa-location-pin icon"></i>
-                            <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setTown( e.target.value )} name='town' placeholder='town' value={ town }></input>
+                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setTown( e.target.value )} name='town' placeholder='town' value={ town }></input>
                         </div>
 
                     </div>
@@ -813,11 +926,11 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-2'>
                             <i className="fa-solid fa-signs-post icon"></i>
-                            <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setPostCode1( e.target.value )} name='post-code-1' placeholder='post' maxLength='4' value={ postCode1 }></input>
+                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setPostCode1( e.target.value )} name='post-code-1' placeholder='post (xxxx)' maxLength='4' value={ postCode1 }></input>
                         </div>
                         <div className='inputGroup col-3'>
                             <i className="fa-solid fa-signs-post icon"></i>
-                            <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setPostCode2( e.target.value )} name='post-code-2' placeholder='code' maxLength='3' value={ postCode2 }></input>
+                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setPostCode2( e.target.value )} name='post-code-2' placeholder='code (xxx)' maxLength='3' value={ postCode2 }></input>
                         </div>
 
                     </div>
@@ -827,22 +940,16 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-12'>
                         <i className="fa-solid fa-person-circle-plus icon"></i>
-                        <input type='text' className='inputBox' onInput={ onInputMainGuest } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests' value={ maxGuests } disabled={ disableItem }></input>
+                        <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests' value={ maxGuests } disabled={ disableItem }></input>
 
                         </div>
 
                     </div>
 
                     {/* Select additional guests Section */}
-                    <div className='row'>
+                    { additionalGuestsOption() }
 
-                        <div className='inputGroup col-12'>
-
-                        { additionalGuestsOption() }
-
-                      </div>
-
-                    </div>
+                  
 
                     {/* RSVP Section */}
                     <div className='row'>

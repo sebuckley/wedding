@@ -22,6 +22,7 @@ export default function Guests(props){
     const setLoading = props.setLoading;
     const loggedIn = props.loggedIn;
     const setLoggedin = props.setLoggedin;
+    
     const [role, setRole] = useState("");
 
     const pathName = window.location.search;
@@ -123,7 +124,7 @@ export default function Guests(props){
 
             <div className="adminBody">
 
-              <AddGuest user={ user } getRoles={ getRoles } role={ role } setRole={ setRole }/>
+              <AddGuest user={ user } getRoles={ getRoles } role={ role } setRole={ setRole } setGuestList={ setGuestList }/>
 
               <ListType setListType={ setListType } listType={ listType } />
 

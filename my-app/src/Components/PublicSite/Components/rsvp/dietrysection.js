@@ -98,6 +98,22 @@ export default function DietSection(props){
 
     }
 
+
+    const addCommentsBox = () => {
+
+        return (
+
+            <div className="row">
+                <div className="inputGroupFull">
+                    <label className="label">Please provide more details:</label>
+                    <textarea style={{width: "calc(100% - 20px)"}} className={ getClassName("comments",bridal, arrayNumber)} name="commentsDietry" onChange={ onChange } value={ props.valueComments }></textarea>
+                </div>
+            </div>
+
+        )
+
+    }
+
     return(
 
         <>
@@ -125,6 +141,8 @@ export default function DietSection(props){
                     </div>
 
                 </div>
+
+            { valueAllergies === "Complex" || valueAllergies === "Other"  ? addCommentsBox() : "" }
 
             { showGuest !== "" ? addRSVPButton() : "" }
 

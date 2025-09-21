@@ -64,6 +64,8 @@ export default function Guest(props){
                 getRoles={ getRoles } 
                 bridalParty={ bridalParty } 
                 user={ user }
+                loading={ loading }
+                setLoading={ setLoading }
 
               />
 
