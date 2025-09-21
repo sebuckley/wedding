@@ -22,7 +22,7 @@ import PublicSite from './Components/PublicSite/PublicSite';
 import RSVPForm from './Components/PublicSite/rsvpform';
 import PrivacyPolicy from './Components/Wigits/Privacy-Policy/privacy-policy';
 import mainTaskData from './Components/App/mainData';
-import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVenue, faq, weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
+import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVenue, faqs, weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
 
 function App() {
 
@@ -64,7 +64,8 @@ function App() {
         sizeSystem: "",
         mainColor: ""
 
-      }
+      },
+      faqs: faqs
 
   }
 
@@ -737,7 +738,7 @@ function App() {
 
           <Route basename="/wedding" path="/">
 
-            <Route index element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faq } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
+            <Route index element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faqs } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
 
             <Route path="managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData } supplierData={ supplierData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
             <Route path="managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />

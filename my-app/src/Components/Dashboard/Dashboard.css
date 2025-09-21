@@ -218,6 +218,14 @@ form {
 
 }
 
+#addQuestionTitle {
+
+    padding-left: 50px;
+    cursor: pointer;
+    width: 100%;
+    
+
+}
 
 #addSupplierSection {
 
@@ -450,10 +458,23 @@ textarea{
 
 .iconHeader2 {
 
+
     color: var(--accent);
     padding: 10px;
     margin-top: 13px;
     margin-bottom: 13px;
+    font-size: 24px;
+    cursor: pointer;
+
+}
+
+.iconHeader3 {
+
+    position: absolute;
+    color: var(--accent);
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     font-size: 24px;
     cursor: pointer;
 

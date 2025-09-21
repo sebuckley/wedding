@@ -1,173 +1,102 @@
-import DietSection  from '../../PublicSite/Components/rsvp/dietrysection';
-import dietry from '../../PublicSite/Components/Data/dietry';  
-import WeddingClothingForm from '../Guests/clothing';
-import { weddingClothingSizes } from '../../App/wedding_clothing_sizes_schema_with_gender'
+import React, { useState, useEffect } from "react";
+import {faqs as questionsList } from "../../PublicSite/Components/Data/data"; 
+import { saveBridalPartyItem } from "../../Wigits/dataFunctions-bridalParty";
+import AddFAQ from "./addQuestion";
 
-export default function BridalPerson(props){
+export default function FAQ(props) {
+    
 
-    const handleChange = props.handleChange;  
-    const getColor = props.getColor;
-    const getName = props.getName;
-
-    const selection = props.selection;
+    const [faqs, setFaqs] = useState(questionsList);
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [editingAnswer, setEditingAnswer] = useState("");
     const bridalParty = props.bridalParty;
-    const person = bridalParty[selection];
-    const sizeSystem = props.bridalParty["weddingDetails"].sizeSystem;
-    const religiousType = props.bridalParty["weddingDetails"].religiousType;
-    const getRoles = props.getRoles  || "";
-    const dietValue = person.diet || "";
-    const allergiesValue = person.allergies || "";
-    const disableItem = props.disableItem;
-    const checkEmpty = props.checkEmpty;
 
-    const switchNum = {
+  
 
-        first: 1,
-        second: 2,
-        third: 3
+    // Start editing an answer
+    const handleEdit = (idx) => {
 
-    }
-   
-    const getClass = (name, num) => {
+        setEditingIndex(idx);
+        setEditingAnswer(faqs[idx].answer);
 
-        return name + " " + num;
+    };
 
-    }
+    // Save edited answer
+    const handleSaveEdit = (idx) => {
 
-    return(
+        const updatedFaqs = Object.entries(faqs).map(([key, faqObj], i) =>
+            key === idx ? { ...faqObj, answer: editingAnswer } : faqObj
+        );
+
+        setFaqs(updatedFaqs);
+        saveBridalPartyItem(bridalParty, "faqs", updatedFaqs);
+        setEditingIndex(null);
+        setEditingAnswer("");
+
+    };
+
+    // Delete a FAQ
+    const deleteQuestion = (key) => {
+        const updatedFaqs = Object.entries(faqs)
+            .filter(([k]) => k !== key)
+            .map(([_, faqObj]) => faqObj);
+        setFaqs(updatedFaqs);
+        saveBridalPartyItem(bridalParty, "faqs", updatedFaqs);
+    };
+
+    return (
 
         <>
 
-            <h2 className="text-2xl font-semibold mb-4">{ getName(selection) }</h2>
+        <AddFAQ bridalParty={ bridalParty } faqs={ faqs } setFaqs={ setFaqs } />
+        <div className="detailsContainer">
 
-            <div className='row'>
+            <h2>Frequently Answered Questions (FAQ's)</h2>
+        
+                {Object.entries(faqs).map(([key, faqObj], idx) => (
+                    <div key={key} className="row">
+                        <div className="col-5">
+                        <strong>{faqObj.question}</strong>
+                        </div>
+                     
+                        {editingIndex === key ? (
+
+                            <>
+                            <div className="col-5">
+                                <textarea
+                                    rows="4"
+                                    value={editingAnswer}
+                                    onChange={e => setEditingAnswer(e.target.value)}
+                                />
+
+                                </div>
+
+                                <div className="col-2">
+                                <button onClick={() => handleSaveEdit(key)} className="button primary">Save</button>
+                                </div>
+
+                                </>
+                            
+                        ) : (
+
+                            <>
+                                <div className="col-5">
+                                    { faqObj.answer}
+                                </div>
+                                <div className="col-2">
+                                    <button onClick={() => handleEdit(key)} className="button primary">Edit</button>
+                                    <button onClick={() => deleteQuestion(key)} className="button secondary">Delete</button>
+                                </div>
+
+                            </>
+                        )}
+                    </div>
+                ))}
             
-              <div className='inputGroup col-12'>
-
-                <i className="fa fa-user icon"></i>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={person.firstName === "Partner 1" || person.firstName === "Partner 2" ? "": person.firstName }
-                  onInput={handleChange}
-                  className={getClass("inputBox", selection)}
-                  placeholder="first name (required)"
-                  required
-                />
-
-              </div>
-
-            </div>
-
-            <div className='row'>
-          
-              <div className='inputGroup col-12'>
-
-                <i className="fa fa-user icon"></i>
-                <input
-                  type="text"
-                  name="surname"
-                  value={person.surname}
-                  onInput={handleChange}
-                  className={getClass("inputBox", selection)}
-                  placeholder="surname (required)"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className='row'>
-            
-              <div className='inputGroup col-12'>
-
-                  <i className="fa-solid fa-person-circle-question icon"></i>
-               
-                  <select id="mainRole" className={getClass("guestType", selection)} style={ getColor(person.role) } name='role' onChange={ handleChange } value={ person.role }>
-                      <option value="" hidden className="noOption">please select role... (required)</option>
-                      <option>Guest</option>
-                      { getRoles() }
-
-                  </select>
-                
-              </div>
-
-            </div>
-
-            <div className='row'>
-            
-              <div className='inputGroup col-12'>
-
-                <i className="fa-solid fa-envelope icon"></i>
-                <input
-                  type="email"
-                  name="email"
-                  value={person.email}
-                  onInput={handleChange}
-                  className={getClass("inputBox", selection)}
-                  placeholder="email"
-                  required
-                />
-
-              </div>
-
-            </div>
-
-            <div className='row'>
-            
-              <div className='inputGroup col-12'>
-
-                <i className="fa-solid fa-venus-mars icon"></i>
-                <select id="mainGender" className={getClass("guestType", selection)} style={ getColor(person.gender) } name='gender' onChange={ handleChange } value={ person.gender }>
-                  <option value="" hidden className="noOption">please select gender... (required)</option>
-                  <option value="Female">Female</option>
-                  <option value="Male">Male</option>
-                  <option value="Non-binary">Non-binary</option>
-                  <option value="Prefer-not-to-say">Prefer not to say</option>
-                </select>
-
-              </div>
-            
-            </div>
-
-
-            <DietSection 
-              
-              diet={ dietry.dietry.diet } 
-              allergies={ dietry.dietry.allergies } 
-              bridal={ selection } 
-              showGuest={ "" } 
-              onChange={ handleChange } 
-              valueDiet={ dietValue } 
-              valueAllergies={ allergiesValue }
-              name={  person.surname ? person.firstName + " " + person.surname : person.firstName }
-              weddingClothingSizes={ weddingClothingSizes }
-              
-            />
-
-            <WeddingClothingForm 
-              
-              gender={ person.gender } 
-              getColor={ getColor } 
-              sizeSystem={ sizeSystem } 
-              religiousType={ religiousType } 
-              guestList={ person } 
-              index={ switchNum[selection] } 
-              checkEmpty={ checkEmpty } 
-              disableItem={ disableItem } 
-              name={ person.firstName + " " + person.surname } 
-              location={"bridalParty"}
-              weddingClothingSizes={ weddingClothingSizes }
-              role={ person.role }
-              bridalParty={ bridalParty }
-              selection={ selection }
-            
-            />
-
-
+           
+        </div>
 
         </>
-
-    )
-
+    );
 }
 

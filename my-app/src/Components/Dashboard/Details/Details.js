@@ -8,6 +8,7 @@ import { uuidv4 } from "../../Wigits/dataFunctions";
 import BridalPerson from "./person";
 import WeddingPlans from "./wedding";
 import BridalFilter from "./bridalFilter";
+import FAQ from "./faq";
 
 export default function Details(props){
   
@@ -461,6 +462,15 @@ export default function Details(props){
                                                       colorEmpty={ colorEmpty }
 
                                                     /> : ""
+
+            }
+
+            {
+
+             weddingFilter === "FAQs" ? <FAQ 
+                                            bridalParty={ bridalParty } 
+                                        
+                                          /> : ""
 
             }
           

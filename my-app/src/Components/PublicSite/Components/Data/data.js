@@ -132,7 +132,7 @@ const weddingReceptionInvite = {
 
 }
 
-const faq = {
+const faqs = {
 
     1: {question: "Where should I stay?", answer:"You can book a room in our hotel or there are several close by including xxxx and xxxx"},
     2: {question: "What time should I arrive?", answer:"You should arrive at 12:00pm"},
@@ -145,4 +145,4 @@ const faq = {
 
 }
 
-export { bridalParty, wedding, weddingVenue, faq, weddingDayInvite, weddingReceptionInvite };
+export { bridalParty, wedding, weddingVenue, faqs, weddingDayInvite, weddingReceptionInvite };

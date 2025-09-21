@@ -76,6 +76,5 @@ const deleteBridalPartyItem = (weddingParty, key) =>{
 
 }
 
-
 export { getBridalParty, saveBridalParty, saveBridalPartyItem, deleteBridalPartyItem, saveBridalPartyClothing } 
   

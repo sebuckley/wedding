@@ -47,6 +47,8 @@ export default function BridalFilter(props){
             <button className={ getActive("Wedding Plans", filterName) } onClick={ onClick }>Wedding Plans</button>
             <button className={ getActive("Partner 1", filterName) } onClick={ onClick }>Partner 1</button>
             <button className={ getActive("Partner 2", filterName) } onClick={ onClick }>Partner 2</button>
+            <button className={ getActive("FAQs", filterName) } onClick={ onClick }>FAQs</button>
+            
 
         </div>
 
