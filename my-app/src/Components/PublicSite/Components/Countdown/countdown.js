@@ -94,12 +94,21 @@ export default function Countdown(props){
 
             <div className="countdown">
 
-                {dateObject.year > 0 ? <CountDownBox label="Year" data={dateObject.year}/> : ""}    
-                {dateObject.month > 0 ? <CountDownBox label="Month" data={dateObject.month}/> : ""}    
-                {dateObject.day > 0 ? <CountDownBox label="Day" data={dateObject.day}/> : ""}  
-                {dateObject.hour > 0 ? <CountDownBox label="Hour" data={dateObject.hour}/> : ""}
-                {dateObject.year === 0 && dateObject.month === 0 && dateObject.day === 0 && dateObject.hour === 0 && dateObject.minute === 0 ? "Wedding Complete": <CountDownBox label="Minute" data={dateObject.minute}/> }
-                {dateObject.year === 0 && dateObject.month === 0 && dateObject.day === 0 && dateObject.hour === 0 && dateObject.minute === 0 ? "Wedding Complete": <CountDownBox label="Second" data={dateObject.second}/> }
+                <div className="days">
+
+                    {dateObject.year > 0 ? <CountDownBox label="Year" data={dateObject.year}/> : ""}    
+                    {dateObject.month > 0 ? <CountDownBox label="Month" data={dateObject.month}/> : ""}    
+                    {dateObject.day > 0 ? <CountDownBox label="Day" data={dateObject.day}/> : ""} 
+
+                </div> 
+
+                <div className="time">
+
+                    {dateObject.hour > 0 ? <CountDownBox label="Hour" data={dateObject.hour}/> : ""}
+                    {dateObject.year === 0 && dateObject.month === 0 && dateObject.day === 0 && dateObject.hour === 0 && dateObject.minute === 0 ? "Wedding Complete": <CountDownBox label="Minute" data={dateObject.minute}/> }
+                    {dateObject.year === 0 && dateObject.month === 0 && dateObject.day === 0 && dateObject.hour === 0 && dateObject.minute === 0 ? "Wedding Complete": <CountDownBox label="Second" data={dateObject.second}/> }
+
+                </div>
 
             </div>
 

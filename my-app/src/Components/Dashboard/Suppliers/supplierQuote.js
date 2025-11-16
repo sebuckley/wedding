@@ -1,44 +1,82 @@
 export default function SupplierQuoteDetails(props){
 
-    const type = props.type;
     const onInput = props.onInput;
-    let value = props.value;
-
-    if( value !== ""){
-
-        value = parseFloat(props.value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-    }
-
+    let quote = props.quote;
+    const quoteDate = props.quoteDate || "";
+    const getColor = props.getColor;
+    const quoteBy = props.quoteBy || "";
     const currency = props.currency;
     const currencyList = props.currencyList;
 
+    if( quote !== ""){
+
+        quote = currencyList[currency].symbol + parseFloat(quote).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    }
+
     const formatNumber = (e) => {
 
-        if(e.target.value !== ""){
+        let value = e.target.value.replace(/[£$€¥,.]/g, "");
 
-            e.target.value = currencyList[currency].symbol +  parseFloat(e.target.value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        if(value !== ""){
+
+            value = currencyList[currency].symbol +  parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
         }else{
 
-            e.target.value = currencyList[currency].symbol + " 0.00";
+            value = currencyList[currency].symbol + " 0.00";
 
         }
+
+        e.target.value = value;
 
     }
 
     return(
 
-        <div className='row'>
+        <>
+            {/* Quote */}
+            <div className='row'>
 
-            <div className='inputGroup col-12'>
-                <i className="icon">{currencyList[currency].symbol}</i>
-                <input type='text' className='inputBox' name="quote"  placeholder="0.00 (quote)"  onChange={ onInput } defaultValue={ value } numeric="true" onBlur={ formatNumber }></input>
+                <div className='inputGroup col-12'>
+                    <label className="block mb-2 font-semibold">
+                        Quote:
+                    </label>
+                    <i className="icon">{currencyList[currency].symbol}</i>
+                    <input type='text' className='inputBox' name="quoteValue"  placeholder="0.00 (quote)"  onChange={ onInput } defaultValue={ quote } numeric="true" onBlur={ formatNumber }></input>
+
+                </div>
 
             </div>
 
-        </div>
+            {/* Deposit date */}    
+            <div className='row'>
 
+                <div className='inputGroup col-12'>
+                    <label className="block mb-2 font-semibold">
+                        Quote date:
+                    </label>
+                    <i class="fa-solid fa-calendar-check icon"></i>
+                    <input type='date' className='dateBox3 dateChange' name="quoteDate" style={ getColor(quoteDate) } onChange={ onInput } defaultValue={ quoteDate } ></input>
+
+                </div>
+
+            </div>
+
+             {/* Quote by */}
+            <div className='row'>
+
+                <div className='inputGroup col-12'>
+                    <label className="block mb-2 font-semibold">
+                        Quoted by:
+                    </label>
+                    <i className="fa-solid fa-person icon"></i>
+                    <input type='text' className='inputBox' name="quoteBy"  placeholder="name of official"  onChange={ onInput } defaultValue={ quoteBy } ></input>
+
+                </div>
+
+            </div>
+        </>
     );
 
 

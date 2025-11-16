@@ -2,6 +2,7 @@
 export const data = [
     
     "Wedding Venue",
+    "Wedding Reception Venue",
     "Caterers",
     "Invitations",
     "Photographer",

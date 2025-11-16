@@ -7,7 +7,7 @@ export default function CountdownBox(props){
 
     const getNumber = (number, label) => {
 
-        if(label === "Second"){
+        if(label === "Second" || label === "Minute"){
 
             formatted = number;
 

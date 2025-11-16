@@ -2,6 +2,7 @@ import '../Dashboard.css';
 import { useState, useEffect } from 'react';
 import { useLocation  } from 'react-router-dom';
 import { getSupplierIndex, updateSupplierObject, deleteSupplierListItem } from '../../Wigits/dataFunctions-suppliers';
+import { saveBridalPartyItem } from '../../Wigits/dataFunctions-bridalParty';
 import { splitByCapitalNums, updateSupplierTask } from '../../Wigits/dataFunctions';
 import Notes from './notes';
 import SupplierCostDetails from './supplierBooked';
@@ -22,25 +23,54 @@ export default function UpdateSupplier(props){
     const setTaskList = props.setTaskList;
     const supplierStatuses = props.supplierStatuses;
     const currency = props.currency;
+    const bridalParty = props.bridalParty;
 
     const object = {
 
         UUID: "",
         name: "",
         type: "",
-        email: "",
-        phone: "",
-        website: "",
-        status: "",
-        address: "",
-        roadName: "",
-        town: "",
-        postCode1: "",
-        postCode2: ""
+        contactDetails: {
 
+            email: "",
+            phone: "",
+            website: "",
+
+        },
+        status: "",
+        address: {
+
+            number: "",
+            roadName: "",
+            town: "",
+            postCode1: "",
+            postCode2: ""
+
+        },
+        payments: {
+
+            totalCost: "0.00",
+            dueDate: "",
+            deposit: "0.00",    
+            depositDate: "",
+            depositPaidBy: "",
+            depositPaymentType: "",
+            balancePaymentType: "",
+            balancePaidDate: "",
+            balancePaidBy: ""
+
+
+        },
+        quote: {
+
+            quoteValue: "",
+            quoteDate: "",
+            quoteBy: ""
+
+        }
     }
- 
-    const [supplierID, setSupplierID] = useState('');
+
+    const [supplierID, setSupplierID] = useState(supplierIDParam);
     const [formData, setFormData] = useState(object);
     const [updated, setUpdated] = useState(0);
     const [validEmail, setValidEmail] = useState(false);
@@ -48,21 +78,47 @@ export default function UpdateSupplier(props){
     const [validWeb, setValidWeb] = useState(false);
     const [note, setNote] = useState('');
     const [formLength, setFormLength] = useState(0);
+    const [totalEmptyState, setTotalEmptyState] = useState(0);
 
-    const quote = formData.quote || "";
-    const cost = formData.cost || "";
-    const dueDate = formData.dueDate || "";
-    const deposit = formData.deposit || "";
-    const depositDate = formData.depositDate || "";
-    const depositPaidBy = formData.depositPaidBy || "";
-    const depositPaymentType = formData.depositPaymentType || "";
-    const balancePaymentType = formData.balancePaymentType || "";
-    const balancePaidDate = formData.balancePaidDate || "";
-    const balancePaidBy = formData.balancePaidBy || "";
+    const quote = formData.quote?.quoteValue || "";
+    const quoteDate = formData.quote?.quoteDate || "";
+    const quoteBy = formData.quote?.quoteBy || "";
+    const totalCost = formData.payments?.totalCost || "";
+    const dueDate = formData.payments?.dueDate || "";
+    const deposit = formData.payments?.depositValue || "";
+    const depositDate = formData.payments?.depositDate || "";
+    const depositPaidBy = formData.payments?.depositPaidBy || "";
+    const balance = formData.payments?.balance || "";
+    const depositPaymentType = formData.payments?.depositPaymentType || "";
+    const balancePaymentType = formData.payments?.balancePaymentType || "";
+    const balancePaidDate = formData.payments?.balancePaidDate || "";
+    const balancePaidBy = formData.payments?.balancePaidBy || "";
+    const costValue = formData.status === "Booked" ? totalCost : quote;
+    const addressSearch = formData.address?.count ? formData.address.count >= 5 ? true : false : false;
+    const longitude = formData.address?.longitude || "";
+    const latitude = formData.address?.latitude || "";
+    const name = formData.name || "";
+    const email = formData.contactDetails?.email || "";
+    const phone = formData.contactDetails?.phone || "";
+    const website = formData.contactDetails?.website || "";
+    const type = formData.type || "";
+    const status = formData.status || "";
+    const number = formData.address?.number || "";
+    const roadName = formData.address?.roadName || "";
+    const town = formData.address?.town || "";
+    const postCode1 = formData.address?.postCode1 || "";
+    const postCode2 = formData.address?.postCode2 || "";
+
+
+    if(formData.payments?.balance  === "" && totalCost !== "" && deposit !== ""){
+
+        let newObject = formData.payments;
+        newObject["balance"] = parseInt(totalCost) - parseInt(deposit);
+        formData.payments = newObject;
+        setFormData(formData);
+        
+    }
     
-
-    const costValue = formData.status === "Booked" ? cost : quote;
-
     if(supplierID === ""){
 
         setSupplierID(supplierIDParam);
@@ -73,107 +129,120 @@ export default function UpdateSupplier(props){
 
     const checkPhone = (number) => {
 
-        const char = number.length;
-        let phoneNumber = number;
-        let validNumber = false;
-    
-        if( isNaN(phoneNumber) === false && phoneNumber.length === 11){
 
-            validNumber = true;
-            setValidPhone(true);
+        if(number !== "" && typeof number !== "undefined"){
 
-        }
+            const char = number.length;
+            let phoneNumber = number;
+            let validNumber = false;
         
-        const getIcon = document.getElementsByClassName("phoneCheck")[0];
+            if( isNaN(phoneNumber) === false && phoneNumber.length === 11){
 
-        if(validNumber){
+                validNumber = true;
+                setValidPhone(true);
 
-            getIcon.style.color = "var(--green)";
-            getIcon.className = "fa-solid fa-circle-check icon2 phoneCheck";
+            }
+            
+            const getIcon = document.getElementsByClassName("phoneCheck")[0];
 
-        }else if(char > 0){
+            if(validNumber){
 
-            getIcon.style.color = "var(--red)";
-            getIcon.className = "fa-solid fa-circle-xmark icon2 phoneCheck";
-            setValidPhone(false);
+                getIcon.style.color = "var(--green)";
+                getIcon.className = "fa-solid fa-circle-check icon2 phoneCheck";
 
-        }else{
+            }else if(char > 0){
 
-            getIcon.style.color = "var(--grey)";
-            getIcon.className = "fa-solid fa-circle-minus icon2 phoneCheck";
-            setValidPhone(false);
+                getIcon.style.color = "var(--red)";
+                getIcon.className = "fa-solid fa-circle-xmark icon2 phoneCheck";
+                setValidPhone(false);
+
+            }else{
+
+                getIcon.style.color = "var(--grey)";
+                getIcon.className = "fa-solid fa-circle-minus icon2 phoneCheck";
+                setValidPhone(false);
+
+            }
+
+            return validNumber;
 
         }
-
-        return validNumber;
 
     }
 
     const checkEmail = (email) => {
 
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        const char = email.length;
-        const regexResult = regex.test(email);
-        let validEmail = false;
+        if(email !== "" && typeof email !== "undefined"){
 
-        const getIcon = document.getElementsByClassName("emailCheck")[0];
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const char = email.length;
+            const regexResult = regex.test(email);
+            let validEmail = false;
 
-        if(regexResult){
+            const getIcon = document.getElementsByClassName("emailCheck")[0];
 
-            getIcon.style.color = "var(--green)";
-            getIcon.className = "fa-solid fa-circle-check icon2 emailCheck";
-            validEmail = true;
-            setValidEmail(true);
+            if(regexResult){
 
-        }else if(char > 0){
+                getIcon.style.color = "var(--green)";
+                getIcon.className = "fa-solid fa-circle-check icon2 emailCheck";
+                validEmail = true;
+                setValidEmail(true);
 
-            getIcon.style.color = "var(--red)";
-            getIcon.className = "fa-solid fa-circle-xmark icon2 emailCheck";
-            setValidEmail(false);
+            }else if(char > 0){
 
-        }else{
+                getIcon.style.color = "var(--red)";
+                getIcon.className = "fa-solid fa-circle-xmark icon2 emailCheck";
+                setValidEmail(false);
 
-            getIcon.style.color = "var(--grey)";
-            getIcon.className = "fa-solid fa-circle-minus icon2 emailCheck";
-            setValidEmail(false);
+            }else{
+
+                getIcon.style.color = "var(--grey)";
+                getIcon.className = "fa-solid fa-circle-minus icon2 emailCheck";
+                setValidEmail(false);
+
+            }
+
+            return validEmail;
 
         }
-
-        return validEmail;
 
     }
 
     const checkWebsite = (website) => {
 
-        const regex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-]*)*(\?.*)?(#.*)?/;
-        const char = website.length;
-        const regexResult = regex.test(website);
-        let validWebsite = false;
+        if(website !== "" && typeof website !== "undefined"){
 
-        const getIcon = document.getElementsByClassName("websiteCheck")[0];
+            const regex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w-]*)*(\?.*)?(#.*)?/;
+            const char = website.length;
+            const regexResult = regex.test(website);
+            let validWebsite = false;
 
-        if(regexResult){
+            const getIcon = document.getElementsByClassName("websiteCheck")[0];
 
-            getIcon.style.color = "var(--green)";
-            getIcon.className = "fa-solid fa-circle-check icon2 websiteCheck";
-            validWebsite = true;
-            setValidWeb(true);
+            if(regexResult){
 
-        }else if(char > 0){
+                getIcon.style.color = "var(--green)";
+                getIcon.className = "fa-solid fa-circle-check icon2 websiteCheck";
+                validWebsite = true;
+                setValidWeb(true);
 
-            getIcon.style.color = "var(--red)";
-            getIcon.className = "fa-solid fa-circle-xmark icon2 websiteCheck";
-            setValidWeb(false);
+            }else if(char > 0){
 
-        }else{
+                getIcon.style.color = "var(--red)";
+                getIcon.className = "fa-solid fa-circle-xmark icon2 websiteCheck";
+                setValidWeb(false);
 
-            getIcon.style.color = "var(--grey)";
-            getIcon.className = "fa-solid fa-circle-minus icon2 websiteCheck";
-            setValidWeb(false);
+            }else{
+
+                getIcon.style.color = "var(--grey)";
+                getIcon.className = "fa-solid fa-circle-minus icon2 websiteCheck";
+                setValidWeb(false);
+
+            }
+
+            return validWebsite;
 
         }
-
-        return validWebsite;
 
     }
 
@@ -183,45 +252,188 @@ export default function UpdateSupplier(props){
 
     };
 
+    function isValidLatitude(latitude) {
+
+        return typeof latitude === 'number' && latitude >= -90 && latitude <= 90;
+
+    }
+
+    function isValidLongitude(longitude) {
+
+        return typeof longitude === 'number' && longitude >= -180 && longitude <= 180;
+
+    }
+
     const onInput = (e) =>{
 
         const name = e.target.getAttribute("name");
-        const value = e.target.value.trim();
+        let value = e.target.value.trim();
         let newObject = formData;
+        let weddingVenueDisplay = false;
+        let weddingReceptionVenueDisplay = false;
+        const itemType = document.getElementsByName("type")[0];
+        const itemStatus = document.getElementsByName("status")[0];
 
-        if(name === "quote" || name === "cost"){
+        console.log(itemType.value + " | " + itemStatus.value);
 
-            if(parseInt(value)){
+        if(itemType.value === "WeddingVenue" && itemStatus.value === "Booked" || itemType.value === "WeddingReceptionVenue" && itemStatus.value === "Booked"){
 
-                newObject[name] = parseFloat(value).toFixed(2).toString();
+            let itemBusinessName = document.getElementsByName("name")[0];
+            let itemEmail = document.getElementsByName("email")[0];
+            let itemPhone = document.getElementsByName("phone")[0];
+            let itemWebsite = document.getElementsByName("website")[0];
+            let itemNumber = document.getElementsByName("number")[0];
+            let itemRoadName = document.getElementsByName("roadName")[0];
+            let itemTown = document.getElementsByName("town")[0];
+            let itemPostCode1 = document.getElementsByName("postCode1")[0];
+            let itemPostCode2 = document.getElementsByName("postCode2")[0];
+            let itemLatitude = document.getElementsByName("latitude")[0];   
+            let itemLongitude = document.getElementsByName("longitude")[0];
 
-            }else if(value === ""){
+            let fields = [itemBusinessName, itemEmail, itemPhone, itemWebsite, itemNumber, itemRoadName, itemTown, itemPostCode1, itemPostCode2, itemLatitude, itemLongitude];
+            let allowedEmpty = ["website", "phone", "number"];
 
-                newObject[name] = "0.00";
+            let checkCount = checkFields(fields, allowedEmpty, "address");
 
+            if(checkCount === 0 && itemType.value === "WeddingVenue"){
+               weddingVenueDisplay = true;
             }else{
+            weddingVenueDisplay = false;
+            }
 
-                let newValue = removeNonNumbers(value);
-                newObject[name] = parseFloat(newValue).toFixed(2).toString();
+            if(checkCount === 0 && itemType.value === "WeddingReceptionVenue"){
+               weddingReceptionVenueDisplay = true;
+            }else{
+            weddingReceptionVenueDisplay = false;
+            }
+
+        }
+
+        if(name === "type"){
+
+            value = value.replace(" ","");
+
+        }
+
+        if(name === "status" && value === "Booked"){
+
+            if (!newObject.payments) {
+
+                newObject.payments = {};
 
             }
 
-            getSupplierDataUpdate(supplierList);
+            newObject.payments.totalCost = newObject.quote?.quoteValue || "0.00";
+            newObject.payments.dateBooked = new Date();
+
+        }
+
+        if(name === "quoteValue" || name === "totalCost" || name === "depositValue"){
+
+            value = value.replace(/[£$€¥,.]/g, "");
+
+            if(parseInt(value)){
+
+                value = parseFloat(value).toFixed(2).toString();
+
+            }else if(value === ""){
+
+                value = "0.00";
+
+            }else{
+
+              
+                value = parseFloat(value).toFixed(2).toString();
+
+            }
+
+        }
+
+        if(name === "number" || name === "roadName" || name === "town" || name === "postCode1" || name === "postCode2" || name === "latitude" || name === "longitude"){
+
+            let addressObject = formData.address === "" || typeof  formData.address === "undefined" ? {} : formData.address;
+
+            addressObject[name] = value;
+            addressObject["count"] = Object.keys(addressObject).length;
+            newObject["address"] = addressObject;
+
+        }else if(name === "email" || name === "phone" || name === "website"){
+
+            let contactObject = formData.contactDetails === "" || typeof  formData.contactDetails === "undefined" ? {} : formData.contactDetails;
+
+            contactObject[name] = value;
+            newObject["contactDetails"] = contactObject;
+
+        }else if(name === "dueDate" || name === "totalCost" || name === "depositValue" || name === "depositDate" || name === "depositPaidBy" || name === "depositPaymentType" || name === "balancePaymentType" || name === "balancePaidDate" || name === "balancePaidBy" ){
+
+            let paymentObject = formData.payments === "" || typeof  formData.payments === "undefined" ? {} : formData.payments;
+
+            paymentObject[name] = value;
+
+            if(name === "totalCost" || name === "depositValue"){
+
+                if(paymentObject["totalCost"] !== "" && paymentObject["depositValue"] !== ""){
+
+                    paymentObject["balance"] = paymentObject["totalCost"] - paymentObject["depositValue"];
+
+                } 
+            }
+
+            newObject["payments"] = paymentObject;
+
+        }else if(name === "quoteValue" || name === "quoteDate" || name === "quoteBy" ){
+
+            let quoteObject = formData.quote === "" || typeof  formData.quote === "undefined" ? {} : formData.quote;
+
+            quoteObject[name] = value;
+            newObject["quote"] = quoteObject;
 
         }else{
-
 
             newObject[name] = value;
 
         }
 
-        
         newObject["updated"] = new Date();
         newObject["updatedBy"] = user.email;
 
+        if(itemType.value === "WeddingVenue" && itemStatus.value === "Booked"){
+
+            if(weddingVenueDisplay){
+
+                newObject["weddingVenueDisplay"] = true;
+
+            }else{
+
+                newObject["weddingVenueDisplay"] = false;
+
+            }
+
+            saveBridalPartyItem(bridalParty, "weddingVenue", newObject);
+
+        }
+
+        if(itemType.value === "WeddingReceptionVenue" && itemStatus.value === "Booked"){
+
+            if(weddingReceptionVenueDisplay){
+
+                newObject["weddingReceptionDisplay"] = true;
+
+            }else{
+
+                newObject["weddingReceptionDisplay"] = false;
+
+            }
+
+            saveBridalPartyItem(bridalParty, "weddingReceptionVenue", newObject);
+
+        }
+
         let newSupplierList = updateSupplierObject(supplierList, index, newObject);
         setFormData(newObject);
+        checkEmpty(e.target);       
 
+        getSupplierDataUpdate(supplierList);
 
         let newTaskList = updateSupplierTask(newSupplierList, supplierID, value, taskList, newObject["type"], user);
         setTaskList(newTaskList);
@@ -239,6 +451,7 @@ export default function UpdateSupplier(props){
     const getSupplierData = (SupplierID) => {
 
         if(supplierList !== null){
+
 
             setFormData(supplierList.list[index]);
 
@@ -281,7 +494,6 @@ export default function UpdateSupplier(props){
 
     const checkEmpty = (item) => {
 
-
         if(item.value !== ""){
 
             if(item.tagName === "SELECT"){
@@ -317,11 +529,11 @@ export default function UpdateSupplier(props){
 
         if(item !== "" && !validWeb){
 
-            item = <a href={link}> <i className={ itemName }></i></a>;
+            item = <a href={link} > <i className={ itemName } title="website"></i></a>;
 
         }else{
 
-            item = <i className={ itemName }></i>;
+            item = <i className={ itemName } title="website"></i>;
 
         }
 
@@ -347,11 +559,11 @@ export default function UpdateSupplier(props){
          if(item !== "" && validPhone){
 
             let href = "tel:" + num;
-            item = <a href={href}> <i className={ itemName }></i></a>
+            item = <a href={href} > <i className={ itemName } title="phone"></i></a>
 
         }else{
 
-            item = <i className={ itemName }></i>;
+            item = <i className={ itemName } title="phone"></i>;
 
         }
 
@@ -378,11 +590,11 @@ export default function UpdateSupplier(props){
 
             let href = "mailto:" + email;
         
-            item = <a href={href}> <i className={ itemName }></i></a>;
+            item = <a href={href} > <i className={ itemName } title="email"></i></a>;
 
         }else{
 
-            item = <i className={ itemName }></i>;
+            item = <i className={ itemName } title="email"></i>;
 
         }
 
@@ -393,9 +605,9 @@ export default function UpdateSupplier(props){
     useEffect(() => {
 
         getSupplierData(supplierID);
-        checkEmail(formData.email);
-        checkPhone(formData.phone);
-        checkWebsite(formData.website);
+        checkEmail(formData.contactDetails?.email);
+        checkPhone(formData.contactDetails?.phone);
+        checkWebsite(formData.contactDetails?.website);
 
     }, [ getSupplierData, supplierID ]);
 
@@ -426,7 +638,7 @@ export default function UpdateSupplier(props){
 
     }
 
-    const checkFields = (fields, allowedEmpty) => {
+    const checkFields = (fields, allowedEmpty, address="Non-address") => {
 
         let count = 0;
 
@@ -441,7 +653,7 @@ export default function UpdateSupplier(props){
 
             }else{
 
-                fieldValue = fields[i].defaultValue;
+                fieldValue = fields[i].value;
 
                 if(fieldValue === ""){
 
@@ -451,17 +663,15 @@ export default function UpdateSupplier(props){
 
             }
 
-          
-
             if(fields[i].tagName === "SELECT"){
 
-                fields[i].style.border = "1px solid var(--grey)";
+                fields[i].style.outline = "none";
 
             }else{
             
                 fields[i].style.borderColor = "var(--grey)";
 
-            }   
+            }  
 
             if(allowedEmpty.includes(fieldName) === false){
 
@@ -471,15 +681,13 @@ export default function UpdateSupplier(props){
 
                     if(fields[i].tagName === "SELECT"){
 
-                        fields[i].style.border = " 1px solid red";
-                    
+                        fields[i].style.outline = "1px solid red";
 
                     }else{
 
                         fields[i].style.borderColor = "red";
 
                     }
-                    
                     
                 }
 
@@ -488,6 +696,53 @@ export default function UpdateSupplier(props){
         }
 
         return count;
+
+    }
+
+    const checkEmptyFields = () => {
+
+        const itemType = document.getElementsByName("type")[0] ? document.getElementsByName("type")[0] : { value: "" }  ;
+
+        
+        let allowedEmpty;
+
+        if(itemType.value === "WeddingVenue" || itemType.value === "WeddingReceptionVenue"){
+
+            allowedEmpty = ["number","website"];
+
+        }else{
+
+            allowedEmpty = ["website", "phone", "number", "roadName", "town", "postCode1", "postCode2", "latitude","longitude"];
+
+        }
+        
+        const inputs = document.getElementsByTagName("input");
+        const selects = document.getElementsByTagName("select");
+
+        const checkInputs = checkFields(inputs, allowedEmpty);
+        const checkSelects = checkFields(selects, allowedEmpty);
+
+        const totalEmpty = checkInputs + checkSelects;
+
+        if(totalEmptyState !== totalEmpty){
+
+            setTotalEmptyState(totalEmpty);
+            
+        }
+
+        let returnText;
+
+        if(totalEmpty === 0){
+
+            returnText = " (completed)";
+
+        }else{
+
+            returnText = " (" + totalEmpty + " required fields)";
+
+        }
+
+        return returnText;
 
     }
 
@@ -547,6 +802,109 @@ export default function UpdateSupplier(props){
 
     }
 
+    const getSearchAddress = () => {
+
+        let search = "";
+
+        if(formData.address?.number){
+
+            if(formData.address.number !== ""){
+
+                let number = formData.address.number
+
+                if(search === ""){
+
+                    search = number.replace(" ","+");
+
+                }else{
+
+                    search = search + "+" + number.replace(" ","+");
+                }
+
+            }
+
+        }
+
+        if(formData.address?.roadName){
+
+            if(formData.address.roadName !== ""){
+
+                let roadName = formData.address.roadName
+
+                if(search === ""){
+
+                    search = roadName.replace(" ","+");
+
+                }else{
+
+                    search = search + "+" + roadName.replace(" ","+");
+                }
+
+            }
+
+        }
+
+        if(formData.address?.town){
+
+            if(formData.address.town !== ""){
+
+                let town = formData.address.town;
+
+                if(search === ""){
+
+                    search = town.replace(" ","+");
+
+                }else{
+
+                    search = search + "+" + town.replace(" ","+");
+                }
+
+            }
+
+        }
+
+        if(formData.address?.postCode1){
+
+            if(formData.address.postCode1 !== ""){
+
+                let postCode1 = formData.address.postCode1;
+
+                if(search === ""){
+
+                    search = formData.address.postCode1;
+
+                }else{
+
+                    search = search + "+" + formData.address.postCode1;
+                }
+
+            }
+
+        }
+
+        if(formData.address?.postCode2){
+
+            if(formData.address.postCode2 !== ""){
+
+                if(search === ""){
+
+                    search = formData.address.postCode2;
+
+                }else{
+
+                    search = search + "+" + formData.address.postCode2;
+                }
+
+            }
+
+        }
+
+        const href = "https://www.google.co.uk/maps/search/" + formData.name.replace(" ","+") + "+" + search;
+
+        return href;
+
+    }
+
     return(
 
         <div className='contentWrapper'>
@@ -557,15 +915,15 @@ export default function UpdateSupplier(props){
 
                     <div className='col-6'>
                     
-                        <h2>{ formData.name }</h2>
+                        <h2>{ formData.name + " " + checkEmptyFields() }</h2>
 
                     </div>
 
                     <div className='topLinks col-6'>
                         
-                        <div>{ formData.phone !== "" && validPhone ? getPhoneLink(formData.email, "link") : "" }</div>
-                        <div>{ formData.website !== "" && validWeb ? getWebLink(formData.website, "link") : "" }</div>
-                        <div>{ formData.email !== "" && validEmail ? getEmailLink(formData.email, "link") : "" }</div>
+                        <div>{ phone !== "" && validPhone ? getPhoneLink(email, "link") : "" }</div>
+                        <div>{ website !== "" && validWeb ? getWebLink(website, "link") : "" }</div>
+                        <div>{ email !== "" && validEmail ? getEmailLink(email, "link") : "" }</div>
                         <div><button className="deleteButton" onClick={ deleteListItem } >Delete</button></div>
                         <div style={{display:"none"}}>{ formData.UUID }</div>
 
@@ -578,8 +936,8 @@ export default function UpdateSupplier(props){
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            <i className="fa fa-building icon"></i>
-                            <input type='text' className='inputBox' name='name' placeholder='name' value={ formData.name } onInput={ onInput }></input>
+                            <i className="fa fa-building icon" title="Supplier name"></i>
+                            <input type='text' className='inputBox' name='name' placeholder='name' defaultValue={ name } onInput={ onInput }></input>
                         </div>
                  
                     </div>
@@ -588,8 +946,10 @@ export default function UpdateSupplier(props){
 
                     <div className='inputGroup col-12'>
 
-                            <i className="fa-solid fa-circle-info icon"></i>
-                            <select className='guestType' style={ getColor() } name='type'  onChange={ onInput } value={ formData.type }>
+                            <i className="fa-solid fa-circle-info icon" title="Supplier type"></i>
+
+                            
+                            <select className='guestType' style={ getColor(type) } name='type'  onChange={ onInput } value={ type.replace(/\s/g,"") }>
                                 
                                 {taskList.list.map((s, i) => (
                                     <option key={i} value={s.taskName}>{splitByCapitalNums(s.taskName)}</option>
@@ -605,8 +965,8 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-12'>
 
-                            { getEmailLink(formData.email) }
-                            <input type='email' className='inputBox checkIcon' name='email' placeholder='email' value={ formData.email } onInput={ onInput }></input>
+                            { getEmailLink(formData.contactDetails?.email) }
+                            <input type='email' className='inputBox checkIcon' name='email' placeholder='email' defaultValue={ email } onInput={ onInput }></input>
                             <i className="fa-solid fa-circle-minus icon2 emailCheck"></i>
                         
                         </div>
@@ -616,8 +976,8 @@ export default function UpdateSupplier(props){
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            { getPhoneLink(formData.phone) }
-                            <input type='text' className='inputBox checkIcon' name='phone' placeholder='phone' value={ formData.phone } onInput={ onInput }></input>
+                            { getPhoneLink(formData.contactDetails?.phone) }
+                            <input type='text' className='inputBox checkIcon' name='phone' placeholder='phone' defaultValue={ phone } onInput={ onInput }></input>
                             <i className="fa-solid fa-circle-minus icon2 phoneCheck"></i>
                         </div>
 
@@ -626,8 +986,8 @@ export default function UpdateSupplier(props){
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            <i className="fa-solid fa-globe icon"></i>
-                            <input type='text' className='inputBox checkIcon' name='website' placeholder='website' value={ formData.website } onInput={ onInput }></input>
+                            <i className="fa-solid fa-globe icon" title="Website"></i>
+                            <input type='text' className='inputBox checkIcon' name='website' placeholder='website' defaultValue={ website } onInput={ onInput }></input>
                             <i className="fa-solid fa-circle-minus icon2 websiteCheck"></i>
                         </div>
 
@@ -638,13 +998,13 @@ export default function UpdateSupplier(props){
                     <div className='row two'>
 
                         <div className='inputGroup col-4'>
-                            <i className="fa-solid fa-house icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInput } name='number' placeholder='Unit/number' value={ formData.number }></input>
+                            <i className="fa-solid fa-house icon" title="Unit/Number"></i>
+                            <input type='text' className='inputBox' onInput={ onInput } name='number' placeholder='Unit/number' defaultValue={ number }></input>
                         </div>
 
                         <div className='inputGroup col-8'>
-                            <i className="fa-solid fa-road icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInput }  name='roadName' placeholder='road name' value={ formData.road }></input>
+                            <i className="fa-solid fa-road icon" title="Road name"></i>
+                            <input type='text' className='inputBox' onInput={ onInput }  name='roadName' placeholder='road name' defaultValue={ roadName }></input>
                         </div>
 
                     </div>
@@ -653,8 +1013,8 @@ export default function UpdateSupplier(props){
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            <i className="fa-solid fa-location-pin icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInput } name='town' placeholder='town' value={ formData.town }></input>
+                            <i className="fa-solid fa-location-pin icon" title="Town"></i>
+                            <input type='text' className='inputBox' onInput={ onInput } name='town' placeholder='town' defaultValue={ town }></input>
                         </div>
 
                     </div>
@@ -663,38 +1023,27 @@ export default function UpdateSupplier(props){
                     <div className='row two'>
 
                         <div className='inputGroup col-2'>
-                            <i className="fa-solid fa-signs-post icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInput } name='post-code-1' placeholder='post (xxxx)' maxLength='4' value={ formData.postCode1 }></input>
+                            <i className="fa-solid fa-signs-post icon" title="Post code part one XXXX"></i>
+                            <input type='text' className='inputBox' onInput={ onInput } name='postCode1' placeholder='post (xxxx)' maxLength='4' defaultValue={ postCode1 }></input>
                         </div>
                         <div className='inputGroup col-3'>
-                            <i className="fa-solid fa-signs-post icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInput }  name='post-code-2' placeholder='code (xxx)' maxLength='3' value={ formData.postCode2 }></input>
+                            <i className="fa-solid fa-signs-post icon" title="Post code part two XXX"></i>
+                            <input type='text' className='inputBox' onInput={ onInput }  name='postCode2' placeholder='code (xxx)' maxLength='3' defaultValue={ postCode2 }></input>
                         </div>
 
                     </div>
 
-                    <div className='row'>
-
-                        <div className='inputGroup col-12'>
-                            <i className={getClassName(formData.status)}></i>
-                            <select className="guestType" name="status"  style={ getColor(formData.status) } value={ formData.status } onChange={ onInput }>
-                    
-                                <option value="">None</option>
-                                {supplierStatuses.map((s, i) => (
-                                    <option key={i} value={s}>{s}</option>
-                                ))}
-               
-                            </select>
-                        </div>
-
-                    </div>
+                    { addressSearch && latitude === "" || addressSearch && longitude === "" ? <a href={ getSearchAddress() } target="_blank">Search to add logitude and latitude</a> : "" }
 
                      {/* Latitude */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            <i className="fa-solid fa-location-crosshairs icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInput } name='latitude' placeholder='latitude' value={ formData.latitude }></input>
+                             <label className="block mb-2 font-semibold">
+                                Latitude:
+                            </label>
+                            <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
+                            <input type='text' className='inputBox' onChange={ onInput } name='latitude' placeholder='latitude' defaultValue={ latitude }></input>
                         </div>
 
                     </div>
@@ -703,24 +1052,48 @@ export default function UpdateSupplier(props){
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
-                            <i className="fa-solid fa-location-crosshairs icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInput } name='longitude' placeholder='longitude' value={ formData.longitude }></input>
+                            <label className="block mb-2 font-semibold">
+                                Longitude:
+                            </label>
+                            <i className="fa-solid fa-location-crosshairs icon" title="longitude"></i>
+                            <input type='text' className='inputBox' onChange={ onInput } name='longitude' placeholder='longitude' defaultValue={ longitude }></input>
                         </div>
 
                     </div>
 
-                    { formData.status === "Enquiry made"  ? <SupplierQuoteDetails type="quote" onInput={ onInput } value={ costValue } currency={ currency } currencyList={ currencyList }/> : "" }
+                     <div className='row'>
+
+                        <div className='inputGroup col-12'>
+
+                             <label className="block mb-2 font-semibold">
+                                Status:
+                            </label>
+                            <i className={getClassName(status)}></i>
+                            <select className="guestType" name="status"  style={ getColor(status) } value={ status } onChange={ onInput }>
+                    
+                                <option defaultValue="">None</option>
+                                {supplierStatuses.map((s, i) => (
+                                    <option key={i} defaultValue={s}>{s}</option>
+                                ))}
+               
+                            </select>
+                        </div>
+
+                    </div>
+
+                    { formData.status === "Enquiry made"  ? <SupplierQuoteDetails type="quote" onInput={ onInput } quote={ costValue } currency={ currency } currencyList={ currencyList } getColor={ getColor } quoteDate={ quoteDate } quoteBy={ quoteBy }/> : "" }
                     { formData.status === "Booked"  ?   <SupplierCostDetails  type="booked" 
                                                                             onInput={ onInput } 
-                                                                            value={ costValue } 
+                                                                            defaultValue={ costValue } 
                                                                             currency={ currency } 
                                                                             currencyList={ currencyList } 
                                                                             getColor={ getColor } 
                                                                             deposit={ deposit } 
                                                                             depositDate={ depositDate }
                                                                             dueDate={ dueDate}
-                                                                            balancePaidBy={ formData.balancePaidBy }
-                                                                            depositPaidBy={ formData.depositPaidBy }
+                                                                            balance={ balance }
+                                                                            balancePaidBy={ balancePaidBy }
+                                                                            depositPaidBy={ depositPaidBy }
                                                                             balancePaymentType={ balancePaymentType }
                                                                             balancePaidDate={ balancePaidDate }
                                                                             depositPaymentType={ depositPaymentType }

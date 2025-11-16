@@ -25,11 +25,12 @@ const saveBridalPartyItem = (weddingParty, key, value) => {
 
     const setValue = weddingParty[key] = value;
     
-    if(!setValue){
+    if (weddingParty[key] === undefined) {
 
-        throw Error;
-
+        throw new Error("Failed to set value");
+        
     }
+
     const set = saveBridalParty(weddingParty);
 
     if(set){

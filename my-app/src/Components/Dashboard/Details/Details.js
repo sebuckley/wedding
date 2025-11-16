@@ -20,6 +20,10 @@ export default function Details(props){
     const setLoggedin = props.setLoggedin;
     let bridalParty = props.bridalParty;
     const setBridalParty = props.setBridalParty;
+    const setFaqs = props.setFaqs;
+    const faqs = props.faqs;
+    const setFaqState = props.setFaqState;
+    const faqState = props.faqState;
     const [listUpdated, setListUpdated] = useState(0);
     const [weddingFilter, setWeddingFilter] = useState("Wedding Plans");
     const [formEmpty, setFormEmpty] = useState(0);
@@ -73,7 +77,12 @@ export default function Details(props){
       saveBridalParty(bridalParty);
       setListUpdated(listUpdated + 1);
       checkEmptyWedding();
-      checkEmpty(e.target);
+
+      if(name !== "weddingStyleCategory" && name !== "styleDescription"){
+
+        checkEmpty(e.target);
+
+      }
 
     };
 
@@ -120,8 +129,6 @@ export default function Details(props){
         for(let i=0; i< items.length; i++){
 
             let value = items[i].value;
-
-            console.log(value);
             
             if(value === ""){
 
@@ -145,8 +152,6 @@ export default function Details(props){
         for(let i=0; i< items.length; i++){
 
             let value = items[i].value;
-
-            console.log(value);
             
             if(value === ""){
 
@@ -170,8 +175,6 @@ export default function Details(props){
         for(let i=0; i< items.length; i++){
 
             let value = items[i].value;
-
-            console.log(value);
             
             if(value === ""){
 
@@ -189,7 +192,6 @@ export default function Details(props){
     const handleSubmit = (e) => {
 
       e.preventDefault();
-      console.log("Form submitted:", bridalParty);
       // Add your submission logic here (e.g., API call)
 
     };
@@ -282,8 +284,6 @@ export default function Details(props){
     const checkEmpty = (item) => {
 
         if(item.value !== ""){
-
-            console.log(item)
 
             if(item.tagName === "SELECT"){
 
@@ -469,6 +469,10 @@ export default function Details(props){
 
              weddingFilter === "FAQs" ? <FAQ 
                                             bridalParty={ bridalParty } 
+                                            faqs={ faqs }
+                                            setFaqs={ setFaqs }
+                                            setFaqState={ setFaqState }
+                                            faqState={ faqState }
                                         
                                           /> : ""
 

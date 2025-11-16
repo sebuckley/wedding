@@ -21,6 +21,9 @@ export default function Header(props){
     const loggedIn = props.loggedIn;
     let logInPage = props.logInPage
     let publicPage = props.publicPage;
+    const weddingDateSet = props.weddingDateSet;
+    const weddingVenueSet = props.weddingVenueSet;
+    const weddingFAQSet = props.weddingFAQSet;
 
     if(typeof logInPage === "undefined"){
 
@@ -32,37 +35,6 @@ export default function Header(props){
 
         publicPage = false;
 
-    }
-
-    let onClickMenuItem = (e) => {
-
-        console.log("here");
-
-        // let links = document.getElementsByClassName("menuActive");
-
-        // for(let i = 0; i < links.length; i ++){
-
-        //     links[i].classList.remove("active");
-
-        // }
-
-        // const elementID = e.target.innerHTML;
-
-        // setActiveSection(elementID);
-
-        // if(elementID !== "Countdown"){
-       
-        //     setTimeout(function () {
-
-        //         let windowPosition = window.scrollY - 100;
-
-        //         window.scrollTo(0,windowPosition);
-
-        //     },2);
-
-        // }
-
- 
     }
 
     const showMenu = (e) => {
@@ -196,7 +168,7 @@ export default function Header(props){
 
         if(!logInPage && publicPage === true){
 
-            object = <PublicLinks onClickMenuItem={ onClickMenuItem } activeSection={ activeSection } token={ token } webPage={ webPage } onClickPage={ setPage } user={ user } loggedIn={ loggedIn } setLoggedIn={ setLoggedIn }/>
+            object = <PublicLinks  activeSection={ activeSection } token={ token } webPage={ webPage } onClickPage={ setPage } user={ user } loggedIn={ loggedIn } setLoggedIn={ setLoggedIn } handleLogout={ handleLogout } weddingDateSet={ weddingDateSet } weddingVenueSet={ weddingVenueSet } weddingFAQSet={ weddingFAQSet }/>
 
         }
 

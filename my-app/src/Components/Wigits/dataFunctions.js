@@ -37,8 +37,6 @@ const splitByCapitalNums = (Str) => {
 
     let split;
 
-    console.log(Str)
-
     if(Str !== "DJ" && Str !== "GuestBookorAlternative"){
 
         split = Str.split(/(?=\b(?:or|for)\b)|(?=[A-Z0-9&\-\/(]())/).join(" ");
@@ -121,7 +119,7 @@ const uuidv4 = () => {
 
 const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user) => {
 
-    const taskIndex = getTaskIndexName(taskList, taskName);
+    const taskIndex = getTaskIndexName(taskList, taskName.replace(/\s/g,""));
 
     let taskState;
     let taskActivity;
@@ -180,10 +178,7 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user
         
     }
 
-    
-
     newObject.list[taskIndex]["state"] = taskState;
-
     newObject.list[taskIndex]["activity"] = taskActivity;
     newObject.list[taskIndex]["updated"] = new Date();
     newObject.list[taskIndex]["updatedBy"] = user.email;

@@ -2,7 +2,7 @@ export default function SupplierCostDetails(props){
 
     const type = props.type;
     const onInput = props.onInput;
-    let cost = props.value;
+    let cost = props.defaultValue;
     let deposit = props.deposit;
     const depositDate = props.depositDate;
     const dueDate = props.dueDate;
@@ -11,7 +11,7 @@ export default function SupplierCostDetails(props){
     const currencyList = props.currencyList;
     const balancePaidBy = props.balancePaidBy;
     const depositPaidBy = props.depositPaidBy;
-    const balance = (cost && deposit) ? currencyList[currency].symbol + (parseFloat(cost.replace(/[^0-9.-]+/g,"")) - parseFloat(deposit.replace(/[^0-9.-]+/g,""))).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : "";
+    let balance = props.balance;
     const paymentTypes = ["Cash", "Debit Card", "Credit Card","Bank Transfer", "Cheque", "Other"];
     const balancePaymentType = props.balancePaymentType;
     const balancePaidDate = props.balancePaidDate;
@@ -19,9 +19,8 @@ export default function SupplierCostDetails(props){
 
     if(cost !== ""){
 
-        cost = currencyList[currency].symbol + parseFloat(cost).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-        console.log("here")
+        cost = currencyList[currency].symbol + parseFloat(cost).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     }
 
@@ -31,18 +30,26 @@ export default function SupplierCostDetails(props){
 
     }
 
+    if(balance !== ""){
 
+        balance = currencyList[currency].symbol + parseFloat(balance).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    }
 
     const formatNumber = (e) => {
 
-        if(e.target.value !== ""){
+        let value = e.target.value.replace(/[£$€¥,.]/g, "");
 
-            e.target.value = currencyList[currency].symbol +  parseFloat(e.target.value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        if(value !== ""){
+
+            value = currencyList[currency].symbol +  parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
         }else{
 
-            e.target.value = "";
+            value = "";
         }
+
+        e.target.value = value;
 
     }
 
@@ -57,7 +64,7 @@ export default function SupplierCostDetails(props){
                         Total Cost:
                     </label>
                     <i className="icon">{currencyList[currency].symbol}</i>
-                    <input type='text' className='inputBox' name="cost"  placeholder="0.00 (total cost)"  onChange={ onInput } defaultValue={ cost } numeric="true" onBlur={ formatNumber }></input>
+                    <input type='text' className='inputBox' name="totalCost"  placeholder="0.00 (total cost)"  onChange={ onInput } defaultValue={ cost } numeric="true" onBlur={ formatNumber }></input>
 
                 </div>
 
@@ -70,7 +77,7 @@ export default function SupplierCostDetails(props){
                     <label className="block mb-2 font-semibold">
                         Deposit date:
                     </label>
-                    <i class="fa-solid fa-calendar-check icon"></i>
+                    <i className="fa-solid fa-calendar-check icon"></i>
                     <input type='date' className='dateBox3 dateChange' name="depositDate" style={ getColor(depositDate) } onChange={ onInput } defaultValue={ depositDate } ></input>
 
                 </div>
@@ -87,7 +94,7 @@ export default function SupplierCostDetails(props){
                     </label>
 
                     <i className="icon">{currencyList[currency].symbol}</i>
-                    <input type='text' className='inputBox' name="deposit"  placeholder="0.00 (deposit)" onChange={ onInput } defaultValue={ deposit } numeric="true" onBlur={ formatNumber }></input>
+                    <input type='text' className='inputBox' name="depositValue"  placeholder="0.00 (deposit)" onChange={ onInput } defaultValue={ deposit } numeric="true" onBlur={ formatNumber }></input>
 
                 </div>
 
@@ -97,6 +104,9 @@ export default function SupplierCostDetails(props){
             <div className='row'>
 
                 <div className='inputGroup col-12'>
+                     <label className="block mb-2 font-semibold">
+                        Deposit payee:
+                    </label>
                     <i className="fa-solid fa-user icon"></i>
                     <select className="guestType" name="balancePaidBy"  style={ getColor(balancePaidBy) }  value={ balancePaidBy } onChange={ onInput }>
 
@@ -115,6 +125,9 @@ export default function SupplierCostDetails(props){
             <div className='row'>
     
                 <div className='inputGroup col-12'>
+                     <label className="block mb-2 font-semibold">
+                         Paid by:
+                    </label>
                     <i className="fa-solid fa-credit-card icon"></i>
                     <select className="guestType" name="depositPaymentType"  style={ getColor(depositPaymentType) } value={ depositPaymentType } onChange={ onInput }>
 
@@ -135,7 +148,7 @@ export default function SupplierCostDetails(props){
                     <label className="block mb-2 font-semibold">
                         Due date:
                     </label>
-                    <i class="fa-solid fa-calendar-day icon"></i>
+                    <i className="fa-solid fa-calendar-day icon"></i>
                     <input type='date' className='dateBox3 dateChange' name="dueDate" style={ getColor(dueDate) } onChange={ onInput } defaultValue={ dueDate } ></input>
 
                 </div>
@@ -161,6 +174,10 @@ export default function SupplierCostDetails(props){
             <div className='row'>
     
                 <div className='inputGroup col-12'>
+
+                     <label className="block mb-2 font-semibold">
+                        Balance payee:
+                    </label>
                     <i className="fa-solid fa-user icon"></i>
                     <select className="guestType" name="balancePaidBy"  style={ getColor(balancePaidBy) } placeholder="Who is paying the balance?" value={ balancePaidBy } onChange={ onInput }>
 
@@ -181,7 +198,7 @@ export default function SupplierCostDetails(props){
                     <label className="block mb-2 font-semibold">
                         Balance paid date:
                     </label>
-                    <i class="fa-solid fa-calendar-check icon"></i>
+                    <i className="fa-solid fa-calendar-check icon"></i>
                     <input type='date'  className='dateBox3 dateChange' name="balancePaidDate" style={ getColor(balancePaidDate) } onChange={ onInput } defaultValue={ balancePaidDate } ></input>
 
                 </div>
@@ -192,6 +209,9 @@ export default function SupplierCostDetails(props){
             <div className='row'>
     
                 <div className='inputGroup col-12'>
+                     <label className="block mb-2 font-semibold">
+                        Balance paid by:
+                    </label>
                     <i className="fa-solid fa-credit-card icon"></i>
                     <select className="guestType" name="balancePaymentType"  style={ getColor(balancePaymentType) } placeholder="Who is paying the balance?" value={ balancePaymentType } onChange={ onInput }>
 

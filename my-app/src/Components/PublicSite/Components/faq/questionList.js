@@ -30,7 +30,7 @@ export default function QuestionList(props){
         <div>
 
             { generateList(faq) }
-            
+        
             
         </div>
 

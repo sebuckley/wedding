@@ -57,7 +57,7 @@ export default function WeatherToday(props){
 
                 <div> 
 
-                    <h3 style={ {"textAlign":"center"} }> Current Weather at Venue</h3>
+                    <h3 style={ {"textAlign":"center"} }> Current Weather at { props.venueName }</h3>
 
                     <div className="weather">
 

@@ -7,6 +7,9 @@ export default function PublicLinks(props){
     const displayRSVP = window.location.href.includes("rsvp");
     const onClickPage = props.onClickPage;
     const loggedIn = props.loggedIn;
+    const weddingDateSet = props.weddingDateSet;
+    const weddingVenueSet = props.weddingVenueSet;
+    const weddingFAQSet = props.weddingFAQSet;
 
     const rsvpLink = () => {
 
@@ -22,7 +25,7 @@ export default function PublicLinks(props){
 
     const logOutLink = () => {
 
-        return <a className="menuActive" href="/" onClick={(e) => props.logOut(e) }>Log Out</a>
+        return <a className="menuActive" href="/" onClick={(e) => props.handleLogout(e) }>Log Out</a>
 
     }
 
@@ -30,11 +33,11 @@ export default function PublicLinks(props){
 
          <nav className="publicLinks">
 
-            <HashLink className={ props.activeSection === 'Home' ? "menuActive active": "menuActive" } to="#Home" onClick={(e) => props.onClickMenuItem(e)}>Home</HashLink>
-            <HashLink className={ props.activeSection === 'Details' ? "menuActive active": "menuActive" } to="#Details" onClick={(e) => props.onClickMenuItem(e)}>Details</HashLink>
-            <HashLink className={ props.activeSection === 'Weather' ? "menuActive active": "menuActive" } to="#Weather" onClick={(e) => props.onClickMenuItem(e)}>Weather</HashLink>
-            <HashLink className={ props.activeSection === 'FAQ' ? "menuActive active": "menuActive" } to="#FAQ" onClick={(e) => props.onClickMenuItem(e)}>FAQ</HashLink>
-            <HashLink className={ props.activeSection === 'Countdown' ? "menuActive active": "menuActive" } to="#Countdown" onClick={(e) => props.onClickMenuItem(e)}>Countdown</HashLink>
+            <HashLink className={ props.activeSection === 'Home' ? "menuActive active": "menuActive" } to="#Home">Home</HashLink>
+            { weddingVenueSet ? <HashLink className={ props.activeSection === 'Details' ? "menuActive active": "menuActive" } to="#Details" >Details</HashLink> : "" }
+            { weddingVenueSet ? <HashLink className={ props.activeSection === 'Weather' ? "menuActive active": "menuActive" } to="#Weather" >Weather</HashLink> : "" }
+            { weddingFAQSet ? <HashLink className={ props.activeSection === 'FAQ' ? "menuActive active": "menuActive" } to="#FAQ" >FAQ</HashLink> : "" }
+            { weddingDateSet ? <HashLink className={ props.activeSection === 'Countdown' ? "menuActive active": "menuActive" } to="#Countdown" >Countdown</HashLink> : "" }
 
             { displayRSVP ? rsvpLink() : "" }
             { loggedIn ? dashboardLink(onClickPage) : "" }

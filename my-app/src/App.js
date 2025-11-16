@@ -22,7 +22,7 @@ import PublicSite from './Components/PublicSite/PublicSite';
 import RSVPForm from './Components/PublicSite/rsvpform';
 import PrivacyPolicy from './Components/Wigits/Privacy-Policy/privacy-policy';
 import mainTaskData from './Components/App/mainData';
-import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVenue, faqs, weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
+import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVenue, faqs as questionsOriginal , weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
 
 function App() {
 
@@ -65,7 +65,9 @@ function App() {
         mainColor: ""
 
       },
-      faqs: faqs
+      faqsSet: false,
+      faqs: questionsOriginal,
+      weddingVenue: ""
 
   }
 
@@ -93,6 +95,8 @@ function App() {
   const [supplierList, setSupplierList] = useState(emptySuppliers);
   const [supplierListCheck, setSupplierListCheck] = useState(0);
   const [wedding, setWedding] = useState({});
+  const [faqs, setFaqs] = useState({});
+  const [faqState, setFaqState] = useState(false);
 
   const supplierStatuses = ["Ruled out","Shortlisted", "Enquiry made", "Booked"];
 
@@ -545,8 +549,8 @@ function App() {
         let uuid = data.list[i].UUID;
         let type = data.list[i].type;
         let state = data.list[i].status;
-        let quote = parseInt(data.list[i].quote) || 0;
-        let cost = parseInt(data.list[i].cost) || 0;
+        let quote = parseInt(data.list[i].quote?.quoteValue) || 0;
+        let cost = parseInt(data.list[i].payments?.paymentValue) || 0;
 
         if(cost !== 0 && state === "Booked"){
 
@@ -688,12 +692,17 @@ function App() {
 
             setBridalParty(emptyBridal);
             saveBridalParty(emptyBridal);
+            setFaqs(questionsOriginal);
             setBridalPartyChecked(1);
+            setFaqState(false);
 
           }else{
 
             setBridalParty(checkList);
+            setFaqs(checkList.faqs);
+            setFaqState(checkList.faqsSet);
             setBridalPartyChecked(1);
+            
 
           }
 
@@ -738,10 +747,11 @@ function App() {
 
           <Route basename="/wedding" path="/">
 
+
             <Route index element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faqs } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
 
             <Route path="managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData } supplierData={ supplierData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
-            <Route path="managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
+            <Route path="managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin } faqs={ faqs } setFaqs={ setFaqs }  setFaqState={ setFaqState } faqState={ faqState }/>} />
             <Route path="managemywedding/guests" element={<Guests loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
             <Route path="managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
             <Route path="managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />

@@ -2,6 +2,9 @@ import './faq.css';
 import React from 'react';
 import faqIcon from '../../../../images/faq.png';
 import QuestionList from './questionList';
+import plusImage from '../../../../images/plus.png'
+import minusImage from '../../../../images/minus.png';
+
 
 export default function FAQ(props){
 
@@ -45,22 +48,18 @@ export default function FAQ(props){
             currentDisplay = targetClick.parentNode.querySelectorAll(".answer")[0];
             iconChange = targetClick.parentNode.querySelector(".plus");
 
-        }
-
-        console.log(currentDisplay.style.display);
-
-        
+        }       
 
         if(getComputedStyle(currentDisplay).display === "none" || currentDisplay.style.display === null){
 
             currentDisplay.style.display = "block";
-            iconChange.style.backgroundImage = "url('./images/minus.png')";
+            iconChange.style.backgroundImage = `url(${minusImage})`
           
 
         } else{
 
             currentDisplay.style.display = "none";
-            iconChange.style.backgroundImage = "url('./images/plus.png')";
+            iconChange.style.backgroundImage = `url(${plusImage})`;
           
         }
 
@@ -88,6 +87,8 @@ export default function FAQ(props){
                 <div className="right">
 
                     <QuestionList displayAnswer={ displayAnswer } faq={ faq } />
+
+                
 
                 </div>
 

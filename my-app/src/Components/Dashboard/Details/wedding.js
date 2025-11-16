@@ -25,8 +25,9 @@ export default function WeddingPlans(props){
     let country;
     let sizeSystem
     let location;
-    let date;
+    let dateWedding;
     let receptionDate;
+    let dateTimeEnd;
     let rsvpDate;
     let mainColor;
     let accentColor;
@@ -39,19 +40,20 @@ export default function WeddingPlans(props){
 
     if(typeof details !== "undefined"){
 
-        date = details.dateTime;
-        rsvpDate = details.dateTimeRSVP || "";
-        receptionDate = details.dateTimeReception || "";
-        budget = typeof details.budget === "undefined" ? "" : details.budget;
-        country = details.country || "";
-        sizeSystem = details.sizeSystem || "";
-        location = details.location || "";
-        mainColor = details.mainColor || "";
-        accentColor = details.mainColor || "";
-        weddingStyle = details.weddingStyle || "";
-        religiousType = details.religiousType || "";
-        maxGuests = details.maxGuests  || "";
-        currency = typeof details.currency === "undefined" ? "" : details.currency;
+        dateWedding = details?.dateTime;
+        rsvpDate = details?.dateTimeRSVP || "";
+        receptionDate = details?.dateTimeReception || "";
+        dateTimeEnd = details?.dateTimeEnd || "";
+        budget = typeof details?.budget === "undefined" ? "" : details?.budget;
+        country = details?.country || "";
+        sizeSystem = details?.sizeSystem || "";
+        location = details?.location || "";
+        mainColor = details?.mainColor || "";
+        accentColor = details?.mainColor || "";
+        weddingStyle = details?.weddingStyle || "";
+        religiousType = details?.religiousType || "";
+        maxGuests = details?.maxGuests  || "";
+        currency = typeof details?.currency === "undefined" ? "" : details?.currency;
         disableItem = currency === "" ? true : false;
         initialEmptyCheck = props.initialEmptyCheck;
 
@@ -59,9 +61,10 @@ export default function WeddingPlans(props){
     }else{
 
         budget = ""; 
-        date = "";
+        dateWedding = "";
         receptionDate = "";
-        rsvpDate = details.dateTimeRSVP || "";
+        rsvpDate = details?.dateTimeRSVP || "";
+        dateTimeEnd = details?.dateTimeEnd || "";
         country = "";
         sizeSystem = ""
         location = "";   
@@ -138,7 +141,7 @@ export default function WeddingPlans(props){
 
             if(rsvpDate === ""){
 
-                rsvpDate = new Date(date);
+                rsvpDate = new Date(dateWedding);
                 // Subtract 4 weeks (28 days)
                 const daysToSubtract = 28;
                 rsvpDate.setDate(rsvpDate.getDate() - daysToSubtract);
@@ -173,7 +176,7 @@ export default function WeddingPlans(props){
 
     }
 
-     const getReceptionDateValue = (date) => {
+    const getReceptionDateValue = (date) => {
 
         let object;
 
@@ -185,10 +188,10 @@ export default function WeddingPlans(props){
 
             if(receptionDate === ""){
 
-                receptionDate = new Date(date);
+                receptionDate = new Date(dateWedding);
                 receptionDate = receptionDate.toISOString().split('T')[0] + "T20:00";;
 
-                bridalParty["weddingDetails"]["dateTimeReception"] = rsvpDate;
+                bridalParty["weddingDetails"]["dateTimeReception"] = receptionDate;
 
                 setBridalParty(bridalParty);
                 saveBridalParty(bridalParty);
@@ -205,6 +208,50 @@ export default function WeddingPlans(props){
                     <div>
                         <i className="fa-solid fa-calendar-day icon"></i>
                         <input type={ checkType(receptionDate) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(receptionDate) } name="dateTimeRSVP" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(receptionDate) }></input>
+                    </div>
+                </div>
+
+            </div>
+
+        }
+
+
+        return object;
+
+    }
+
+    const getEndDateValue = (date) => {
+
+        let object;
+
+        if (date === "" || typeof date === "undefined"){
+
+            object = "";
+
+        }else{
+
+            if(dateTimeEnd === ""){
+
+                dateTimeEnd = new Date(dateWedding);
+                dateTimeEnd = dateTimeEnd.toISOString().split('T')[0] + "T23:59";;
+
+                bridalParty["weddingDetails"]["dateTimeEnd"] = dateTimeEnd;
+
+                setBridalParty(bridalParty);
+                saveBridalParty(bridalParty);
+                setListUpdated(listUpdated + 1);
+
+            }
+
+            object =  <div className='row'>
+
+                <div className='inputGroup col-12'>
+                    <label className="block mb-2 font-semibold">
+                        Wedding end date/time:
+                    </label>
+                    <div>
+                        <i className="fa-solid fa-calendar-day icon"></i>
+                        <input type={ checkType(dateTimeEnd) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(dateTimeEnd) } name="dateTimeEnd" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(dateTimeEnd) }></input>
                     </div>
                 </div>
 
@@ -325,16 +372,18 @@ export default function WeddingPlans(props){
                     </label>
                     <div>
                         <i className="fa-solid fa-calendar-day icon"></i>
-                        <input type={ checkType(date) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(date) } name="dateTime" placeholder="Proposed date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(date) }></input>
+                        <input type={ checkType(dateWedding) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(dateWedding) } name="dateTime" placeholder="Proposed date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(dateWedding) }></input>
                     </div>
                 </div>
 
             </div>
 
     
-            { getReceptionDateValue(date) }
+            { getReceptionDateValue(dateWedding) }
 
-            { getRSVPDateValue(date) }
+             { getEndDateValue(dateWedding) }
+
+            { getRSVPDateValue(dateWedding) }
 
             <CurrencySelector getColor={ getColor } handleChange={ handleChange } value={ currency }/>
 

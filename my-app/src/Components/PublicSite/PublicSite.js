@@ -20,27 +20,25 @@ export default function PublicSite(props){
     const weddingReceptionInvite = props.weddingReceptionInvite;
     const loggedIn = props.loggedIn;
     const setLoggedin = props.setLoggedin;
+    const checkVenueDetails = bridalParty?.weddingVenue?.weddingVenueDisplay || false;
 
-    const weddingDateSet = false;
-    const weddingVenueSet = true;
-    const weddingFAQSet = true;
+    const weddingDateSet = bridalParty.weddingDetails.dateTime !== "" ? true : false;
+    const weddingVenueSet = checkVenueDetails ? true : false;
+    const weddingFAQSet = bridalParty.faqsSet === true ? true : false;
 
     return(
 
         <div>
 
-            {console.log(bridalParty)}
-
-             <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ true } loggedIn={ loggedIn } setLoggedin={ setLoggedin } publicPage={ true }/>
+             <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ true } loggedIn={ loggedIn } setLoggedin={ setLoggedin } publicPage={ true } weddingDateSet={ weddingDateSet } weddingVenueSet={ weddingVenueSet } weddingFAQSet={ weddingFAQSet }/>
 
             <div className="publicBody">
 
-                < PictureWall fName={bridalParty.first.firstName} sName={bridalParty.second.firstName} date={wedding.date} weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite }/> 
-                { weddingVenueSet ? <Details headerOn={true} details={weddingVenue}/> : <NoVenue />}
-                <WeatherToday lon={ weddingVenue.longitude } lat={ weddingVenue.latitude } />
+                < PictureWall fName={bridalParty.first.firstName} sName={bridalParty.second.firstName} date={bridalParty.weddingDetails.dateTime} weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } bridalParty={ bridalParty }/> 
+                { weddingVenueSet ? <Details headerOn={true} details={bridalParty.weddingVenue} bridalParty={ bridalParty }/> : <NoVenue />}
+                { weddingVenueSet ? <WeatherToday venueName={ bridalParty.weddingVenue.name } lon={ bridalParty.weddingVenue.address.longitude } lat={ bridalParty.weddingVenue.address.latitude } />  : "" }
                 { weddingFAQSet ? <FAQ headerOn={ true } faq={ faq } wedding={ wedding }/> : <NoFAQ /> }
-            
-                { weddingDateSet ? <Countdown headerOn={ true } date={ wedding.date }/> :"" }
+                { weddingDateSet ? <Countdown headerOn={ true } date={ bridalParty.weddingDetails.dateTime }/> :"" }
                 <CookieConsent />
 
             </div>

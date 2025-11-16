@@ -30,6 +30,8 @@ export default function SupplierList(props){
 
                 htmlContent =  array.map((item, index) => {
 
+                    console.log(supplierFilter, supplierFilter2);
+
                     return (
 
                         <SupplierListItem 
@@ -52,8 +54,9 @@ export default function SupplierList(props){
 
             }else{
 
-
                 htmlContent =  array.map((item, index) => {
+
+                    console.log(supplierFilter, supplierFilter2);
 
                     if(supplierFilter === "All" && supplierFilter2 !== "All"){
 

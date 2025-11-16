@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import {faqs as questionsList } from "../../PublicSite/Components/Data/data"; 
 import { saveBridalPartyItem } from "../../Wigits/dataFunctions-bridalParty";
 import AddFAQ from "./addQuestion";
+import FAQSet from "./faqsSet";
 
 export default function FAQ(props) {
     
-
-    const [faqs, setFaqs] = useState(questionsList);
+    const faqs = props.faqs;
+    const setFaqs = props.setFaqs;
+    const setFaqState = props.setFaqState;
+    const faqState = props.faqState;
     const [editingIndex, setEditingIndex] = useState(null);
     const [editingAnswer, setEditingAnswer] = useState("");
     const bridalParty = props.bridalParty;
@@ -48,8 +51,10 @@ export default function FAQ(props) {
 
         <>
 
-        <AddFAQ bridalParty={ bridalParty } faqs={ faqs } setFaqs={ setFaqs } />
+        <AddFAQ bridalParty={ bridalParty } faqs={ faqs } setFaqs={ setFaqs }  />
         <div className="detailsContainer">
+
+            <FAQSet bridalParty={ bridalParty } faqState={ faqState } setFaqState={ setFaqState }/>
 
             <h2>Frequently Answered Questions (FAQ's)</h2>
         

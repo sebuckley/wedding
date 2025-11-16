@@ -34,9 +34,6 @@ export default function Suppliers(props){
 
     const clearSearch = useSearchParams();
 
-     { console.log(setType)}
-
-
     let filterName;
     let filterName2;
     let currentDisplay = false;

@@ -45,7 +45,7 @@ export default function Supplier(props){
 
             <div className="adminBody">
                
-              <UpdateSupplier  setSupplierList={ setSupplierList } supplierList={ supplierList } index={ index } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses } user={ user } currency={ bridalParty.weddingDetails.currency } getSupplierData={ getSupplierData }/>
+              <UpdateSupplier  setSupplierList={ setSupplierList } supplierList={ supplierList } index={ index } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses } user={ user } bridalParty={ bridalParty } currency={ bridalParty.weddingDetails.currency } getSupplierData={ getSupplierData }/>
             
               {/* <FamilyList listObject={ listObject } wedding={ wedding } checkExists={ checkExists }/> */}
                

@@ -84,7 +84,6 @@ export default function AddSuppliers(props) {
                 console.log(`Website is valid: ${response.status} ${response.statusText}`);
                 responseVal = true;
             } else {
-                console.log(response);
                 console.log(`Website returned an error: ${response} ${response.statusText}`);
                 responseVal = true;
             }
@@ -118,7 +117,7 @@ export default function AddSuppliers(props) {
 
             testURL = checkWebsiteURL(website).then((value) => {
                            testURL = value;
-                           console.log(testURL);
+                         
                         })
                         .catch((error) => {
                             console.error(error); // Handles any errors
@@ -161,11 +160,7 @@ export default function AddSuppliers(props) {
 
         if(item === "type"){
 
-             console.log(e.target);
-
             value = value.split("").join("");
-
-             console.log(value);
 
         }
 
@@ -230,9 +225,11 @@ export default function AddSuppliers(props) {
             name: formData.name, 
             type: formData.type,
             address: "", 
-            email: formData.email, 
-            phone: formData.phone, 
-            website: formData.website, 
+            contactDetails:{ 
+                email: formData.email, 
+                phone: formData.phone, 
+                website: formData.website, 
+            },
             status: "Shortlisted",
             created: new Date().toISOString(),
             createdBy: user.email,
@@ -292,8 +289,6 @@ export default function AddSuppliers(props) {
 
             <i onClick={toggleDisplay} id="addSupplierIcon" className={`fa ${display ? "fa-circle-minus" : "fa-circle-plus"} iconHeader`}></i>
             <h1 onClick={toggleDisplay} id="addSupplierTitle">Add Supplier</h1>
-
-            { console.log(formData.type) }
 
             { formData.type !== "" ? <a href={ "https://www.google.com/search?q=" + getSearchText( formData.type) } target="_blank" >Search for { splitByCapitalNums(formData.type) }</a> : "" }
 

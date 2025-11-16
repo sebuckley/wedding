@@ -14,33 +14,6 @@ export default function AddFAQ(props){
     const [newQuestion, setNewQuestion] = useState("");
     const [newAnswer, setNewAnswer] = useState("");
 
-
-    const saveItem = (item, value) => {
-
-        const checkItem = localStorage.getItem("addGuest");
-
-        if(checkItem === null){
-
-            const addGuest = {
-
-                [item]: value
-
-            }
-
-            localStorage.setItem("addGuest", JSON.stringify(addGuest));
-
-        }else{
-
-            const list = JSON.parse(checkItem);
-
-            Object.assign(list, { [item]: value });
-
-            localStorage.setItem("addGuest", JSON.stringify(list));
-
-        }
-
-    }  
-
     const clearState = () => {
 
         setNewQuestion('');
@@ -139,10 +112,12 @@ export default function AddFAQ(props){
                 { question: newQuestion, answer: newAnswer },
     
             ];
+
             setFaqs(updatedFaqs);
             saveBridalPartyItem(bridalParty, "faqs", updatedFaqs);
             setNewQuestion("");
             setNewAnswer("");
+            
         }
     };
 
