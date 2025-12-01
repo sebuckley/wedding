@@ -103,18 +103,18 @@ export default function SupplierListItem(props){
         const name = e.target.className;
         setStatus(value);
         let supplierID = e.target.parentElement.nextSibling.innerText
-        let index = getSupplierIndex(supplierID);
+        let index = getSupplierIndex(supplierID,supplierList);
 
         supplierList.list[index]["status"] = value;
         saveSupplierList(supplierList);
         setSupplierList(supplierList);
 
-        let newTaskList = updateSupplierTask(supplierList, supplierID, value, taskList, name, user);
+        let newTaskList = updateSupplierTask(supplierList, supplierID, value, taskList, supplierList.list[index], user);
         setTaskList(newTaskList);
 
         if(value === "Booked" || value === "Enquiry made"){
 
-            const reDirectString = "/managemywedding/supplier/?supplierID=" + supplierID;
+            const reDirectString = "/#/managemywedding/supplier/?supplierID=" + supplierID.trim();
             window.location.replace(reDirectString);
 
         }

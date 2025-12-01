@@ -78,9 +78,9 @@ export default function TaskRow(props){
         let returnObject;
         let currentDate;
 
-        if (date === "" || date === null) {
+        if (!date || isNaN(new Date(date).getTime())) {
 
-        currentDate = "";
+            currentDate = "";
 
         }else{
 

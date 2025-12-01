@@ -119,8 +119,6 @@ const uuidv4 = () => {
 
 const updateSupplierTask = (supplierList, UUID, status, taskList, updatedObject, user) => {
 
-    console.log(UUID);
-
     let taskName = updatedObject["type"];
     const hasWhiteSpace = /\s/.test(taskName);
     let taskIndex;
@@ -215,7 +213,9 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, updatedObject,
             let supplierID = supplierList.list[i].UUID;
             let supplierType = supplierList.list[i].type;
 
-            if(supplierType === taskName && supplierID !== UUID){
+            if(supplierType === taskName && supplierID.trim() !== UUID.trim()){
+
+                console.log(supplierID,UUID, supplierType, taskName);
 
                 supplierList.list[i].status = "Ruled out";
                 supplierList.list[i]["updated"] = new Date();

@@ -59,8 +59,6 @@ export default function UpdateGuest(props){
     }
 
     const getPersonData = (personID) => {
-
-
     
         if(guestList !== null){
 
