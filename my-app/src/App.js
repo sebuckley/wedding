@@ -541,6 +541,8 @@ function App() {
       let totalQuote = 0;
       let quoteObject = {};
       let totalCost = 0;
+      let totalPaid = 0;
+      let balance = 0;
       let costObject = {}; 
 
       for(let i = 0; i < data.list.length; i++){
@@ -550,11 +552,31 @@ function App() {
         let type = data.list[i].type;
         let state = data.list[i].status;
         let quote = parseInt(data.list[i].quote?.quoteValue) || 0;
-        let cost = parseInt(data.list[i].payments?.paymentValue) || 0;
+        let totalCost = parseInt(data.list[i].payments?.totalCost) || 0;
+        let balance = data.list[i].payments?.balance || 0;
+        let totalPaid = totalCost - balance || 0;
 
-        if(cost !== 0 && state === "Booked"){
+        if(totalCost !== 0 && state === "Booked"){
 
-          costObject[type] = parseFloat(cost).toFixed(2);
+           let newObject = {
+
+            "uuid": uuid,
+            "totalCost": totalCost,
+            "outstanding": balance,
+            "paid": totalPaid,
+            "name": name,
+
+          }
+
+           if(costObject[type] === undefined){
+
+            costObject[type] = [ newObject ];    
+
+          }else{
+
+            costObject[type].push(newObject);
+
+          }
 
         }
 
@@ -633,7 +655,13 @@ function App() {
 
       for(let key in costObject){
 
-        totalCost += Number(costObject[key]);
+        for(let i = 0; i < costObject[key].length; i++){
+
+          totalCost += Number(costObject[key][i].totalCost);
+          totalPaid += Number(costObject[key][i].paid);
+          balance += Number(costObject[key][i].outstanding);
+
+        }
 
       }
 
@@ -648,6 +676,8 @@ function App() {
         totalQuote: parseFloat(totalQuote).toFixed(2),
         quoteObject: quoteObject,
         totalCost: parseFloat(totalCost).toFixed(2),
+        totalPaid: parseFloat(totalPaid).toFixed(2),
+        balance: parseFloat(balance).toFixed(2),
         costObject: costObject
 
       }

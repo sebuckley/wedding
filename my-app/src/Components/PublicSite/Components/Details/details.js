@@ -18,18 +18,23 @@ export default function Details(props){
 
     }
 
-     const getDescription = (object) => {
+    const getDescription = (object) => {
 
-        let options = object;
+        if (!object || !Array.isArray(object) || object.length === 0) return "";
 
         for (let i = 0; i < object.length; i++) {
 
-            if (object[i].value === bridalParty.weddingDetails.weddingStyle) {
-                return object[i].description;
+            if (object[i].value === bridalParty?.weddingDetails?.weddingStyle) {
+                return object[i].description || "";
+            }else{
+
+                return "";
+
             }
 
         }
 
+        return "";
     }
 
     const headerOn = props.headerOn;
@@ -47,7 +52,7 @@ export default function Details(props){
         return (
 
             <div className="detailsheader">
-                <h1>Details</h1>
+                <h1>Venue</h1>
             </div>
 
         );
@@ -66,10 +71,13 @@ export default function Details(props){
 
     return(
 
-        <section id="Details">
+        <section id="Venue">
+
+            { headerOn ? displayHeader() : ""}
 
             <div className="details">
 
+                
                 <div className="left">
 
                     <div>
@@ -81,8 +89,6 @@ export default function Details(props){
                 <div className="right">
 
                     <div>
-
-                        { headerOn ? displayHeader() : ""}
 
                         <div className="detailSet">
                             <div className="item">When:</div>

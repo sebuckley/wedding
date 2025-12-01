@@ -117,19 +117,37 @@ const uuidv4 = () => {
 
 }
 
-const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user) => {
+const updateSupplierTask = (supplierList, UUID, status, taskList, updatedObject, user) => {
 
-    const taskIndex = getTaskIndexName(taskList, taskName.replace(/\s/g,""));
+    console.log(UUID);
+
+    let taskName = updatedObject["type"];
+    const hasWhiteSpace = /\s/.test(taskName);
+    let taskIndex;
+
+    if (hasWhiteSpace) {
+
+        taskIndex = getTaskIndexName(taskList, taskName.replace(/\s/g,""));
+
+    }else{
+
+        taskIndex = getTaskIndexName(taskList, taskName);
+
+    }
+
+    console.log(updatedObject);
 
     let taskState;
     let taskActivity;
+    let toDoDate = "";
     let newObject;
-    let newList;
+    let newList = taskList.list[taskIndex]["supplierID"] || [];
 
     newObject = taskList;
 
     if(status === "Booked"){
 
+        toDoDate = updatedObject?.payments?.dueDate || new Date();
         taskState = "Completed";
         taskActivity = "Selected";
         newObject.list[taskIndex]["supplierID"] = UUID;
@@ -150,6 +168,7 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user
 
         }
 
+        toDoDate = new Date(new Date(updatedObject?.quote?.quoteDate).getTime() + 14 * 24 * 60 * 60 * 1000) || new Date();
         taskState = "In-progress";
         taskActivity = "Enquiry made";
 
@@ -158,7 +177,7 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user
 
     }else{
 
-        newList = taskList.list[taskIndex]["supplierID"];
+        newList = taskList.list[taskIndex]?.supplierID || "";
 
         if(!Array.isArray(newList)){
 
@@ -174,10 +193,12 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user
 
         taskState = "In-progress";
         taskActivity = "Researching";
+        toDoDate = new Date();
         newObject.list[taskIndex]["supplierID"] = newList;
         
     }
 
+    newObject.list[taskIndex]["toDoDate"] = toDoDate;
     newObject.list[taskIndex]["state"] = taskState;
     newObject.list[taskIndex]["activity"] = taskActivity;
     newObject.list[taskIndex]["updated"] = new Date();
@@ -210,6 +231,42 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, taskName, user
 
 }
 
+const deleteSupplierTaskItem = (taskList, UUID) => {
+
+    let newList = { ...taskList };
+
+    for(let i = 0; i < newList.list.length; i++){
+
+        let supplierIDs = newList.list[i]["supplierID"];
+
+        if(Array.isArray(supplierIDs)){
+
+            let index = supplierIDs.indexOf(UUID);  
+
+            if(index > -1){
+
+                supplierIDs.splice(index, 1);
+
+            }
+
+            newList.list[i]["supplierID"] = supplierIDs;
+
+        }else{
+
+            if(supplierIDs === UUID){     
+
+                newList.list[i]["supplierID"] = "";
+
+            }
+
+        }
+    
+    }
+
+    saveTaskList(newList);
+    return newList;
+
+}
 
 export { 
 
@@ -220,6 +277,7 @@ export {
         uuidv4, 
         splitByCapitalNums, 
         updateSupplierTask,
-        toProperCase
+        toProperCase,
+        deleteSupplierTaskItem
 
  }

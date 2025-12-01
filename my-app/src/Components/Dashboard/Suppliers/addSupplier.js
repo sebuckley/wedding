@@ -123,9 +123,8 @@ export default function AddSuppliers(props) {
                             console.error(error); // Handles any errors
                         }); 
 
-                    }
+        }
 
-        
         const getIcon = document.getElementsByClassName("websiteCheck")[0];
 
         if(char === 0){
@@ -245,7 +244,7 @@ export default function AddSuppliers(props) {
         saveSupplierList(supplierList);
         setStateChange(stateChange + 1);
 
-       let newTaskList = updateSupplierTask(supplierList, newSupplier["UUID"], "Shortlisted", taskList, newSupplier["type"], user);
+       let newTaskList = updateSupplierTask(supplierList, newSupplier["UUID"], "Shortlisted", taskList, newSupplier, user);
        setTaskList(newTaskList);
 
         clearForm();

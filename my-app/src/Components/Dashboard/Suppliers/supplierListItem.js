@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link  } from 'react-router-dom';
 import '../Dashboard.css';
-import { splitByCapitalNums, updateSupplierTask } from '../../Wigits/dataFunctions';
+import { splitByCapitalNums, updateSupplierTask, deleteSupplierTaskItem } from '../../Wigits/dataFunctions';
 import { getSupplierIndex, saveSupplierList, deleteSupplierListItem } from '../../Wigits/dataFunctions-suppliers';
 
 export default function SupplierListItem(props){
@@ -18,7 +18,6 @@ export default function SupplierListItem(props){
     const setTaskList = props.setTaskList;
     const taskList = props.taskList;
     const user = props.user;
-
 
     const getSupplierLink = (a, name) => {
 
@@ -127,10 +126,12 @@ export default function SupplierListItem(props){
 
         let UUID = e.target.parentElement.previousSibling.innerText;
 
-
         let index = getSupplierIndex(UUID);
 
-        let newList = deleteSupplierListItem(supplierList, index);
+        let newList = deleteSupplierListItem(supplierList, index, UUID);
+        let newTaskList = deleteSupplierTaskItem(taskList, UUID);
+
+        setTaskList(newTaskList);
         setSupplierList(newList);
         setStateChange((stateChange + 1));
 

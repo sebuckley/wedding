@@ -34,7 +34,7 @@ export default function PublicLinks(props){
          <nav className="publicLinks">
 
             <HashLink className={ props.activeSection === 'Home' ? "menuActive active": "menuActive" } to="#Home">Home</HashLink>
-            { weddingVenueSet ? <HashLink className={ props.activeSection === 'Details' ? "menuActive active": "menuActive" } to="#Details" >Details</HashLink> : "" }
+            { weddingVenueSet ? <HashLink className={ props.activeSection === 'Venue' ? "menuActive active": "menuActive" } to="#Venue" >Venue</HashLink> : "" }
             { weddingVenueSet ? <HashLink className={ props.activeSection === 'Weather' ? "menuActive active": "menuActive" } to="#Weather" >Weather</HashLink> : "" }
             { weddingFAQSet ? <HashLink className={ props.activeSection === 'FAQ' ? "menuActive active": "menuActive" } to="#FAQ" >FAQ</HashLink> : "" }
             { weddingDateSet ? <HashLink className={ props.activeSection === 'Countdown' ? "menuActive active": "menuActive" } to="#Countdown" >Countdown</HashLink> : "" }

@@ -191,8 +191,6 @@ export default function UpdateGuest(props){
 
     const index = getGuestIndex(guestList, personIDParam);
 
-    console.log(index);
-
     if(!checkAdditionalGuestsSet){
 
         setAdditionalGuestsSet(guestList.list[index]?.additionalGuestsSet);

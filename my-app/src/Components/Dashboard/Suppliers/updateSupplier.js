@@ -13,8 +13,18 @@ export default function UpdateSupplier(props){
 
     const location = useLocation();
     const search = location.search; // e.g., #/path?param1=value1&param2=value2
-    const supplierIDParam = search.split("=")[1];
+    // const supplierIDParam = search.split("=")[1];
     const getSupplierDataUpdate = props.getSupplierData;
+
+      useEffect(() => {
+        // Extract the ID from the URL search params
+        const newSupplierID = search.split("=")[1];
+        
+        // Only update if it's different from current state
+        if (newSupplierID && newSupplierID !== supplierID) {
+            setSupplierID(newSupplierID);
+        }
+    }, [search]);  // Run whenever URL changes
 
     const user = props.user;
     const supplierList = props.supplierList;
@@ -70,7 +80,7 @@ export default function UpdateSupplier(props){
         }
     }
 
-    const [supplierID, setSupplierID] = useState(supplierIDParam);
+    const [supplierID, setSupplierID] = useState("");
     const [formData, setFormData] = useState(object);
     const [updated, setUpdated] = useState(0);
     const [validEmail, setValidEmail] = useState(false);
@@ -119,13 +129,6 @@ export default function UpdateSupplier(props){
         
     }
     
-    if(supplierID === ""){
-
-        setSupplierID(supplierIDParam);
-        
-    }
-
-    const index = getSupplierIndex(supplierID);
 
     const checkPhone = (number) => {
 
@@ -266,15 +269,15 @@ export default function UpdateSupplier(props){
 
     const onInput = (e) =>{
 
+        const currentIndex = getSupplierIndex(supplierID, supplierList);
+
         const name = e.target.getAttribute("name");
         let value = e.target.value.trim();
-        let newObject = formData;
+        let newObject = { ...formData };  // Create new object reference
         let weddingVenueDisplay = false;
         let weddingReceptionVenueDisplay = false;
         const itemType = document.getElementsByName("type")[0];
         const itemStatus = document.getElementsByName("status")[0];
-
-        console.log(itemType.value + " | " + itemStatus.value);
 
         if(itemType.value === "WeddingVenue" && itemStatus.value === "Booked" || itemType.value === "WeddingReceptionVenue" && itemStatus.value === "Booked"){
 
@@ -296,15 +299,23 @@ export default function UpdateSupplier(props){
             let checkCount = checkFields(fields, allowedEmpty, "address");
 
             if(checkCount === 0 && itemType.value === "WeddingVenue"){
+
                weddingVenueDisplay = true;
+
             }else{
-            weddingVenueDisplay = false;
+
+                weddingVenueDisplay = false;
+
             }
 
             if(checkCount === 0 && itemType.value === "WeddingReceptionVenue"){
+
                weddingReceptionVenueDisplay = true;
+
             }else{
-            weddingReceptionVenueDisplay = false;
+
+                weddingReceptionVenueDisplay = false;
+
             }
 
         }
@@ -429,13 +440,14 @@ export default function UpdateSupplier(props){
 
         }
 
-        let newSupplierList = updateSupplierObject(supplierList, index, newObject);
+        let newSupplierList = updateSupplierObject(supplierList, currentIndex, newObject);
         setFormData(newObject);
+        setSupplierList(newSupplierList);  // Update parent state with new list
         checkEmpty(e.target);       
 
-        getSupplierDataUpdate(supplierList);
+        getSupplierDataUpdate(newSupplierList);  // Pass UPDATED list, not old supplierList
 
-        let newTaskList = updateSupplierTask(newSupplierList, supplierID, value, taskList, newObject["type"], user);
+        let newTaskList = updateSupplierTask(newSupplierList, supplierID, value, taskList, newObject, user);
         setTaskList(newTaskList);
         setUpdated(updated + 1);
 
@@ -449,12 +461,13 @@ export default function UpdateSupplier(props){
     }
 
     const getSupplierData = (SupplierID) => {
+       
+        const currentIndex = getSupplierIndex(SupplierID, supplierList);
 
-        if(supplierList !== null){
-
-
-            setFormData(supplierList.list[index]);
-
+        if (currentIndex !== -1 && supplierList?.list[currentIndex]) {
+            setFormData(supplierList.list[currentIndex]); 
+        } else {
+            console.error('Supplier not found for ID:', SupplierID);
         }
 
     }
@@ -462,11 +475,12 @@ export default function UpdateSupplier(props){
     const deleteListItem = (event) => {
 
         const checkAction = window.confirm("Are you sure you want to delete the supplier?");
+        const currentIndex = getSupplierIndex(supplierID, supplierList);
 
         if(checkAction){
 
             event.preventDefault();
-            deleteSupplierListItem(supplierList, index);
+            deleteSupplierListItem(supplierList, currentIndex);
             const reDirectString = "/wedding/#/managemywedding/suppliers";
             window.location.replace(reDirectString);
 
@@ -602,15 +616,28 @@ export default function UpdateSupplier(props){
         
     }
 
-    useEffect(() => {
 
-        getSupplierData(supplierID);
-        checkEmail(formData.contactDetails?.email);
-        checkPhone(formData.contactDetails?.phone);
-        checkWebsite(formData.contactDetails?.website);
 
-    }, [ getSupplierData, supplierID ]);
 
+  useEffect(() => {
+
+    if (supplierID && supplierList?.list) {
+
+        console.log(supplierID);
+        const currentIndex = getSupplierIndex(supplierID, supplierList);
+        console.log(supplierList.list);
+        if (currentIndex !== -1 && supplierList.list[currentIndex]) {
+            const newFormData = supplierList.list[currentIndex];
+            setFormData(newFormData);
+            console.log('Getting supplier data for ID:', supplierID, 'Index:', currentIndex, 'Data:', newFormData.name);
+            checkEmail(newFormData.contactDetails?.email);
+            checkPhone(newFormData.contactDetails?.phone);
+            checkWebsite(newFormData.contactDetails?.website);
+        } else {
+            console.error('Invalid index or supplier not found:', supplierID, currentIndex);
+        }
+    }
+}, [supplierID, supplierList]);
 
     const getClassName = (name) => {
 
@@ -749,11 +776,12 @@ export default function UpdateSupplier(props){
     const addNote = (e) => {
 
         e.preventDefault();
+        const currentIndex = getSupplierIndex(supplierID, supplierList);
 
         let existingNotes;
         let note = document.getElementById("Note").value;
 
-        let newObject = supplierList.list[index];
+        let newObject = supplierList.list[currentIndex];
         existingNotes = newObject.notes;
 
         if(!Array.isArray(existingNotes)){
@@ -773,7 +801,7 @@ export default function UpdateSupplier(props){
         existingNotes.push(newNote);
         newObject["notes"] = existingNotes;
 
-        updateSupplierObject(supplierList, index, newObject);
+        updateSupplierObject(supplierList, currentIndex, newObject);
         setFormData(newObject);
 
         document.getElementById("Note").value = "";
@@ -937,7 +965,7 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-12'>
                             <i className="fa fa-building icon" title="Supplier name"></i>
-                            <input type='text' className='inputBox' name='name' placeholder='name' defaultValue={ name } onInput={ onInput }></input>
+                            <input type='text' className='inputBox' name='name' placeholder='name' value={ name } onInput={ onInput }></input>
                         </div>
                  
                     </div>
@@ -949,12 +977,10 @@ export default function UpdateSupplier(props){
                             <i className="fa-solid fa-circle-info icon" title="Supplier type"></i>
 
                             
-                            <select className='guestType' style={ getColor(type) } name='type'  onChange={ onInput } value={ type.replace(/\s/g,"") }>
-                                
+                            <select className='guestType' style={ getColor(type) } name='type' onChange={ onInput } value={ type.replace(/\s/g,"") }>
                                 {taskList.list.map((s, i) => (
-                                    <option key={i} value={s.taskName}>{splitByCapitalNums(s.taskName)}</option>
+                                    <option key={i} value={s.taskName.replace(/\s/g,"")}>{splitByCapitalNums(s.taskName)}</option>
                                 ))}
-
                             </select>
                         
                         </div>
@@ -966,7 +992,7 @@ export default function UpdateSupplier(props){
                         <div className='inputGroup col-12'>
 
                             { getEmailLink(formData.contactDetails?.email) }
-                            <input type='email' className='inputBox checkIcon' name='email' placeholder='email' defaultValue={ email } onInput={ onInput }></input>
+                            <input type='email' className='inputBox checkIcon' name='email' placeholder='email' value={ email } onInput={ onInput }></input>
                             <i className="fa-solid fa-circle-minus icon2 emailCheck"></i>
                         
                         </div>
@@ -977,7 +1003,7 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-12'>
                             { getPhoneLink(formData.contactDetails?.phone) }
-                            <input type='text' className='inputBox checkIcon' name='phone' placeholder='phone' defaultValue={ phone } onInput={ onInput }></input>
+                            <input type='text' className='inputBox checkIcon' name='phone' placeholder='phone' value={ phone } onInput={ onInput }></input>
                             <i className="fa-solid fa-circle-minus icon2 phoneCheck"></i>
                         </div>
 
@@ -987,7 +1013,7 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-12'>
                             <i className="fa-solid fa-globe icon" title="Website"></i>
-                            <input type='text' className='inputBox checkIcon' name='website' placeholder='website' defaultValue={ website } onInput={ onInput }></input>
+                            <input type='text' className='inputBox checkIcon' name='website' placeholder='website' value={ website } onInput={ onInput }></input>
                             <i className="fa-solid fa-circle-minus icon2 websiteCheck"></i>
                         </div>
 
@@ -999,12 +1025,12 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-4'>
                             <i className="fa-solid fa-house icon" title="Unit/Number"></i>
-                            <input type='text' className='inputBox' onInput={ onInput } name='number' placeholder='Unit/number' defaultValue={ number }></input>
+                            <input type='text' className='inputBox' onInput={ onInput } name='number' placeholder='Unit/number' value={ number }></input>
                         </div>
 
                         <div className='inputGroup col-8'>
                             <i className="fa-solid fa-road icon" title="Road name"></i>
-                            <input type='text' className='inputBox' onInput={ onInput }  name='roadName' placeholder='road name' defaultValue={ roadName }></input>
+                            <input type='text' className='inputBox' onInput={ onInput }  name='roadName' placeholder='road name' value={ roadName }></input>
                         </div>
 
                     </div>
@@ -1014,7 +1040,7 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-12'>
                             <i className="fa-solid fa-location-pin icon" title="Town"></i>
-                            <input type='text' className='inputBox' onInput={ onInput } name='town' placeholder='town' defaultValue={ town }></input>
+                            <input type='text' className='inputBox' onInput={ onInput } name='town' placeholder='town' value={ town }></input>
                         </div>
 
                     </div>
@@ -1024,11 +1050,11 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-2'>
                             <i className="fa-solid fa-signs-post icon" title="Post code part one XXXX"></i>
-                            <input type='text' className='inputBox' onInput={ onInput } name='postCode1' placeholder='post (xxxx)' maxLength='4' defaultValue={ postCode1 }></input>
+                            <input type='text' className='inputBox' onInput={ onInput } name='postCode1' placeholder='post (xxxx)' maxLength='4' value={ postCode1 }></input>
                         </div>
                         <div className='inputGroup col-3'>
                             <i className="fa-solid fa-signs-post icon" title="Post code part two XXX"></i>
-                            <input type='text' className='inputBox' onInput={ onInput }  name='postCode2' placeholder='code (xxx)' maxLength='3' defaultValue={ postCode2 }></input>
+                            <input type='text' className='inputBox' onInput={ onInput }  name='postCode2' placeholder='code (xxx)' maxLength='3' value={ postCode2 }></input>
                         </div>
 
                     </div>
@@ -1043,7 +1069,7 @@ export default function UpdateSupplier(props){
                                 Latitude:
                             </label>
                             <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
-                            <input type='text' className='inputBox' onChange={ onInput } name='latitude' placeholder='latitude' defaultValue={ latitude }></input>
+                            <input type='text' className='inputBox' onChange={ onInput } name='latitude' placeholder='latitude' value={ latitude }></input>
                         </div>
 
                     </div>
@@ -1056,7 +1082,7 @@ export default function UpdateSupplier(props){
                                 Longitude:
                             </label>
                             <i className="fa-solid fa-location-crosshairs icon" title="longitude"></i>
-                            <input type='text' className='inputBox' onChange={ onInput } name='longitude' placeholder='longitude' defaultValue={ longitude }></input>
+                            <input type='text' className='inputBox' onChange={ onInput } name='longitude' placeholder='longitude' value={ longitude }></input>
                         </div>
 
                     </div>
@@ -1104,7 +1130,7 @@ export default function UpdateSupplier(props){
 
                         <div className='inputGroup col-8'>
                             <i className="fa-solid fa-note-sticky icon"></i>
-                            <textarea placeholder="add note" id="Note" onInput={ onInputNote } defaultValue={note}></textarea>
+                            <textarea placeholder="add note" id="Note" onInput={ onInputNote } value={note}></textarea>
                             
                         </div>
 

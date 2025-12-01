@@ -13,13 +13,23 @@ const saveSupplierList = (supplierList) => {
 
 };
 
-const getSupplierIndex = (supplierID) => {
+const getSupplierIndex = (supplierID,supplierList="") => {
 
-    const supplierList = getSupplierList();
+    let supplierListUsed;
+
+    if(supplierList === ""  || typeof supplierList === "undefined"){
+
+        supplierListUsed = getSupplierList();
+
+    }else{
+
+        supplierListUsed = supplierList;
+
+    }
  
-    for(let i = 0; i < supplierList.length; i++){
+    for(let i = 0; i < supplierListUsed.length; i++){
 
-        if(supplierList.list[i].UUID.trim() === supplierID.trim()){
+        if(supplierListUsed.list[i].UUID.trim() === supplierID.trim()){
 
             return i;
 
