@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/wedding/static/css/main.3684f317.css",
-    "main.js": "/wedding/static/js/main.7d6ce6e0.js",
+    "main.css": "/wedding/static/css/main.c7421e10.css",
+    "main.js": "/wedding/static/js/main.d2035c6a.js",
     "static/js/453.96453769.chunk.js": "/wedding/static/js/453.96453769.chunk.js",
     "static/media/1.jpg": "/wedding/static/media/1.83e530eb2668ea37d9ec.jpg",
     "static/media/faq.png": "/wedding/static/media/faq.3bbcf9d7ce11f6b6f168.png",
@@ -9,12 +9,12 @@
     "static/media/minus.png": "/wedding/static/media/minus.53f6c53cc2d7e7eda5e7.png",
     "static/media/plus.svg": "/wedding/static/media/plus.4c7cf1cd260210394eff.svg",
     "index.html": "/wedding/index.html",
-    "main.3684f317.css.map": "/wedding/static/css/main.3684f317.css.map",
-    "main.7d6ce6e0.js.map": "/wedding/static/js/main.7d6ce6e0.js.map",
+    "main.c7421e10.css.map": "/wedding/static/css/main.c7421e10.css.map",
+    "main.d2035c6a.js.map": "/wedding/static/js/main.d2035c6a.js.map",
     "453.96453769.chunk.js.map": "/wedding/static/js/453.96453769.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3684f317.css",
-    "static/js/main.7d6ce6e0.js"
+    "static/css/main.c7421e10.css",
+    "static/js/main.d2035c6a.js"
   ]
 }
