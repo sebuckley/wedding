@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import DietSection  from '../../PublicSite/Components/rsvp/dietrysection';
 import dietry from '../../PublicSite/Components/Data/dietry';  
 import WeddingClothingForm from '../Guests/clothing';
@@ -8,6 +9,7 @@ export default function BridalPerson(props){
     const handleChange = props.handleChange;  
     const getColor = props.getColor;
     const getName = props.getName;
+    const checkEmptyWedding = props.checkEmptyWedding;
 
     const selection = props.selection;
     const bridalParty = props.bridalParty;
@@ -30,9 +32,14 @@ export default function BridalPerson(props){
    
     const getClass = (name, num) => {
 
-        return name + " " + num;
+        return  "weddingDetails " + name + " " + num;
 
     }
+
+    useEffect(() => {
+      console.log("Initial check wedding called");
+      checkEmptyWedding();
+    }, []);
 
     return(
 
@@ -48,8 +55,8 @@ export default function BridalPerson(props){
                 <input
                   type="text"
                   name="firstName"
-                  value={person.firstName === "Partner 1" || person.firstName === "Partner 2" ? "": person.firstName }
-                  onInput={handleChange}
+                  value={ person.firstName }
+                  onChange={handleChange}
                   className={getClass("inputBox", selection)}
                   placeholder="first name (required)"
                   required
@@ -68,7 +75,7 @@ export default function BridalPerson(props){
                   type="text"
                   name="surname"
                   value={person.surname}
-                  onInput={handleChange}
+                  onChange={handleChange} // Changed from onInput to onChange
                   className={getClass("inputBox", selection)}
                   placeholder="surname (required)"
                   required
@@ -167,7 +174,12 @@ export default function BridalPerson(props){
 
         </>
 
+       
+
     )
+
+
+    
 
 }
 

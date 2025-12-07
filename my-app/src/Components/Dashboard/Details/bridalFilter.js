@@ -4,6 +4,7 @@ export default function BridalFilter(props){
 
     const setWeddingFilter = props.setWeddingFilter;
     const filterName = props.filterName;
+    const checkEmptyWedding = props.checkEmptyWedding;
 
     const onClick = (e) => {
 
@@ -19,6 +20,8 @@ export default function BridalFilter(props){
         }
 
         e.target.className = "weddingfilterButton activeWeddingFB";
+
+
 
     }
 

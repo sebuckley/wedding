@@ -54,27 +54,29 @@ export default function Details(props){
       const value = e.target.value;
       const className = e.target.className;
 
-      // console.log("Change detected:", name, value, className);
-
       const split = className.split(" ");
       const createName = split[split.length - 1];
 
-      if (!("UUID" in bridalParty[createName])) {
+      const updatedBridalParty = { ...bridalParty, [createName]: { ...bridalParty[createName] } };
 
-        bridalParty[createName]["UUID"] = uuidv4();
+      if (!("UUID" in updatedBridalParty[createName])) {
+
+       updatedBridalParty[createName]["UUID"] = uuidv4();
 
       }
 
-      bridalParty[createName][name] = value;
+      console.log(updatedBridalParty[createName][name]);
+
+      updatedBridalParty[createName][name] = value;
 
       if(name === "weddingStyle" && value !== "Religious Ceremony"){
 
-        bridalParty[createName]["religiousType"] = "Humanist";
+        updatedBridalParty[createName]["religiousType"] = "Humanist";
 
       }
-   
-      setBridalParty(bridalParty);
-      saveBridalParty(bridalParty);
+     
+      setBridalParty(updatedBridalParty);
+      saveBridalParty(updatedBridalParty);
       setListUpdated(listUpdated + 1);
       checkEmptyWedding();
 
@@ -86,8 +88,6 @@ export default function Details(props){
 
     };
 
-   
-
     const checkEmptyWedding = () => {
 
         if(initialEmptyCheck === false){
@@ -96,18 +96,19 @@ export default function Details(props){
 
         }
 
-        const items = document.getElementsByClassName("checkDetails");
+        const items = document.getElementsByClassName("weddingDetails");
 
         let empty = 0;
 
         for(let i=0; i< items.length; i++){
 
             let value = items[i].value;
-            
+
             if(value === ""){
 
-                empty += 1;
-                items[i].style.borderColor = "red";
+              empty += 1;
+              items[i].style.borderColor = "red";
+              items[i].style.outline = "none";
 
             }
 
@@ -189,12 +190,6 @@ export default function Details(props){
 
     }
 
-    const handleSubmit = (e) => {
-
-      e.preventDefault();
-      // Add your submission logic here (e.g., API call)
-
-    };
 
     const getRoles = () => {
 
@@ -388,11 +383,6 @@ export default function Details(props){
   
     }
 
- 
-    
-   
-  
-
     return(
 
       <div>
@@ -401,14 +391,10 @@ export default function Details(props){
 
         <div className="adminBody">
 
-          <BridalFilter setWeddingFilter={ setWeddingFilter } filterName={ weddingFilter } />
+          <BridalFilter setWeddingFilter={ setWeddingFilter } filterName={ weddingFilter } checkEmptyWedding={ checkEmptyWedding }/>
 
 
-          <form
-            onSubmit={handleSubmit}
-            id="detailsForm"
-            className="detailsForm"
-          >
+          <div id="detailsForm">
           
            { weddingFilter === "Partner 1" ? <BridalPerson 
 
@@ -419,8 +405,8 @@ export default function Details(props){
                                                   bridalParty={ bridalParty } 
                                                   getColor={ getColor } 
                                                   checkEmpty={ checkEmpty }
+                                                  checkEmptyWedding={ checkEmptyWedding }
                                                   
-
                                                 /> : ""
 
             }
@@ -436,6 +422,7 @@ export default function Details(props){
                                                 bridalParty={ bridalParty } 
                                                 getColor={ getColor } 
                                                 checkEmpty={ checkEmpty }
+                                                checkEmptyWedding={ checkEmptyWedding }
 
                                               /> : ""
 
@@ -481,7 +468,7 @@ export default function Details(props){
             {/* <button type="submit" className="className='button primary">Save</button>
             <button type='button' onClick={ clearNewForm } id='clearBtn' className='button secondary'>Clear form</button> */}
 
-          </form>
+          </div>
 
         </div>
 

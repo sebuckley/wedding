@@ -56,7 +56,7 @@ export default function SupplierQuoteDetails(props){
                     <label className="block mb-2 font-semibold">
                         Quote date:
                     </label>
-                    <i class="fa-solid fa-calendar-check icon"></i>
+                    <i className="fa-solid fa-calendar-check icon"></i>
                     <input type='date' className='dateBox3 dateChange' name="quoteDate" style={ getColor(quoteDate) } onChange={ onInput } defaultValue={ quoteDate } ></input>
 
                 </div>
