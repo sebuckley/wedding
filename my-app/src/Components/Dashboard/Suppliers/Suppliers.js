@@ -32,13 +32,25 @@ export default function Suppliers(props){
     let paramName;
     let filterName;
     let filterName2;
-    let currentDisplay = false;
+    let currentDisplay;
+    const [display, setDisplay] = useState("");
 
-    if(typeof filterParam === "undefined"){
+    if(typeof filterParam === "undefined" || filterParam === null){
 
       paramName = "";
       paramID = "";
       filterParam = "";
+
+      if(display !== ""){
+
+        currentDisplay = display;
+
+      }else{
+
+        currentDisplay = false;
+
+      }
+      
 
     }else{
       
@@ -62,14 +74,13 @@ export default function Suppliers(props){
 
       }else{
 
-        currentDisplay = false;
+        currentDisplay = display;
 
         if(taskList){
 
           const index = getTaskIndex(taskList, filterParam);
           paramID = taskList.list[index].taskID;
           paramName = taskList.list[index].taskName;
-          
 
         }else{
 
@@ -109,7 +120,7 @@ export default function Suppliers(props){
     const [supplierFilter2, setSupplierFilter2] = useState(filterName2);
     const [supplierSortedBy, setSupplierSortedBy] = useState(settings["suppliers"].sort.supplierSortedBy);
     const [supplierSorted, setSupplierSorted] = useState(settings["suppliers"].sort.supplierSorted);
-    const [display, setDisplay] = useState("");
+    
 
     if(display === "" || display !== currentDisplay){
 

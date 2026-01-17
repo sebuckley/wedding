@@ -58,7 +58,7 @@ export default function SupplierFilter(props){
         <div className="filterButtons"> 
 
             <button className={ getActive("All", filterName) } onClick={ onClick }>All</button>
-            <button className={ getActive("Ruled Out", filterName) } onClick={ onClick }>Ruled out</button>
+            <button className={ getActive("Ruled out", filterName) } onClick={ onClick }>Ruled out</button>
             <button className={ getActive("Shortlisted", filterName) } onClick={ onClick }>Shortlisted</button>
             <button className={ getActive("Enquiry made", filterName) } onClick={ onClick }>Enquiry made</button>
             <button className={ getActive("Quote received", filterName) } onClick={ onClick }>Quote received</button>

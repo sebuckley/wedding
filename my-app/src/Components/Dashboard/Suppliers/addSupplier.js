@@ -39,8 +39,6 @@ export default function AddSuppliers(props) {
         setFormData(object);
 
     }
-
-    console.log(formData.taskID)
  
     const getData = () => {
 
@@ -59,7 +57,7 @@ export default function AddSuppliers(props) {
         
         getData();
 
-    },[setDisplay, setFormData]);
+    },[]);
 
 
     const checkPhone = (number) => {
@@ -285,7 +283,11 @@ export default function AddSuppliers(props) {
 
     }
 
-    const toggleDisplay = () => setDisplay(prev => !prev);
+    const toggleDisplay = () => {
+        
+        setDisplay(prev => !prev);
+
+    }
 
     const removeSpaces = (e) => {
 
