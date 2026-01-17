@@ -1,4 +1,4 @@
-import { getTaskIndexName, saveTaskList } from "./dataFunctions-taskList";
+import { getTaskIndex, saveTaskList } from "./dataFunctions-taskList";
 import { getSupplierIndex, saveSupplierList } from "./dataFunctions-suppliers";
 
 
@@ -117,92 +117,99 @@ const uuidv4 = () => {
 
 }
 
-const updateSupplierTask = (supplierList, UUID, status, taskList, updatedObject, user) => {
+const updateSupplierTask = (supplierList, supplierID, status, taskList, supplierDetails, user) => {
 
-    let taskName = updatedObject["type"];
-    const hasWhiteSpace = /\s/.test(taskName);
-    let taskIndex;
-
-    if (hasWhiteSpace) {
-
-        taskIndex = getTaskIndexName(taskList, taskName.replace(/\s/g,""));
-
-    }else{
-
-        taskIndex = getTaskIndexName(taskList, taskName);
-
-    }
-
-    console.log(updatedObject);
+    let taskID = supplierDetails["taskTypeID"];
+    let taskIndex = getTaskIndex(taskList, taskID);
 
     let taskState;
     let taskActivity;
     let toDoDate = "";
-    let newObject;
-    let newList = taskList.list[taskIndex]["supplierID"] || [];
+    let tempTaskList;
+    let newSupplierList = taskList.list[taskIndex]["supplierID"] || [];
 
-    newObject = taskList;
+    tempTaskList = taskList;
 
     if(status === "Booked"){
 
-        toDoDate = updatedObject?.payments?.dueDate || new Date();
+        toDoDate = supplierDetails?.payments?.dueDate || new Date();
         taskState = "Completed";
-        taskActivity = "Selected";
-        newObject.list[taskIndex]["supplierID"] = UUID;
+        taskActivity = "Booked";
+        tempTaskList.list[taskIndex]["supplierID"] = supplierID;
 
     }else if(status === "Enquiry made"){
 
-        newList = taskList.list[taskIndex]["supplierID"];
+        if(!Array.isArray(newSupplierList)){
 
-        if(!Array.isArray(newList)){
-
-            newList = [];
+            newSupplierList = [];
 
         }
 
-        if (!newList.includes(UUID)) {
+        if (!newSupplierList.includes(supplierID)) {
         
-            newList.push(UUID);
+            newSupplierList.push(supplierID);
 
         }
 
-        toDoDate = new Date(new Date(updatedObject?.quote?.quoteDate).getTime() + 14 * 24 * 60 * 60 * 1000) || new Date();
+        toDoDate = supplierDetails?.quote?.quoteDate 
+            ? new Date(new Date(supplierDetails.quote.quoteDate).getTime() + 14 * 24 * 60 * 60 * 1000)
+            : new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000);
         taskState = "In-progress";
         taskActivity = "Enquiry made";
 
-        newObject.list[taskIndex]["supplierID"] = newList;
+        tempTaskList.list[taskIndex]["supplierID"] = newSupplierList;
+
+    }else if(status === "Quote recieved"){
+
+         if(!Array.isArray(newSupplierList)){
+
+            newSupplierList = [];
+
+        }
+
+        if (!newSupplierList.includes(supplierID)) {
+        
+            newSupplierList.push(supplierID);
+
+        }
+
+        toDoDate = supplierDetails?.quote?.quoteDate 
+            ? new Date(new Date(supplierDetails.quote.quoteDate).getTime() + 14 * 24 * 60 * 60 * 1000)
+            : new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000);
+        taskState = "In-progress";
+        taskActivity = "Quote recieved";
+
+        tempTaskList.list[taskIndex]["supplierID"] = newSupplierList;
        
 
     }else{
 
-        newList = taskList.list[taskIndex]?.supplierID || "";
+        if(!Array.isArray(newSupplierList)){
 
-        if(!Array.isArray(newList)){
-
-            newList = [];
+            newSupplierList = [];
 
         }
         
-        if (!newList.includes(UUID)) {
+        if (!newSupplierList.includes(supplierID)) {
         
-            newList.push(UUID);
+            newSupplierList.push(supplierID);
 
         }
 
         taskState = "In-progress";
         taskActivity = "Researching";
-        toDoDate = new Date();
-        newObject.list[taskIndex]["supplierID"] = newList;
+        toDoDate = new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000);
+        tempTaskList.list[taskIndex]["supplierID"] = newSupplierList;
         
     }
 
-    newObject.list[taskIndex]["toDoDate"] = toDoDate;
-    newObject.list[taskIndex]["state"] = taskState;
-    newObject.list[taskIndex]["activity"] = taskActivity;
-    newObject.list[taskIndex]["updated"] = new Date();
-    newObject.list[taskIndex]["updatedBy"] = user.email;
+    tempTaskList.list[taskIndex]["toDoDate"] = toDoDate;
+    tempTaskList.list[taskIndex]["state"] = taskState;
+    tempTaskList.list[taskIndex]["activity"] = taskActivity;
+    tempTaskList.list[taskIndex]["updated"] = new Date();
+    tempTaskList.list[taskIndex]["updatedBy"] = user.email;
 
-    saveTaskList(newObject);
+    saveTaskList(tempTaskList);
 
     let length = supplierList.length;
 
@@ -210,12 +217,10 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, updatedObject,
 
         for(let i = 0; i < length; i++){
 
-            let supplierID = supplierList.list[i].UUID;
-            let supplierType = supplierList.list[i].type;
-
-            if(supplierType === taskName && supplierID.trim() !== UUID.trim()){
-
-                console.log(supplierID,UUID, supplierType, taskName);
+            let taskIDCheck = supplierList.list[i].taskID;
+            let supplierIDCheck = supplierList.list[i].supplierID;
+      
+            if(taskIDCheck === taskID && supplierID.trim() !== supplierIDCheck.trim()){
 
                 supplierList.list[i].status = "Ruled out";
                 supplierList.list[i]["updated"] = new Date();
@@ -227,7 +232,7 @@ const updateSupplierTask = (supplierList, UUID, status, taskList, updatedObject,
 
     }
 
-    return newObject;
+    return tempTaskList;
 
 }
 
@@ -268,6 +273,29 @@ const deleteSupplierTaskItem = (taskList, UUID) => {
 
 }
 
+const getSettings = () => {
+
+        const getList = JSON.parse(localStorage.getItem("settings"));
+        return getList;
+
+}
+
+const saveSettings = (settings) => {
+
+    const setItem = localStorage.setItem("settings", JSON.stringify(settings));
+
+    if(setItem){
+
+        return true;
+
+    }else{
+
+        return false;
+
+    }
+
+}
+
 export { 
 
         checkCapital, 
@@ -278,6 +306,8 @@ export {
         splitByCapitalNums, 
         updateSupplierTask,
         toProperCase,
-        deleteSupplierTaskItem
+        deleteSupplierTaskItem,
+        getSettings,
+        saveSettings
 
  }

@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import DietSection  from '../../PublicSite/Components/rsvp/dietrysection';
 import dietry from '../../PublicSite/Components/Data/dietry';  
 import WeddingClothingForm from '../Guests/clothing';
-import { weddingClothingSizes } from '../../App/wedding_clothing_sizes_schema_with_gender'
+import { weddingClothingSizes } from '../../App/wedding_clothing_sizes_schema_with_gender';
+import Email from '../../Wigits/contact/email';
 
 export default function BridalPerson(props){
 
@@ -10,6 +11,8 @@ export default function BridalPerson(props){
     const getColor = props.getColor;
     const getName = props.getName;
     const checkEmptyWedding = props.checkEmptyWedding;
+    const [empty, setEmpty] = useState(0);
+    let emptyText;
 
     const selection = props.selection;
     const bridalParty = props.bridalParty;
@@ -20,7 +23,6 @@ export default function BridalPerson(props){
     const dietValue = person.diet || "";
     const allergiesValue = person.allergies || "";
     const disableItem = props.disableItem;
-    const checkEmpty = props.checkEmpty;
 
     const switchNum = {
 
@@ -36,16 +38,54 @@ export default function BridalPerson(props){
 
     }
 
+     const checkEmpty = () => {
+  
+        const items = document.getElementsByClassName("checkPerson");
+
+        let empty = 0;
+
+        for(let i=0; i< items.length; i++){
+
+            let value = items[i].value;
+            
+            if(value === ""){
+
+                empty += 1;
+                items[i].style.borderColor = "red";
+
+            }else{
+
+                items[i].style.borderColor = "var(--grey)";
+                
+            }
+
+        }
+
+        setEmpty(empty);
+
+    }
+
     useEffect(() => {
       console.log("Initial check wedding called");
       checkEmptyWedding();
+      checkEmpty();
     }, []);
+
+    if(empty === 0){
+
+      emptyText = "[completed]";
+
+    }else{
+
+      emptyText = "[" + empty + " incomplete]";
+
+    }
 
     return(
 
         <>
 
-            <h2 className="text-2xl font-semibold mb-4">{ getName(selection) }</h2>
+            <h2 className="text-2xl font-semibold mb-4">{ getName(selection) +  " " + emptyText}</h2>
 
             <div className='row'>
             
@@ -57,7 +97,7 @@ export default function BridalPerson(props){
                   name="firstName"
                   value={ person.firstName }
                   onChange={handleChange}
-                  className={getClass("inputBox", selection)}
+                  className={getClass("checkPerson inputBox", selection)}
                   placeholder="first name (required)"
                   required
                 />
@@ -76,7 +116,7 @@ export default function BridalPerson(props){
                   name="surname"
                   value={person.surname}
                   onChange={handleChange} // Changed from onInput to onChange
-                  className={getClass("inputBox", selection)}
+                  className={getClass("checkPerson inputBox", selection)}
                   placeholder="surname (required)"
                   required
                 />
@@ -89,7 +129,7 @@ export default function BridalPerson(props){
 
                   <i className="fa-solid fa-person-circle-question icon"></i>
                
-                  <select id="mainRole" className={getClass("guestType", selection)} style={ getColor(person.role) } name='role' onChange={ handleChange } value={ person.role }>
+                  <select id="mainRole" className={getClass("checkPerson guestType", selection)} style={ getColor(person.role) } name='role' onChange={ handleChange } value={ person.role }>
                       <option value="" hidden className="noOption">please select role... (required)</option>
                       <option>Guest</option>
                       { getRoles() }
@@ -100,31 +140,22 @@ export default function BridalPerson(props){
 
             </div>
 
-            <div className='row'>
-            
-              <div className='inputGroup col-12'>
 
-                <i className="fa-solid fa-envelope icon"></i>
-                <input
-                  type="email"
-                  name="email"
-                  value={person.email}
-                  onInput={handleChange}
-                  className={getClass("inputBox", selection)}
-                  placeholder="email"
-                  required
-                />
+            <Email 
 
-              </div>
-
-            </div>
+              type="input"
+              class={ getClass("checkPerson inputBox checkIcon", selection) }
+              updateFunction={ handleChange }
+              value={ person.email }
+                
+            />
 
             <div className='row'>
             
               <div className='inputGroup col-12'>
 
                 <i className="fa-solid fa-venus-mars icon"></i>
-                <select id="mainGender" className={getClass("guestType", selection)} style={ getColor(person.gender) } name='gender' onChange={ handleChange } value={ person.gender }>
+                <select id="mainGender" className={getClass("checkPerson guestType", selection)} style={ getColor(person.gender) } name='gender' onChange={ handleChange } value={ person.gender }>
                   <option value="" hidden className="noOption">please select gender... (required)</option>
                   <option value="Female">Female</option>
                   <option value="Male">Male</option>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from '../../../Wigits/select'
 
 export default function DietSection(props){
@@ -8,13 +8,18 @@ export default function DietSection(props){
     const bridal = props.bridal || false;
     const showGuest = props.showGuest;
     const onChange = props.onChange;
+    const onInput = props.onInput;
     const valueDiet = props.valueDiet;
     const valueAllergies = props.valueAllergies;
     const titleType = props.titleType;
     const arrayNumber = props.arrayNumber;
+    const guestNumber = arrayNumber + 1;
     const disableItem = props.disableItem;
     let name = props.name;
-    const [display, setDisplay] = useState("none")
+    const [display, setDisplay] = useState("none");
+    const [empty, setEmpty] = useState(0);
+    const [itemName, setItemName] = useState("");
+
 
     const addRSVPButton = () => {
 
@@ -41,15 +46,25 @@ export default function DietSection(props){
 
         let title;
         let text = "Your ";
-        name = name + "'s"
+        name = name + "'s";
+        let emptyText;
 
-        if(type === "guest"){
+        if(empty === 0){
 
-            title = "Guests dietry requirements";
+            emptyText = "[completed]";
 
         }else{
 
-            title = disableItem ? text + " dietry requirements" : name + " dietry requirements";
+            emptyText = "[" + empty + " incomplete]";
+        }
+
+        if(type === "guest"){
+
+            title = "Additional Guest " + guestNumber + " dietry requirements"  + " " + emptyText;
+
+        }else{
+
+            title = disableItem ? text + " dietry requirements" : name + " dietry requirements" + " " + emptyText;
 
         }
 
@@ -57,21 +72,38 @@ export default function DietSection(props){
 
     }
 
-    const getClassName = (name, bridal, number = "") => {
+    const getClassName = (name, bridal, number="") => {
 
+        let nameClass = itemName;
         let returnText;
+
+        if(itemName === ""){
+
+            if(number === ""){
+
+               nameClass = "dietryCheck " + name;
+
+            }else{
+
+                nameClass = "dietryCheck" + number.toString();
+
+            }
+
+            setItemName(nameClass);
+
+        }
 
         if(number === "" && bridal === false){
 
-            returnText = name;
+            returnText = nameClass;
 
         } else if(number === "" && bridal){
 
-            returnText = name +" " + bridal;
+            returnText = nameClass + " " + bridal;
 
         }else{
 
-            returnText = name + " " + arrayNumber;
+            returnText = nameClass + " " + number;
 
         }
 
@@ -81,23 +113,35 @@ export default function DietSection(props){
 
     const displayDiet = () => {
 
-        const getIcon = document.getElementById("addDietIcon");
-
         if(display === ""){
 
             setDisplay("none");
-            getIcon.className = "fa fa-circle-plus iconHeader2";
 
         }else{
 
             setDisplay("");
-            getIcon.className = "fa fa-circle-minus iconHeader2";
 
         }
 
-
     }
 
+    const returnIcon = () => {
+
+        let icon;
+
+        if(display === "none"){
+
+            icon = <i onClick={ displayDiet } id="addDietIcon" className="fa fa-circle-plus iconHeader2"></i>
+
+        }else{
+
+            icon = <i onClick={ displayDiet } id="addDietIcon" className="fa fa-circle-minus iconHeader2"></i>
+
+        }
+
+        return icon;
+
+    }
 
     const addCommentsBox = () => {
 
@@ -106,7 +150,7 @@ export default function DietSection(props){
             <div className="row">
                 <div className="inputGroupFull">
                     <label className="label">Please provide more details:</label>
-                    <textarea style={{width: "calc(100% - 20px)"}} className={ getClassName("comments",bridal, arrayNumber)} name="commentsDietry" onChange={ onChange } value={ props.valueComments }></textarea>
+                    <textarea style={{width: "calc(100% - 20px)"}} className={ getClassName("comments",bridal, arrayNumber)} name="commentsDietry" onInput={ onInput } value={ props.valueComments || "" }></textarea>
                 </div>
             </div>
 
@@ -114,11 +158,44 @@ export default function DietSection(props){
 
     }
 
+    const checkEmpty = (item) => {
+
+        const items = document.getElementsByClassName(item);
+
+        let empty = 0;
+
+        for(let i=0; i< items.length; i++){
+
+            let value = items[i].value;
+            
+            if(value === ""){
+
+                empty += 1;
+                items[i].style.borderColor = "red";
+
+            }else{
+
+                items[i].style.borderColor = "var(--grey)";
+
+            }
+
+        }
+
+        setEmpty(empty);
+
+    }
+
+    useEffect(() => {
+
+        checkEmpty(itemName);
+
+    });
+
     return(
 
         <>
 
-            <h2 style={{textAlign: "left",width:"100%"}}><i onClick={ displayDiet } id="addDietIcon" className="fa fa-circle-plus iconHeader2"></i>{ getTitle(titleType) }</h2>
+            <h2 style={{textAlign: "left",width:"100%"}}>{ returnIcon() }{ getTitle(titleType) }</h2>
 
             <div className="dietRow" style={{display:display}}>
 

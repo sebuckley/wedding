@@ -3,13 +3,15 @@ import TaskFilter from './taskFilter.js';
 import TaskSort from './taskSort.js';
 import Login from '../../Login/Login';
 import ListTasks from '../../Wigits/listTasks';
-import { getTaskList, saveTaskListItem, getTaskIndex } from '../../Wigits/dataFunctions-taskList';
+import { getTaskList, saveTaskListItem, getTaskIndex, saveTaskList } from '../../Wigits/dataFunctions-taskList';
 import { isEmpty } from '../../Wigits/dataFunctions';
 import Header from '../../Wigits/Header/header';
 import { useState, useEffect } from 'react';
 import AddTask from './addTask.js';
 import Loading from '../../PublicSite/Components/loading/loading';
-
+import ListTasksGroupType from '../../Wigits/listTasksGroupType.js';
+import ListTasksGroupPhase from '../../Wigits/listTasksGroupPhase.js';
+import ListTasksOrder from '../../Wigits/listTasksOrder.js';
 export default function Tasks(props){
 
     const user = props.user;
@@ -18,6 +20,8 @@ export default function Tasks(props){
     const setLoading = props.setLoading;
     const loggedIn = props.loggedIn;
     const setLoggedin = props.setLoggedin;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
 
     const pathName = window.location.search;
     let filterName;
@@ -27,8 +31,6 @@ export default function Tasks(props){
       const url = new URL(window.location.href);
       url.search = ''; // Clear the search query
       window.history.replaceState({}, document.title, url.toString());
-
-      console.log(pathName);
 
       if(pathName === "?To-do"){
 
@@ -74,173 +76,20 @@ export default function Tasks(props){
 
     }
   
-
     const bridalParty = props.bridalParty;
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
 
     const [taskListState, setTaskListState] = useState({});
-    const [taskFiltered, setTaskFiltered] = useState(filterName);
-    const [taskSortedBy, setTaskSortedBy] = useState("taskName");
-    const [taskSorted, setTaskSorted] = useState("asc");
+    const [taskFiltered, setTaskFiltered] = useState(settings["tasks"].filter.state);
+    const [taskSortedBy, setTaskSortedBy] = useState(settings["tasks"].sort.taskSortedBy);
+    const [taskSorted, setTaskSorted] = useState(settings["tasks"].sort.taskSorted);
+    const [taskGroupBy, setTaskGroupBy] = useState(settings["tasks"].sort.taskGroupedBy);
+    const [taskListConfirmed, setTaskListConfirmed] = useState("");
 
-    const onChange = (e) => {
+    if(taskListConfirmed === ""){
 
-      const itemName = e.target.className;
-      const itemValue = e.target.value;
-      const itemSplit = itemName.split(" ");
-      const currentDate = new Date();
-      let state;
-      let taskName;
-      let activity;
-      let note;
-
-      if(itemSplit[itemSplit.length - 1] === "state"){
-
-          taskName = e.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText;
-          state = itemValue;
-          activity = e.target.parentNode.nextSibling.querySelector(".activity").value;
-          const UUID = e.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.innerText;
-          const index = getTaskIndex(taskList, UUID);
-          let noteStructure;
-
-          note = window.prompt("Enter a note:");
-
-          if(note){
-
-            noteStructure = {
-
-              date: new Date(),
-              note: note
-
-            }
-
-          }else{
-
-             noteStructure = {
-
-              date: new Date(),
-              note: "No note recorded"
-
-            }
-
-          }
-
-          let notes = taskList.list[index].notes;
-
-          if(typeof notes === "undefined"){
-
-            notes = [];
-
-          }
-
-          notes.push(noteStructure);
-
-          saveTaskListItem(taskList, index, "state", itemValue);
-          saveTaskListItem(taskList, index, "toDoDate", currentDate);
-          saveTaskListItem(taskList, index, "lastUpdatedBy", user);
-          saveTaskListItem(taskList, index, "lastUpdated", currentDate);
-          saveTaskListItem(taskList, index, "notes", notes);
-
-          e.target.parentElement.nextSibling.nextSibling.children[0].value = currentDate.toISOString().split('T')[0];
-
-      }else{
-
-        const UUID = e.target.parentNode.nextSibling.nextSibling.nextSibling.innerText;
-        const index = getTaskIndex(taskList, UUID);
-        const currentState = taskList.list[index].state;
-        taskName = e.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.innerText;
-        state = e.target.parentNode.previousSibling.querySelector(".state").value;
-        activity = itemValue;
-
-        let noteStructure;
-
-        note = window.prompt("Enter a note:");
-
-        if(note){
-
-          noteStructure = {
-
-            date: new Date(),
-            note: note
-
-          }
-
-        }else{
-
-            noteStructure = {
-
-            date: new Date(),
-            note: "No note recorded"
-
-          }
-
-        }
-
-        let notes = taskList.list[index].notes;
-
-        if(typeof notes === "undefined"){
-
-          notes = [];
-
-        }
-
-        notes.push(noteStructure);
-
-        let selectState = e.target.parentElement.previousSibling.querySelector(".state");
-
-        
-
-        if(currentState === "" || currentState === "To-do"){
-
-          if(activity === "Selected"){
-
-            selectState.value = "Completed";
-            saveTaskListItem(taskList, index, "state", "Completed");
-
-          }else{
-
-            selectState.value = "In-progress";
-            saveTaskListItem(taskList, index, "state", "In-progress");
-
-          }
-  
-          saveTaskListItem(taskList, index, "activity", activity);
-          saveTaskListItem(taskList, index, "toDoDate", currentDate);
-          saveTaskListItem(taskList, index, "lastUpdatedBy", user);
-          saveTaskListItem(taskList, index, "lastUpdated", currentDate);
-
-        }else{
-
-          if(activity === "Selected"){
-
-            selectState.value = "Completed";
-            saveTaskListItem(taskList, index, "state", "Completed");
-
-          }
-
-          saveTaskListItem(taskList, index, "activity", activity);
-          saveTaskListItem(taskList, index, "toDoDate", currentDate);
-          saveTaskListItem(taskList, index, "lastUpdatedBy", user);
-          saveTaskListItem(taskList, index, "lastUpdated", currentDate);
-
-        }
-
-        saveTaskListItem(taskList, index, "note", notes);
-
-        e.target.parentElement.nextSibling.children[0].value = currentDate.toISOString().split('T')[0];
-
-      }
-
-      let obj = {
-
-        state: state,
-        activity: activity,
-        toDoDate: currentDate
-
-      }
-
-      setTaskListState({...taskListState, [taskName]:obj});
+      setTaskListConfirmed(taskList.listConfirmed);
 
     }
 
@@ -266,36 +115,43 @@ export default function Tasks(props){
         
       }
 
-      const UUID = e.target.parentNode.nextSibling.nextSibling.innerText;
-      const taskName = e.target.parentNode.nextSibling.nextSibling.nextSibling.innerText;
-      console.log(e.target.parentNode.previousSibling.previousSibling.innerText)
-      const state = e.target.parentNode.previousSibling.previousSibling.innerText;
-      let activity = e.target.parentNode.previousSibling.innerText;
+      const row = e.target.closest('.row');
+      const inputID = row.querySelector('.inputID');
+      const UUID = inputID.textContent || inputID.value;
+
+      const task = row.querySelector('.taskName');
+      const taskName = task.textContent || task.value;
+
+      const s = row.querySelector('.state');
+      const state = s.textContent || s.value;
+
+      const a = row.querySelector('.activity');
+      const activity = a.textContent || a.value;
+
       const toDoDate  = itemDate;
 
       const index = getTaskIndex(taskList, UUID);
       const currentState = taskList.list[index].state;
+      let updatedTaskList = {...taskList};
 
-      if(currentState === "" || currentState === "To-do"){
+      if(currentState === "" || currentState === "To-do"){ 
 
-        let stateSelector = e.target.parentElement.previousSibling.previousSibling;
-        stateSelector.innerText = "In-progress";
-        let activitySelector = e.target.parentElement.previousSibling;
-        activitySelector.innerText = "Planned";
-        activity = "Planned";
-        saveTaskListItem(taskList, index, "toDoDate", toDoDate);
-        saveTaskListItem(taskList, index, "state", "In-progress");
-        saveTaskListItem(taskList, index, "activity", "Planned");
-        saveTaskListItem(taskList, index, "lastUpdatedBy", user.email);
-        saveTaskListItem(taskList, index, "lastUpdated", currentDate);
+        updatedTaskList.list[index]["state"] = "In-progress";
+        updatedTaskList.list[index]["activity"] = "Planned";
+        updatedTaskList.list[index]["toDoDate"] = toDoDate;
+        updatedTaskList.list[index]["lastUpdatedBy"] = user.email;
+        updatedTaskList.list[index]["lastUpdated"] = currentDate;
 
       }else{
 
-        saveTaskListItem(taskList, index, "toDoDate", toDoDate);
-        saveTaskListItem(taskList, index, "lastUpdatedBy", user.email);
-        saveTaskListItem(taskList, index, "lastUpdated", currentDate);
+        updatedTaskList.list[index]["toDoDate"] = toDoDate;
+        updatedTaskList.list[index]["lastUpdatedBy"] = user.email;
+        updatedTaskList.list[index]["lastUpdated"] = currentDate;
 
       }
+
+      setTaskList(updatedTaskList);
+      saveTaskList(updatedTaskList);
 
       let obj = {
 
@@ -321,51 +177,73 @@ export default function Tasks(props){
 
   }
 
-  
+  const confirmTasks = () => {
 
-    useEffect(() => {
+    setTaskListConfirmed(true);
 
-      getTaskData();
+    let newTaskList = { ...taskList, listConfirmed: true}
 
-    }, []);
+    setTaskList(newTaskList);
+    saveTaskList(newTaskList);
 
-    if(loading){
 
-      return <Loading bridalParty={ bridalParty } user={ user }/>
+  }
 
-    }
+  useEffect(() => {
 
-    if(user === null) {
-  
-      return <Login setUser={ setUser } loading={loading} setLoading={ setLoading } bridalParty={ bridalParty } />
-  
-    }
+    getTaskData();
 
-    return(
+  }, []);
 
-      <div>
+  if(loading){
 
-         <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
+    return <Loading bridalParty={ bridalParty } user={ user }/>
 
-        <div className="adminBody">
+  }
+
+  if(user === null) {
+
+    return <Login setUser={ setUser } loading={loading} setLoading={ setLoading } bridalParty={ bridalParty } />
+
+  }
+
+  return(
+
+    <div>
+
+      <Header firstName={ bridalParty.first.firstName } sName={ bridalParty.second.firstName } displayPublic={ false } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>
+
+      <div className="adminBody">
 
         <AddTask setTaskList={ setTaskList }/>
 
-        <TaskFilter setTaskFiltered={ setTaskFiltered } filterName={ taskFiltered }/>
-        <TaskSort setTaskSorted={ setTaskSorted } taskSorted={ taskSorted } setTaskSortedBy={ setTaskSortedBy } taskSortedBy={ taskSortedBy } />
+        <TaskFilter setTaskFiltered={ setTaskFiltered } filterName={ taskFiltered } settings={ settings } setSettings={ setSettings }/>
+        <TaskSort setTaskSorted={ setTaskSorted } taskSorted={ taskSorted } setTaskSortedBy={ setTaskSortedBy } taskSortedBy={ taskSortedBy } taskGroupBy={ taskGroupBy } setTaskGroupBy={ setTaskGroupBy } settings={ settings } setSettings={ setSettings }/>
 
         <div id='tasks'>
 
             <h2>Tasks</h2>
 
-            { taskList !== "" ? <ListTasks taskList={ taskList } onChange={ onChange } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState }/> : "" }
+            { console.log(taskGroupBy)}
 
-            </div>
+            { taskList !== "" && taskGroupBy === "none" ? <ListTasks taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState }/> : "" }
+
+            { taskList !== "" && taskGroupBy === "group" ? <ListTasksGroupType taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState }/> : "" }
+
+            { taskList !== "" && taskGroupBy === "phase" ? <ListTasksGroupPhase taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState }/> : "" }
+
+            { taskList !== "" && taskGroupBy === "order" ? <ListTasksOrder taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState }/> : "" }
+
+            { !taskListConfirmed ? <button className="deleteButton" onClick={ confirmTasks }>Confirm Tasks</button> : null }
 
         </div>
 
+          
+
       </div>
-       
-    )
+
+    </div>
+      
+  )
     
 }

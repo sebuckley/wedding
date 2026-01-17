@@ -9,14 +9,17 @@ export default function SupplierList(props){
     const wedding = props.wedding;
     const supplierFilter = props.supplierFilter;
     const supplierFilter2 = props.supplierFilter2;
-    const suppliersSorted = props.guestSorted;
-    const suppliersSortedBy = props.guestSortedBy;
+    const suppliersSorted = props.supplierSorted;
+    const suppliersSortedBy = props.supplierSortedBy;
     const stateChange = props.stateChange;
     const setStateChange = props.setStateChange;
     const supplierStatuses = props.supplierStatuses;
     const setTaskList = props.setTaskList;
     const taskList = props.taskList;
     const user = props.user;
+    const supplierBooked = props.supplierBooked;
+    const [state, setState] = useState(0);
+
 
     const getList = (array) => {
 
@@ -44,6 +47,7 @@ export default function SupplierList(props){
                             user={ user } 
                             taskList={ taskList } 
                             setTaskList= { setTaskList }
+                            supplierBooked={ supplierBooked }
                         />
 
                     )
@@ -56,7 +60,7 @@ export default function SupplierList(props){
 
                     if(supplierFilter === "All" && supplierFilter2 !== "All"){
 
-                        if(item.type === supplierFilter2){
+                        if(item.taskTypeID === supplierFilter2){
                         
                             return (
 
@@ -72,6 +76,7 @@ export default function SupplierList(props){
                                     user={ user } 
                                     taskList={ taskList } 
                                     setTaskList= { setTaskList }
+                                    supplierBooked={ supplierBooked }
                                 />
 
                             )
@@ -97,13 +102,14 @@ export default function SupplierList(props){
                                     user={ user } 
                                     taskList={ taskList } 
                                     setTaskList= { setTaskList }
+                                    supplierBooked={ supplierBooked }
                                 />
 
                             )
 
                         }
         
-                    }else if(supplierFilter === item.status && item.type === supplierFilter2){
+                    }else if(supplierFilter === item.status && item.taskTypeID === supplierFilter2){
 
                         return (
 
@@ -119,6 +125,7 @@ export default function SupplierList(props){
                                 user={ user } 
                                 taskList={ taskList } 
                                 setTaskList= { setTaskList }
+                                supplierBooked={ supplierBooked }
                             />
 
                         )
@@ -141,56 +148,15 @@ export default function SupplierList(props){
         
     }
 
-    const sortSupplierList = (array, sortBy="name", type="asc") => {
+    const sortSupplierList = (array, sortBy="name", type) => {
 
-        if(sortBy === "name"){
+        if(type === "asc"){
 
-            if(type === "asc"){
+            array.sort((a, b) => a.name.localeCompare(b.name)); 
 
-                array.sort((a, b) => a.name.localeCompare(b.name)); 
+        }else{
 
-            }else{
-
-                array.sort((a, b) => b.name.localeCompare(a.name)); 
-
-            }
-
-        }else if(sortBy === "maxGuests"){
-
-            if(type === "asc"){
-
-                array.sort((a, b) => a.maxGuests - b.maxGuests); 
-
-            }else{
-
-                array.sort((a, b) =>  b.maxGuests - a.maxGuests); 
-
-            }
-
-
-        }else if(sortBy === "rsvp"){
-
-            if(type === "asc"){
-
-                array.sort((a, b) => a.rsvp.localeCompare(b.rsvp)); 
-
-            }else{
-
-                array.sort((a, b) => b.rsvp.localeCompare(a.rsvp)); 
-
-            }
-
-        }else if(sortBy === "First name"){
-
-            if(type === "asc"){
-
-                array.sort((a, b) => a.firstName.localeCompare(b.firstName)); 
-
-            }else{
-
-                array.sort((a, b) => b.firstName.localeCompare(a.firstName)); 
-
-            }
+            array.sort((a, b) => b.name.localeCompare(a.name)); 
 
         }
 

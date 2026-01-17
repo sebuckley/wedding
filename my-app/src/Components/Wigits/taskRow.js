@@ -1,18 +1,19 @@
 import { splitByCapitalNums } from "./dataFunctions";
+import { supplierStatuses } from "../../App";
 
 export default function TaskRow(props){
 
-    const itemID = props.itemID;
+    const taskID = props.taskID;
     const taskName = props.taskName;
     const state = props.state;
     const activity = props.activity;
     const toDoDate = props.toDoDate;
     const deleteTaskItem = props.deleteTaskItem;
     const onChangeDate = props.onChangeDate;
-    const onChange = props.onChange;
     const linkSuppliers = props.linkSuppliers;
     const getSupplierLink = props.getSupplierLink;
     const supplierID = props.supplierID;
+    const taskListConfirmed = props.taskListConfirmed;
     
     const selectOptionState = (className, state) => {
 
@@ -30,7 +31,7 @@ export default function TaskRow(props){
 
         return(
 
-        <select className={ className } onChange={ onChange } defaultValue={ currentState }>
+        <select className={ className }  value={ currentState } disabled>
 
             <option value="To-do">To-do</option>
             <option value="In-progress">In-progress</option>
@@ -48,23 +49,31 @@ export default function TaskRow(props){
 
         if(activity ===""){
 
-        currentState = "Not started";
+            currentState = "Not started";
 
         }else{
     
-        currentState = activity;
+            currentState = activity;
 
         }
 
         return(
 
-        <select className={ className } onChange={ onChange } defaultValue={ currentState }>
+        <select className={ className }  value={ currentState } disabled>
 
-            <option value="Not started">Not started</option>
-            <option value="Planned">Planned</option>
-            <option value="Researching">Researching</option>
-            <option value="Enquiry made">Enquiry made</option>
-            <option value="Selected">Selected</option>
+            { 
+            
+                supplierStatuses.map((item) => {
+
+                    return (
+
+                        <option value={item}>{item}</option>
+
+                    )
+
+                }) 
+            
+            }
 
         </select>
 
@@ -109,13 +118,13 @@ export default function TaskRow(props){
 
         if(type === "input"){
 
-        
-            returnObject = <input type='date' onChange={ onChangeDate } className="dateBox2" value={ currentDate }></input>
+         
+            returnObject = <div className="inputDate col-3" ><div><label>Due Date:</label><input type='date' onChange={ onChangeDate } className="dateBox2" value={ currentDate }></input></div></div>
 
 
         }else{
 
-            returnObject = currentDate
+            returnObject = <div className="inputDate col-3" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}><label>Due Date:</label><div >{ currentDate }</div></div>
 
         }
 
@@ -129,15 +138,15 @@ export default function TaskRow(props){
 
         if(state === "To-do" && toDoDate === ""){
 
-            object = <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end"}}><button className="deleteButton" onClick={ deleteTaskItem }>Delete</button></div>;
+            object = !taskListConfirmed ? <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end"}}><button className="deleteButton" onClick={ deleteTaskItem }>Delete</button></div> : <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}></div>
 
-        }else if(state === "Completed"){
+        }else if(state === "Booked"){
 
-            object = <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}>{ getSupplierLink(supplierID) } </div>;
+            object = <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}>{ getSupplierLink(supplierID.trim()) } </div>;
 
         }else{
 
-            object = <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}>{ linkSuppliers(taskName, state, activity) } </div>;
+            object = <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "10px"}}>{ linkSuppliers(taskName, state, activity, taskID) } </div>;
 
         }
 
@@ -148,7 +157,7 @@ export default function TaskRow(props){
 
     return(
 
-        <div className="row" key={ itemID }>
+        <div className="row" key={ taskID }>
 
             <div className="titleName col-3" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}>
 
@@ -173,12 +182,9 @@ export default function TaskRow(props){
             
             </div>
 
-            <div className="inputDate col-3">
-                <label>Due Date:
-                {state === "Completed" ?  addDate(toDoDate): addDate(toDoDate, "input") }
-                </label>
-
-            </div>
+           
+            {state === "Completed" ?  addDate(toDoDate): addDate(toDoDate, "input") }
+               
 
             
 
@@ -188,7 +194,7 @@ export default function TaskRow(props){
 
             <div className="inputID" style={{"display": "none"}}>
 
-                { itemID }
+                { taskID }
 
             </div>
 

@@ -7,22 +7,31 @@ export default function GuestSort(props){
     const guestSorted = props.guestSorted;
     const guestSortedBy = props.guestSortedBy;
     const listType = props.listType;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
 
     const onChange = (e) => {
 
         e.preventDefault();
         const itemName = e.target.className;
         const itemValue = e.target.value;
+
+        const newSettings = { ...settings };
         
         if(itemName === "guestSortedBy"){
 
             setGuestSortedBy(itemValue);
-
+            newSettings["guestList"].sort.guestSortedBy = itemValue;
+            
         }else{
 
             setGuestSorted(itemValue);
-
+            newSettings["guestList"].sort.guestSorted = itemValue;
+            
         }
+
+        setSettings(newSettings);
+        sessionStorage.setItem("settings", JSON.stringify(newSettings));
 
     }
 

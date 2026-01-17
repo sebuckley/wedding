@@ -9,8 +9,6 @@ export default function GuestDataRow(props){
     const additionalGuest = props.additionalGuest;
     const additionalGuestDetails = props.additionalGuestDetails;
 
-    console.log(additionalGuest, additionalGuestDetails);
-
     const UUID = person.UUID;
     const firstName = additionalGuest ? additionalGuestDetails.firstName : person.firstName;
     const surname = additionalGuest ? additionalGuestDetails.surname : person.surname;
@@ -33,9 +31,7 @@ export default function GuestDataRow(props){
     const displayRSVP = props.displayRSVP || false;
     const displayAgeGroup = props.displayAgeGroup || false;
     const displayDiet = props.displayDiet || false;
-    const displayAllergies = props.displayDiet || false;
-
-    
+    const displayAllergies = props.displayAllergies || false;
 
     if(role === "Flower Girl"){
 
@@ -259,7 +255,7 @@ export default function GuestDataRow(props){
         
         }else{
 
-            object = <div className="email empty"></div>;
+            object = <div className="email"></div>;
         
         }
 
@@ -303,6 +299,8 @@ export default function GuestDataRow(props){
     }
 
     const returnDiet = () => {
+
+        console.log("Diet for ", firstName, surname, ": ", diet);
 
         return  <div className="diet">Dietry: { getDiet(diet) }</div>
                             

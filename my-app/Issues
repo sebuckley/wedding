@@ -9,48 +9,50 @@ Add guests
 
 General
 if wedding details not complete go to details page.
-Select options need padding and ensure visible
+Select options need padding and ensure visible (might need a fuller solution by creating a custom select)
 When links copied need to have the page name.
 
 Details 
-all selects (currency, country,  style, colour) not highlighted when empty but budget is which doesnt help navigation although empty displaying correct.
+all selects (currency, country,  style, colour) not highlighted when empty but budget is which doesnt help navigation although empty displaying correct. - completed
+
 
 Partner 1 
 
-not taking text when first clicked
-email no validation
-incomplete boxes needed
-validation required on boxes
+not taking text when first clicked - completed
+email no validation - completed
+incomplete boxes needed - completed
+validation required on boxes - completed
 
 Tasks
-Feels like it should have key tasks away from others.
-Taks due date not updating on  task page when changed.
-Current activity not updated when changed on task page
-re-ordering tasks for priority seems a good idea
-states sure want to delete guest when deleting task
-current state to reflect un-selected with delete button when confirmed should be link to search (consider delete from switch of state)
-when clicking on search should go to add page and new page
+Feels like it should have key tasks away from others. - completed
+re-ordering tasks for priority seems a good idea - completed
+Taks due date not updating on  task page when changed. - completed
+Current activity not updated when changed on task page - completed
+states sure want to delete guest when deleting task - completed
+current state to reflect un-selected with delete button when confirmed should be link to search (consider delete from switch of state) this to be added to details controls
+when clicking on search should go to add page and new page - completed
 
 Guests
-Not showing brides dietry requirements in list on dietry list selection
+Not showing brides dietry requirements in list on dietry list selection - completed
 
 guest
-Selects not highlighting when empty.
-Needs to call update stats function when changing as didn't show on dashboard until refreshed.
+Selects not highlighting when empty. - completed
+Needs to call update stats function when changing as didn't show on dashboard until refreshed. - completed
 
 Add supplier / Suppliers
-When pasting telephone number could clear out spaces.
-When changing box for enquiry / booking doesnt link to correct page.
+When pasting telephone number could clear out spaces. - completed
+When changing box for enquiry / booking doesnt link to correct page. - completed
+When adding value not correct - completed
 
 
 Supplier
-Incorrect highlighting of empty items
-Lattitude and longitue showing with no address inputted.
-Road removing spaces automatically should do this
-Could past into one box for longitude and latitdue and automaticvally split into long and lat
-if due date over due highlight if not leave unhighlighted
+Incorrect highlighting of empty items - completed
+Lattitude and longitue showing with no address inputted. - completed
+Road removing spaces automatically should do this - completed
+Could past into one box for longitude and latitdue and automaticvally split into long and lat - completed
+if due date over due highlight if not leave unhighlighted - completed
 changed to booked but not updated tasks
 
 Dashboard 
-add amounts paid to dashboard
-Could show data on suppliers when shortlisted etc
+add amounts paid to dashboard - completed
+Could show data on suppliers when shortlisted etc - completed

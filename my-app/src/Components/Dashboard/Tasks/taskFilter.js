@@ -6,13 +6,30 @@ export default function TaskFilter(props){
 
     const setTaskFilter = props.setTaskFiltered;
     const filterName = props.filterName;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
     
     const onClick = (e) => {
 
-        e.preventDefault();
-        setTaskFilter(e.target.innerText);
+        const value = e.target.innerText;
 
-         const filterButtons = document.getElementsByClassName('filterButton');
+        e.preventDefault();
+        setTaskFilter(value);
+
+        const settingsCopy = { ...settings };
+
+        settingsCopy["tasks"].filter.state = value;
+
+        if(value === "All"){
+
+            settingsCopy["tasks"].filter.activity = "";
+            
+        }
+
+        setSettings(settingsCopy);
+        sessionStorage.setItem("settings", JSON.stringify(settingsCopy));
+
+        const filterButtons = document.getElementsByClassName('filterButton');
 
         for(let i = 0; i < filterButtons.length; i++){
 
@@ -36,6 +53,11 @@ export default function TaskFilter(props){
 
         e.preventDefault();
         setTaskFilter(e.target.innerText);
+
+        const settingsCopy = { ...settings };
+        settingsCopy["tasks"].filter.activity = e.target.innerText;
+        setSettings(settingsCopy);
+        sessionStorage.setItem("settings", JSON.stringify(settingsCopy));
 
         const filterButtons = document.getElementsByClassName('filterButton');
 
@@ -111,7 +133,8 @@ export default function TaskFilter(props){
                 <button className={ getActive("Planned", filterName,2) } onClick={ onClick2 }>Planned</button>
                 <button className={ getActive("Researched", filterName,2) } onClick={ onClick2 }>Researched</button>
                 <button className={ getActive("Enquiry made", filterName,2) } onClick={ onClick2 }>Enquiry made</button>
-                <button className={ getActive("Selected", filterName,2) } onClick={ onClick2 }>Selected</button>
+                <button className={ getActive("Quote recieved", filterName,2) } onClick={ onClick2 }>Quote recieved</button>
+                <button className={ getActive("Booked", filterName,2) } onClick={ onClick2 }>Booked</button>
 
             </div>
 

@@ -22,6 +22,8 @@ export default function Guests(props){
     const setLoading = props.setLoading;
     const loggedIn = props.loggedIn;
     const setLoggedin = props.setLoggedin;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
     
     const [role, setRole] = useState("");
 
@@ -70,8 +72,8 @@ export default function Guests(props){
 
     }else{
 
-      listTypeName = "Primary guests";
-      filterName = "All";
+      listTypeName = settings["guestList"].filter.listType;
+      filterName = settings["guestList"].filter.state;
 
     }
 
@@ -80,8 +82,8 @@ export default function Guests(props){
     const setGuestList = props.setGuestList;
     const guestList = props.guestList;
     const [guestFilter, setGuestFilter] = useState(filterName);
-    const [guestSortedBy, setGuestSortedBy] = useState("surname");
-    const [guestSorted, setGuestSorted] = useState("asc");
+    const [guestSortedBy, setGuestSortedBy] = useState(settings["guestList"].sort.guestSortedBy);
+    const [guestSorted, setGuestSorted] = useState(settings["guestList"].sort.guestSorted);
     const [listType, setListType] = useState(listTypeName);
     const getRoles = props.getRoles;
 
@@ -126,10 +128,10 @@ export default function Guests(props){
 
               <AddGuest user={ user } getRoles={ getRoles } role={ role } setRole={ setRole } setGuestList={ setGuestList }/>
 
-              <ListType setListType={ setListType } listType={ listType } />
+              <ListType setListType={ setListType } listType={ listType } settings={ settings } setSettings={ setSettings } />
 
-              { listType === "Primary guests" ? <GuestFilter setGuestFilter={ setGuestFilter } filterName={ guestFilter }/> : "" }
-              <GuestSort setGuestSorted={ setGuestSorted } guestSorted={ guestSorted } setGuestSortedBy={ setGuestSortedBy } guestSortedBy={ guestSortedBy } listType={ listType }/>
+              { listType === "Primary guests" ? <GuestFilter setGuestFilter={ setGuestFilter } filterName={ guestFilter } settings={ settings } setSettings={ setSettings }/> : null }
+              { listType !== "Wedding party" ? <GuestSort setGuestSorted={ setGuestSorted } guestSorted={ guestSorted } setGuestSortedBy={ setGuestSortedBy } guestSortedBy={ guestSortedBy } listType={ listType } settings={ settings } setSettings={ setSettings }/> : null }
               
               { guestList.length === 0 ? "No guests in list": "" }
               { listType === "Wedding party" ? <WeddingParty wedding={ wedding } onChangeGuests={ onChangeGuests } setGuestList={ setGuestList } guestList={ guestList } guestFilter={ guestFilter } guestSorted={ guestSorted } guestSortedBy={ guestSortedBy } setRole={ setRole } bridalParty={ bridalParty }/> : "" }

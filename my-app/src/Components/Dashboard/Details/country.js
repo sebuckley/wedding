@@ -180,13 +180,13 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
 
     const handleCountryChange = (e) => {
 
-        handleChange(e);
+        
         let sizeSystem = countrySizePreferences[e.target.options[e.target.selectedIndex].text]?.system || "UK"; // Default to UK if not found
         setSelectedSystem(sizeSystem); // Set the selected system in state
         // Set the selected country name
         setSelectedCountryName(e.target.options[e.target.selectedIndex].text); // Get the text of the selected option
         setSelectedCountry(e.target.value); // Set country to selected option's text
-
+        handleChange([e, { target: { name: "sizeSystem", value: sizeSystem, className: "weddingDetails" } }]);
         setState(state + 1); // Trigger re-render
 
         // Ensure handleChange is called for sizeSystem when country changes

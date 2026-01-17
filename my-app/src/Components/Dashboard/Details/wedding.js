@@ -4,6 +4,7 @@ import WeddingStyleDropdown from "./weddingStyle";
 import SizePreferenceList from "./country";
 import CurrencySelector from "./currency"; 
 import currencyList from "./currencyList";
+import { wedding } from '../../PublicSite/Components/Data/data';
 
 
 export default function WeddingPlans(props){
@@ -32,6 +33,7 @@ export default function WeddingPlans(props){
     let mainColor;
     let accentColor;
     let weddingStyle;
+    let weddingStyleDescription;
     let religiousType;
     let maxGuests;
     let currency;
@@ -51,6 +53,7 @@ export default function WeddingPlans(props){
         mainColor = details?.mainColor || "";
         accentColor = details?.mainColor || "";
         weddingStyle = details?.weddingStyle || "";
+        weddingStyleDescription = details?.styleDescription || "";
         religiousType = details?.religiousType || "";
         maxGuests = details?.maxGuests  || "";
         currency = typeof details?.currency === "undefined" ? "" : details?.currency;
@@ -88,6 +91,11 @@ export default function WeddingPlans(props){
 
         let item = document.getElementsByClassName("dateChange");
         item[0].type = 'datetime-local';
+        if (item[0].value === "") {
+            const date = new Date();
+            date.setHours(13, 0);
+            item[0].value = date.toISOString().slice(0, 16);
+        }
         item[0].showPicker();
 
     }
@@ -444,13 +452,8 @@ export default function WeddingPlans(props){
             </div>
 
             <SizePreferenceList getColor={ getColor } handleChange={ handleChange } sizeSystem={ sizeSystem } country={ country } initialEmptyCheck={ initialEmptyCheck } countryEmpty={ countryEmpty } checkEmpty={ checkEmpty }/>
-
-            
-                                                      
-                                                      
-                                                      
-             
-            <WeddingStyleDropdown handleChange={ handleChange } getColor={ getColor } weddingStyle={ weddingStyle } religiousType={ religiousType } initialEmptyCheck={ initialEmptyCheck } styleEmpty={ styleEmpty }/>
+ 
+            <WeddingStyleDropdown handleChange={ handleChange } getColor={ getColor } weddingStyle={ weddingStyle } weddingStyleDescription={ weddingStyleDescription } religiousType={ religiousType } initialEmptyCheck={ initialEmptyCheck } styleEmpty={ styleEmpty }/>
 
             <WeddingColorSelector getColor={ getColor } mainColor={ mainColor } accentColor={ accentColor } handleChange={ handleChange } initialEmptyCheck={ initialEmptyCheck } colorEmpty={ colorEmpty }/>
 

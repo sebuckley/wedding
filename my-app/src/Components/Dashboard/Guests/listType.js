@@ -6,11 +6,17 @@ export default function ListType(props){
 
     const setListType = props.setListType;
     const listType = props.listType;
+    const settings = props.settings;
+    const setSettings = props.setSettings;  
 
     const onClick = (e) => {
 
         e.preventDefault();
         setListType(e.target.innerText);
+        const newSettings = { ...settings };
+        newSettings["guestList"].filter.listType = e.target.innerText;
+        setSettings(newSettings);
+        sessionStorage.setItem("settings", JSON.stringify(newSettings));
 
         const filterButtons = document.getElementsByClassName('listSelectButton');
 

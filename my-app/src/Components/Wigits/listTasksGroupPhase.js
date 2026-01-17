@@ -7,7 +7,7 @@ import { splitByCapitalNums } from "./dataFunctions";
 import TaskRow from "./taskRow";
 
 
-const ListTasks = (props) => {
+const ListTasksGroupPhase = (props) => {
 
   // Destructure props for easier access
   const taskList = props.taskList;
@@ -18,7 +18,6 @@ const ListTasks = (props) => {
   const onChangeDate = props.onChangeDate;
   const taskFiltered = props.taskFiltered;
   const [taskListUpdated, setThisListUpdated] = useState(0);
-  
 
   const sortList = (array, sortBy="taskName", type="asc") => {
 
@@ -117,7 +116,21 @@ const ListTasks = (props) => {
 
   }
 
-  const generateList = (dataList) => {
+  const weddingTaskPhases = [
+
+  "12+ Months",
+  "9–12 Months",
+  "6–9 Months",
+  "3–6 Months",
+  "1–3 Months",
+  "Final Month",
+  "Wedding Week",
+  "Wedding Day",
+  "Post-Wedding",
+
+] ;
+
+  const generateList = (dataList, phase) => {
 
     let itemList = sortList(dataList.list, taskSortedBy, taskSorted);
 
@@ -131,24 +144,24 @@ const ListTasks = (props) => {
       let taskID;
       let updated;
       let supplierID
+      let taskGroup;
 
       taskName = value.taskName;
       taskNameSplit = splitByCapitalNums(taskName);
       taskID = value.taskID;
       state = value.state.trim();
       activity = value.activity.trim();
+      taskGroup = value.phase;
       updated = value.updated;
       toDoDate = value.toDoDate;
       supplierID = value.supplierID;
 
 
-
-
-      if(taskFiltered === "All"){
+      if(taskFiltered === "All" && taskGroup === phase){
 
           return(
 
-             <TaskRow 
+            <TaskRow 
 
                 taskID={ taskID }
                 taskName={ taskName }
@@ -162,7 +175,8 @@ const ListTasks = (props) => {
                 supplierID={ supplierID }
                 taskListConfirmed ={ taskListConfirmed }
                 
-              ></TaskRow>
+            ></TaskRow>
+
           )
 
       }else{
@@ -180,24 +194,24 @@ const ListTasks = (props) => {
 
         }
 
-        if(filterType === "state"){
+        if(filterType === "state" && taskGroup === phase){
 
           if(taskFiltered === value.state || toDo){
 
             return(
 
              <TaskRow 
-             
-              taskID={ taskID }
-              taskName={ taskName }
-              state={ state }
-              activity={ activity }
-              toDoDate={ toDoDate }
-              deleteTaskItem={ deleteTaskItem }
-              onChangeDate={ onChangeDate }
-              linkSuppliers={ linkSuppliers}
-              getSupplierLink= { getSupplierLink }
-              taskListConfirmed ={ taskListConfirmed }
+                
+                taskID={ taskID }
+                taskName={ taskName }
+                state={ state }
+                activity={ activity }
+                toDoDate={ toDoDate }
+                deleteTaskItem={ deleteTaskItem }
+                onChangeDate={ onChangeDate }
+                linkSuppliers={ linkSuppliers}
+                getSupplierLink= { getSupplierLink }
+                taskListConfirmed ={ taskListConfirmed }
 
               ></TaskRow>
 
@@ -207,22 +221,22 @@ const ListTasks = (props) => {
 
         }else{
 
-          if(taskFiltered === value.activity){
+          if(taskFiltered === value.activity && taskGroup === phase){
 
             return(
 
-             <TaskRow 
+             <TaskRow
              
-              taskID={ taskID }
-              taskName={ taskName }
-              state={ state }
-              activity={ activity }
-              toDoDate={ toDoDate }
-              deleteTaskItem={ deleteTaskItem }
-              onChangeDate={ onChangeDate }
-              linkSuppliers={ linkSuppliers}
-              getSupplierLink= { getSupplierLink }
-              taskListConfirmed ={ taskListConfirmed }
+                taskID={ taskID }
+                taskName={ taskName }
+                state={ state }
+                activity={ activity }
+                toDoDate={ toDoDate }
+                deleteTaskItem={ deleteTaskItem }
+                onChangeDate={ onChangeDate }
+                linkSuppliers={ linkSuppliers}
+                getSupplierLink= { getSupplierLink }
+                taskListConfirmed ={ taskListConfirmed }
 
               ></TaskRow>
 
@@ -239,13 +253,43 @@ const ListTasks = (props) => {
     return itemList;
 
   }
+
+  const generateGroups = () => {
+
+    const list = weddingTaskPhases.map((item) => {
+
+        const title = <h3>{ item }</h3>
+        const group = generateList(taskList, item);
+
+        return(
+
+                <div key={item}>
+                    {title}
+                    {group}
+                </div>
+                
+        )
+
+    })
+
+    return list;
+
+  }
    
   return (
 
-    <div> { generateList(taskList) } </div>
+    <div> 
+        
+        { 
+        
+           generateGroups()
+
+        }
+    
+    </div>
 
   )
 
 };
 
-export default ListTasks;
+export default ListTasksGroupPhase;

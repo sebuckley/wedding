@@ -102,6 +102,7 @@ export default function WeddingStyleDropdown(props) {
   const handleChange = props.handleChange;
   const weddingStyleSelected = props.weddingStyle || '';
   const religousTypeSelected = props.religiousType || '';
+  const weddingStyleDescription = props.weddingStyleDescription || '';
   const getColor = props.getColor;
   const styleEmpty = props.styleEmpty;
   const initialEmptyCheck = props.initialEmptyCheck;
@@ -110,18 +111,23 @@ export default function WeddingStyleDropdown(props) {
   const getSelectedDescription = (item) => {
 
     for (const styles of Object.values(weddingStyles)) {
+
       const found = styles.find(styleObj => styleObj.value === item);
       if (found) return found.description;
+
     }
+
     return '';
 
   };
 
-    // Find the description for the submitted religious type value
-    const getSelectedDescriptionReligeon = (value) => {
+  // Find the description for the submitted religious type value
+  const getSelectedDescriptionReligeon = (value) => {
+
       const found = religiousCeremonyTypes.find(type => type.value === value);
       return found ? found.description : '';
-    };
+
+  };
 
 
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -129,25 +135,37 @@ export default function WeddingStyleDropdown(props) {
   const [religiousType, setReligiousType] = useState(religousTypeSelected ||'');
   const [description, setDescription] = useState(getSelectedDescription(selectedStyle));
 
+  if(description !== weddingStyleDescription && weddingStyleDescription !== "" ){
+
+    setDescription(weddingStyleDescription);
+
+  }
 
   const onStyleChange = (e) => {
 
     const selected = e.target.value;
-    const category = e.target.options[e.target.selectedIndex].parentNode.label
-    
+    const category = e.target.options[e.target.selectedIndex].parentNode.label;
+        
     setSelectedCategory(category);
     setSelectedStyle(selected);
     const description = getSelectedDescription(selected);
-    console.log(description)
     setDescription(description);
-    onDescriptionChange({ target: { name: 'styleDescription', value: description, className: "description weddingDetails" } })
-    handleChange(e);
-    handleChange({ target: { name: 'weddingStyleCategory', value: category, className: e.target.className } })
 
     if (selected !== 'Religious Ceremony') {
 
       setReligiousType('');
+      handleChange([{ target: { name: 'weddingStyleCategory', value: category, className: 'style weddingDetails' } }, 
+                    { target: { name: 'weddingStyle', value: selected, className: 'style weddingDetails' } }, 
+                    { target: { name: 'styleDescription', value: description, className: 'description weddingDetails' } },
+                    { target: { name: 'religiousType', value: 'Humanist', className: 'style weddingDetails' } }]);
 
+    }else{
+
+      handleChange([{ target: { name: 'weddingStyleCategory', value: category, className: 'style weddingDetails' } }, 
+                    { target: { name: 'weddingStyle', value: selected, className: 'style weddingDetails' } }, 
+                    { target: { name: 'styleDescription', value: description, className: 'description weddingDetails' } },
+                    { target: { name: 'religiousType', value: '', className: 'style weddingDetails' } }]);
+                    
     }
 
   };
@@ -157,15 +175,20 @@ export default function WeddingStyleDropdown(props) {
     const selected = e.target.value;
     setReligiousType(selected);
     const description = getSelectedDescriptionReligeon(selected);
-    onDescriptionChange({ target: { name: 'styleDescription', value: description, className: "description weddingDetails" } })
-    handleChange(e);
+    onDescriptionChange({ target: { name: 'styleDescription', value: description, className: "description weddingDetails" } },true)
+    handleChange([e,{ target: { name: 'styleDescription', value: description, className: "description weddingDetails" } }]);
 
   };
 
-  const onDescriptionChange = (e) => {
+  const onDescriptionChange = (e, updated=false) => {
 
     setDescription(e.target.value);
-    handleChange(e);
+
+    if(!updated){
+
+      handleChange(e);
+
+    }
 
   }
 

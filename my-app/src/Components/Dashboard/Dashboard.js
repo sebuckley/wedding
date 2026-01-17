@@ -74,23 +74,38 @@ export default function Dashboard(props){
               <tbody>
             
               <tr>
-                <td>Budget</td>
+                <td>Budget <i class="fa-solid fa-circle-question hoverText" title="The total budget for the wedding."></i></td>
+                <td>&nbsp;</td>
                 <td> { currencyList[currency].symbol + " " +  parseFloat(budget).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</td>
               </tr>
               <tr>
-              <td>Booked</td>
+                <td>Booked Total Amount <i class="fa-solid fa-circle-question hoverText" title="The total cost of all booked suppliers."></i></td>
+                <td>&nbsp;</td>
                 <td> { currencyList[currency].symbol + " " +  parseFloat(supplierData.totalCost).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')  }</td>
               </tr>
               <tr>
-              <td>Quoted</td>
+                <td>Paid Amount <i class="fa-solid fa-circle-question hoverText" title="The total amount paid to suppliers."></i></td>
+                <td>&nbsp;</td>
+                <td> { currencyList[currency].symbol + " " + parseFloat(supplierData.totalPaid).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</td>
+              </tr>
+              <tr>
+                <td>Outstanding payments <i class="fa-solid fa-circle-question hoverText" title="The total amount still owed to suppliers booked."></i></td>
+                <td>&nbsp;</td>
+                <td> { currencyList[currency].symbol + " " + parseFloat(supplierData.totalCost - supplierData.totalPaid).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</td>
+              </tr>
+              <tr>
+                <td>Remaining Budget <i class="fa-solid fa-circle-question hoverText" title="The remaining budget after all booked suppliers have been paid."></i></td>
+                <td>&nbsp;</td>
+                <td> { currencyList[currency].symbol + " " + parseFloat(remaining).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</td>
+              </tr>
+              <tr>
+                <td>Quoted Amount <i class="fa-solid fa-circle-question hoverText" title="The total quoted amount from suppliers (highest amount from each category)."></i></td>
+                <td>&nbsp;</td>
                 <td> { currencyList[currency].symbol + " " +  parseFloat(supplierData.totalQuote).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')  }</td>
               </tr>
               <tr>
-               <td>Remaining</td>
-                <td> { currencyList[currency].symbol + " " + parseFloat(remaining).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</td>
-              </tr>
-               <tr>
-               <td>Remaining (incl Quote)</td>
+                <td>Remaining Budget (incl Quote) <i class="fa-solid fa-circle-question hoverText" title="The remaining budget after all booked suppliers have been paid, including quoted amounts."></i></td>
+                <td>&nbsp;</td>
                 <td>  { currencyList[currency].symbol + " " + parseFloat(remainingQuote).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') }</td>
               </tr>
 
@@ -145,16 +160,19 @@ export default function Dashboard(props){
               { isEmpty(taskData) ? "" : <ValueBox title={ "Booked" } value={ taskData.selected } href={"/managemywedding/tasks"}/> }
 
             </div>
+
+            <h1>Supplier data</h1>
+
+            <div>
+
+              { isEmpty(supplierData) ? "Loading..." : <ValueBox title={ "Shortlisted" } value={ supplierData.shortlisted } href={"/managemywedding/suppliers"}/> }
+              { isEmpty(supplierData) ? "" : <ValueBox title={ "Enquiry made" } value={ supplierData.enquiryMade } href={"/managemywedding/suppliers"}/> }
+              { isEmpty(supplierData) ? "" : <ValueBox title={ "Quote received" } value={ supplierData.quoteReceived } href={"/managemywedding/suppliers"}/> }
+              { isEmpty(supplierData) ? "" : <ValueBox title={ "Booked" } value={ supplierData.booked } href={"/managemywedding/suppliers"}/> }
+           
+            </div>
          
           </div>
-
-          {/* <div id="links">
-
-            <Link title={ "Details" } href={ "managemywedding/details/" } />
-            <Link title={ "Guest List" } href={ "managemywedding/guests/" } />
-            <Link title={ "Tasks" } href={ "managemywedding/tasks/" } />
-
-          </div> */}
 
         </div>
 

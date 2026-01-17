@@ -12,7 +12,7 @@
 
 h1, h2, h3 {
 
-    padding: 10px;
+
 
 }
 
@@ -21,6 +21,38 @@ h1, h2, h3 {
     display: flex;
     flex-direction: column !important;
     align-items: center;
+
+}
+
+.flexRow {
+
+    display: flex;        /* instead of block */
+    flex-direction: row;  /* children in a row */
+    align-items: center;  /* vertical alignment */
+    width: auto !important;
+    margin: 5px;
+    height: 100px;
+    
+
+}
+
+.flexRow > span {
+
+    margin: 5px;
+}
+
+.flexRow > div {
+
+    margin: 5px;
+    width: auto !important;
+    display: block;
+    height: 100%;
+
+}
+
+#addSupplierPayment{
+
+    width:100%;
 
 }
 
@@ -74,7 +106,13 @@ form {
 
 .flexColorSelect > div {
 
-    margin-top: 10px
+    margin-top: 10px;
+}
+
+.flexColorSelect select {
+    padding: 5px;
+    margin: 5px;
+    border-radius: 4px;
 }
 
 #dashboard{
@@ -99,6 +137,71 @@ form {
     margin: 10px;
  
 
+}
+
+.labelTag{
+
+    font-weight:400;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 6px;
+    cursor: pointer;
+    border-radius: 5px;
+
+}
+
+.balance {
+
+    background-color: var(--grey);
+   
+}
+
+.booked {
+
+    background-color: var(--green);
+    color: white;
+
+}
+
+.shortlisted {
+
+    background-color: var(--color-1);
+    color: white;
+
+}
+
+.enquiry {
+
+    background-color: var(--color-2);
+    color: white;
+
+}
+
+.ruledout {
+
+    background-color: var(--red);
+    color: white;
+
+}
+
+.quoted {
+
+    background-color: var(--color-3);
+    color: black;
+
+}
+
+.empty {
+
+    background-color: var(--red);
+    color: white;
+
+}
+
+.hoverText {
+    cursor: help;
+    color: var(--grey)
 }
 
 .dashboardBox {
@@ -449,7 +552,7 @@ textarea{
     position: absolute;
     color: var(--accent);
     padding: 10px;
-    margin-top: 26px;
+    margin-top: 18px;
     margin-bottom: 13px;
     font-size: 24px;
     cursor: pointer;
@@ -457,7 +560,6 @@ textarea{
 }
 
 .iconHeader2 {
-
 
     color: var(--accent);
     padding: 10px;
@@ -1074,12 +1176,20 @@ select::picker-icon {
 
 }
 
-option {
+select option {
 
+    background-color: white;
     color: black;
-    padding: 10px;
+    padding: 10px 12px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    box-sizing: border-box !important;
+    line-height: 1.6 !important;
+    text-indent: 6px !important;
 
 }
+
+
 
 .state {
 
@@ -1452,6 +1562,23 @@ option {
     margin: 10px;
 }
 
+#paymentHistory {
+
+    width: 100%;
+
+}
+
+.payment {
+
+    display: flex;
+    align-items: center;
+
+}
+
+.payment > div {
+
+    margin: 10px;
+}
 
 
 @media screen and (max-width: 1150px) {
@@ -1464,6 +1591,7 @@ option {
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100%;
 
     }
 
@@ -1540,7 +1668,7 @@ option {
     
     }
 
-    .detailsForm {
+    #detailsForm {
 
         width: 100%;
 

@@ -15,14 +15,16 @@ export default function AddSuppliers(props) {
     const user = props.user;
     const setDisplay = props.setDisplay;
     const display = props.display;
-    const setType = props.setType;
+    const taskName = props.taskName;
+    const taskID = props.taskID;
     const location = props.location;
-
-
+    const getSearchText = props.getSearchText;
+   
     let object = {
 
+        taskID: taskID ,
         name: "",
-        type: setType,
+        type: "",
         email: "",
         phone: "",
         website: "",
@@ -30,9 +32,16 @@ export default function AddSuppliers(props) {
 
     };
 
-    const [formData, setFormData] = useState(object);
- 
+    const [formData, setFormData] = useState("");
 
+    if(formData === ""){
+
+        setFormData(object);
+
+    }
+
+    console.log(formData.taskID)
+ 
     const getData = () => {
 
         const getData = JSON.parse(localStorage.getItem("supplierData"));
@@ -72,28 +81,27 @@ export default function AddSuppliers(props) {
 
     };
 
-   async function checkWebsiteURL(url) {
-
-        let responseVal;
+    async function checkWebsiteURL(url) {
 
         try {
-            
-            const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' }); // Use HEAD to minimize data transfer
 
-            if (response.ok) {
-                console.log(`Website is valid: ${response.status} ${response.statusText}`);
-                responseVal = true;
-            } else {
-                console.log(`Website returned an error: ${response} ${response.statusText}`);
-                responseVal = true;
-            }
+            // Add protocol if missing
+            const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+            
+            await fetch(fullUrl, { 
+                method: 'GET', 
+                mode: 'no-cors'
+            });
+
+            // With no-cors mode, we can't check response.ok, so any successful fetch is valid
+            return true;
 
         } catch (error) {
-            console.error(`Failed to fetch the website: ${error.message}`);
-            responseVal = false;
-        }
 
-        return responseVal;
+            console.error(`Failed to fetch the website: ${error.message}`);
+            return false;
+            
+        }
 
     }
 
@@ -150,7 +158,6 @@ export default function AddSuppliers(props) {
         }
 
     }
-
 
     const onInput = (e) => {
 
@@ -222,7 +229,7 @@ export default function AddSuppliers(props) {
         const newSupplier = {
 
             name: formData.name, 
-            type: formData.type,
+            taskTypeID: formData.taskID,
             address: "", 
             contactDetails:{ 
                 email: formData.email, 
@@ -238,18 +245,25 @@ export default function AddSuppliers(props) {
 
         };
 
-        supplierList.list.push(newSupplier);
+        // Create a new supplier list immutably to avoid mutating React state directly
+        let newList = { ...supplierList, list: [ ...supplierList.list, newSupplier ] };
+        newList.length = newList.list.length;
 
-        setSupplierList(supplierList);
-        saveSupplierList(supplierList);
+        // Update state and persist
+        setSupplierList(newList);
+        saveSupplierList(newList);
         setStateChange(stateChange + 1);
 
-       let newTaskList = updateSupplierTask(supplierList, newSupplier["UUID"], "Shortlisted", taskList, newSupplier, user);
+       // Update task list (this may mutate the supplier list object internally)
+       let newTaskList = updateSupplierTask(newList, newSupplier["UUID"], "Shortlisted", taskList, newSupplier, user);
        setTaskList(newTaskList);
 
-        clearForm();
-        setDisplay(false);
+       // Ensure supplier state reflects any mutations made by updateSupplierTask
+       setSupplierList({ ...newList });
+       saveSupplierList(newList);
 
+       clearForm();
+       setDisplay(false);
 
     };
 
@@ -257,7 +271,7 @@ export default function AddSuppliers(props) {
 
         let color;
 
-        if(formData.type === ""){
+        if(formData.taskID === ""){
 
             color = { color: "var(--grey)"}
 
@@ -273,14 +287,21 @@ export default function AddSuppliers(props) {
 
     const toggleDisplay = () => setDisplay(prev => !prev);
 
-    const getSearchText = (data) => {
+    const removeSpaces = (e) => {
 
-        let searchName = splitByCapitalNums(data).split(" ").join("+");
-        searchName = searchName + "+" + location;
+        let value = e.target.value;
+        console.log(value);
+        value = value.split(" ").join("");
 
-        return searchName;
+         // Update the state with the new value
+        setFormData(prevData => ({
+            ...prevData,
+            phone: value // Assuming you're targeting the phone field
+        }));
 
-    }
+        e.target.value = value;
+    
+    };
 
     return (
 
@@ -289,7 +310,7 @@ export default function AddSuppliers(props) {
             <i onClick={toggleDisplay} id="addSupplierIcon" className={`fa ${display ? "fa-circle-minus" : "fa-circle-plus"} iconHeader`}></i>
             <h1 onClick={toggleDisplay} id="addSupplierTitle">Add Supplier</h1>
 
-            { formData.type !== "" ? <a href={ "https://www.google.com/search?q=" + getSearchText( formData.type) } target="_blank" >Search for { splitByCapitalNums(formData.type) }</a> : "" }
+            { taskName !== "" && display ? <a href={ "https://www.google.com/search?q=" + getSearchText(taskName) } target="_blank" >Search for { taskName }</a> : "" }
 
             <form id="supplierForm" style={{ display: display ? "" : "none" }}>
                 <div className="row two">
@@ -303,11 +324,16 @@ export default function AddSuppliers(props) {
                 <div className="row">
                     <div className="inputGroup col-12">
                         <i className="fa-solid fa-circle-info icon"></i>
-                        <select className="guestType" name="type" value={formData.type} onChange={onInput} style={ getColor() }>
+                        
+                        <select className="guestType" name="taskID" value={ formData.taskID } onChange={ onInput } style={ getColor() }>
                             <option value="" hidden>Supplier type... (required)</option>
-                            {taskList.list.map((s, i) => (
-                                <option key={i} value={s.taskName}>{splitByCapitalNums(s.taskName)}</option>
-                            ))}
+                            { 
+                            
+                                taskList.list.map((s, i) => (
+                                    <option key={i} value={s.taskID}>{ s.taskName }</option>
+                                ))
+                            
+                            }
                         </select>
                     </div>
                 </div>
@@ -323,7 +349,10 @@ export default function AddSuppliers(props) {
                 <div className="row">
                     <div className="inputGroup col-12">
                         <i className="fa-solid fa-phone icon"></i>
-                        <input type="text" className="inputBox checkIcon" name="phone" placeholder="phone" value={formData.phone} onChange={onInput} />
+                        <input type="text" className="inputBox checkIcon" name="phone" placeholder="phone" value={formData.phone} onChange={(e) => {
+                                                                                                                                    removeSpaces(e); // Call removeSpaces on change
+                                                                                                                                    onInput(e); // Call your existing onInput function
+                                                                                                                                }} />
                         <i className="fa-solid fa-circle-minus icon2 phoneCheck"></i>
                     </div>
                 </div>

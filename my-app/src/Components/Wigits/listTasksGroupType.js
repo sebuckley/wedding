@@ -7,7 +7,7 @@ import { splitByCapitalNums } from "./dataFunctions";
 import TaskRow from "./taskRow";
 
 
-const ListTasks = (props) => {
+const ListTasksGroupType = (props) => {
 
   // Destructure props for easier access
   const taskList = props.taskList;
@@ -18,7 +18,6 @@ const ListTasks = (props) => {
   const onChangeDate = props.onChangeDate;
   const taskFiltered = props.taskFiltered;
   const [taskListUpdated, setThisListUpdated] = useState(0);
-  
 
   const sortList = (array, sortBy="taskName", type="asc") => {
 
@@ -117,7 +116,27 @@ const ListTasks = (props) => {
 
   }
 
-  const generateList = (dataList) => {
+  const weddingTaskGroups = [
+
+    "Core Planning",
+    "Venues",
+    "Ceremony",
+    "Media",
+    "Food & Drink",
+    "Attire",
+    "Beauty",
+    "Entertainment",
+    "Decor",
+    "Stationery",
+    "Transport",
+    "Accommodation",
+    "Logistics",
+    "Events",
+    "Post-Wedding",
+
+  ];
+
+  const generateList = (dataList, group) => {
 
     let itemList = sortList(dataList.list, taskSortedBy, taskSorted);
 
@@ -131,24 +150,24 @@ const ListTasks = (props) => {
       let taskID;
       let updated;
       let supplierID
+      let taskGroup;
 
       taskName = value.taskName;
       taskNameSplit = splitByCapitalNums(taskName);
       taskID = value.taskID;
       state = value.state.trim();
       activity = value.activity.trim();
+      taskGroup = value.group;
       updated = value.updated;
       toDoDate = value.toDoDate;
       supplierID = value.supplierID;
 
 
-
-
-      if(taskFiltered === "All"){
+      if(taskFiltered === "All" && taskGroup === group){
 
           return(
 
-             <TaskRow 
+            <TaskRow 
 
                 taskID={ taskID }
                 taskName={ taskName }
@@ -162,7 +181,7 @@ const ListTasks = (props) => {
                 supplierID={ supplierID }
                 taskListConfirmed ={ taskListConfirmed }
                 
-              ></TaskRow>
+            ></TaskRow>
           )
 
       }else{
@@ -180,13 +199,13 @@ const ListTasks = (props) => {
 
         }
 
-        if(filterType === "state"){
+        if(filterType === "state" && taskGroup === group){
 
           if(taskFiltered === value.state || toDo){
 
             return(
 
-             <TaskRow 
+            <TaskRow 
              
               taskID={ taskID }
               taskName={ taskName }
@@ -199,7 +218,7 @@ const ListTasks = (props) => {
               getSupplierLink= { getSupplierLink }
               taskListConfirmed ={ taskListConfirmed }
 
-              ></TaskRow>
+            ></TaskRow>
 
             )
 
@@ -207,11 +226,11 @@ const ListTasks = (props) => {
 
         }else{
 
-          if(taskFiltered === value.activity){
+          if(taskFiltered === value.activity && taskGroup === group){
 
             return(
 
-             <TaskRow 
+            <TaskRow 
              
               taskID={ taskID }
               taskName={ taskName }
@@ -224,7 +243,7 @@ const ListTasks = (props) => {
               getSupplierLink= { getSupplierLink }
               taskListConfirmed ={ taskListConfirmed }
 
-              ></TaskRow>
+            ></TaskRow>
 
             )
 
@@ -239,13 +258,43 @@ const ListTasks = (props) => {
     return itemList;
 
   }
+
+  const generateGroups = () => {
+
+    const list = weddingTaskGroups.map((item) => {
+
+        const title = <h3>{ item }</h3>
+        const group = generateList(taskList, item);
+
+        return(
+
+                <div key={item}>
+                    {title}
+                    {group}
+                </div>
+                
+        )
+
+    })
+
+    return list;
+
+  }
    
   return (
 
-    <div> { generateList(taskList) } </div>
+    <div> 
+        
+        { 
+        
+           generateGroups()
+
+        }
+    
+    </div>
 
   )
 
 };
 
-export default ListTasks;
+export default ListTasksGroupType;

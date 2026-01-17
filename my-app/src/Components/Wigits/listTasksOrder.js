@@ -20,52 +20,23 @@ const ListTasks = (props) => {
   const [taskListUpdated, setThisListUpdated] = useState(0);
   
 
-  const sortList = (array, sortBy="taskName", type="asc") => {
+  const sortList = (array, type="asc") => {
 
-      if(sortBy === "taskName"){
+    if(type === "asc"){
 
-        if(type === "asc"){
+      array.sort((a, b) => {
 
-          array.sort((a, b) => {
+        return a.order - b.order;
+      
+      }); 
 
-            return a.taskName.localeCompare(b.taskName);
-          
-          }); 
+    }else{
 
-        }else{
+      array.sort((a, b) => b.order - a.order); 
 
-          array.sort((a, b) => b.taskName.localeCompare(a.taskName)); 
+    }
 
-        }
-
-      }else if(sortBy === "date"){
-
-        if(type === "asc"){
-
-          array.sort((a, b) => new Date(a.updated) - new Date(b.updated)); 
-
-        }else{
-
-          array.sort((a, b) =>  new Date(b.updated) - new Date(a.updated)); 
-
-        }
-
-
-      }else if(sortBy === "type"){
-
-        if(type === "asc"){
-
-          array.sort((a, b) => a.state.localeCompare(b.state)); 
-
-        }else{
-
-          array.sort((a, b) => b.state.localeCompare(a.state)); 
-
-        }
-
-      }
-
-      return array;
+    return array;
 
   }
 
@@ -119,7 +90,7 @@ const ListTasks = (props) => {
 
   const generateList = (dataList) => {
 
-    let itemList = sortList(dataList.list, taskSortedBy, taskSorted);
+    let itemList = sortList(dataList.list, taskSorted);
 
     itemList = itemList.map((value) => {
 

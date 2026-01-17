@@ -1,13 +1,14 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { titleCase, createClass, uuidv4, isEmpty } from './Components/Wigits/dataFunctions';
+import { titleCase, createClass, uuidv4, isEmpty, getSettings, saveSettings } from './Components/Wigits/dataFunctions';
 import { getGuestList } from './Components/Wigits/dataFunctions-guestList';
 import { getTaskList, saveTaskList } from './Components/Wigits/dataFunctions-taskList';
 import { getBridalParty, saveBridalParty } from './Components/Wigits/dataFunctions-bridalParty';
 import { getSupplierList, saveSupplierList } from './Components/Wigits/dataFunctions-suppliers';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../src/Components/Login/firebaseConfig'
+import { auth } from '../src/Components/Login/firebaseConfig';
+import baseSettings from './Components/Wigits/settings';
 import Header from './Components/Wigits/Header/header';
 import Loading from './Components/PublicSite/Components/loading/loading';
 
@@ -21,8 +22,14 @@ import Supplier from './Components/Dashboard/Suppliers/Supplier';
 import PublicSite from './Components/PublicSite/PublicSite';
 import RSVPForm from './Components/PublicSite/rsvpform';
 import PrivacyPolicy from './Components/Wigits/Privacy-Policy/privacy-policy';
-import mainTaskData from './Components/App/mainData';
+import { mainTaskData, weddingTasks } from './Components/App/mainData';
 import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVenue, faqs as questionsOriginal , weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
+
+const supplierStatuses = ["To-do", "Ruled out","Shortlisted", "Enquiry made","Quote received", "Booked"];
+
+
+
+export { supplierStatuses };
 
 function App() {
 
@@ -97,8 +104,8 @@ function App() {
   const [wedding, setWedding] = useState({});
   const [faqs, setFaqs] = useState({});
   const [faqState, setFaqState] = useState(false);
+  const [settings, setSettings] = useState(sessionStorage.getItem("settings") ? JSON.parse(sessionStorage.getItem("settings")) : localStorage.getItem("settings") ? JSON.parse(localStorage.getItem("settings")) : {});
 
-  const supplierStatuses = ["Ruled out","Shortlisted", "Enquiry made", "Booked"];
 
   useEffect(() => {
 
@@ -158,15 +165,17 @@ function App() {
 
     let newList = [];
 
-    for(let i = 0; i < mainTaskData.data.length; i ++){
+    for(let i = 0; i < weddingTasks.length; i ++){
 
       let newTask = {};
 
-      let taskNanme = createClass(titleCase(mainTaskData.data[i]));
       let uuid = uuidv4();
 
-      newTask["taskName"] = taskNanme;
-      newTask["itemID"] = uuid;
+      newTask["taskName"] = weddingTasks[i].label;
+      newTask["taskID"] = uuid;
+      newTask["group"] = weddingTasks[i].group;
+      newTask["phase"] = weddingTasks[i].phase;
+      newTask["order"] = weddingTasks[i].order;
       newTask["toDoDate"] = "";
       newTask["state"] = "To-do";
       newTask["activity"] = "Not started";
@@ -184,6 +193,7 @@ function App() {
 
       "listID": uuidv4(),
       "list": newList,
+      "listConfirmed": false,
       "listCreated":  new Date()
       
     }
@@ -199,7 +209,6 @@ function App() {
 
   }
 
-
   const checkGuestList = async () => {
 
       if(guestList === "" && guestListChecked === 0){
@@ -208,6 +217,8 @@ function App() {
 
         const checkList = getGuestList();
     
+        //console.log(checkList);
+
         if(checkList !== null){
 
             setGuestList(checkList);
@@ -269,8 +280,6 @@ function App() {
         let allergies = 0;
         let dietList = [];
         let allergiesList = [];
-
-        // console.log(data.length);
 
         for(let i = 0; i < data.length; i++){
 
@@ -351,11 +360,11 @@ function App() {
 
               adults += 1;
 
-            }else if(guestType === "Under 18"){
+            }else if(parseInt(guestType) > 5 && parseInt(guestType) <= 17){
 
               children += 1;
 
-            }else if(guestType === "Under 5"){
+            }else{
 
               infants += 1;
 
@@ -371,7 +380,7 @@ function App() {
 
             if(guestAllergies !== "No allergies" && guestAllergies !==""){
 
-              let dietry = [fullName, allergies, UUID];
+              let dietry = [fullName, guestAllergies, UUID];
               allergies += 1;
               allergiesList.push(dietry);
               
@@ -393,11 +402,11 @@ function App() {
 
                   adults += 1;
 
-                }else if(guestType2 === "Under 18"){
+                }else if(parseInt(guestType2) > 5 && parseInt(guestType2) <= 17){
 
                   children += 1;
 
-                }else if(guestType2 === "Under 5"){
+                }else{
 
                   infants += 1;
 
@@ -535,6 +544,7 @@ function App() {
       let noSuppliers = 0;
       let shortlisted = 0;
       let enquiryMade = 0;
+      let quoteReceived = 0;
       let booked = 0;
       let ruledOut = 0;
 
@@ -554,7 +564,17 @@ function App() {
         let quote = parseInt(data.list[i].quote?.quoteValue) || 0;
         let totalCost = parseInt(data.list[i].payments?.totalCost) || 0;
         let balance = data.list[i].payments?.balance || 0;
-        let totalPaid = totalCost - balance || 0;
+        let totalPaid;
+
+        if(typeof data.list[i].payments?.paymentsMade?.length === "undefined" || data.list[i].payments?.paymentsMade.length === 0){
+
+          totalPaid = 0;
+
+        }else{
+
+          totalPaid = data.list[i].payments?.paymentsMade.reduce((acc, payment) => acc + parseFloat(payment.payment), 0);
+
+        }
 
         if(totalCost !== 0 && state === "Booked"){
 
@@ -580,7 +600,9 @@ function App() {
 
         }
 
-        if(quote !== 0 && state === "Enquiry made"){
+        if(quote !== 0 && state === "Quote received"){
+
+          quoteReceived += 1;
 
           let newObject = {
 
@@ -671,6 +693,7 @@ function App() {
         noSuppliers: noSuppliers,
         shortlisted: shortlisted,
         enquiryMade: enquiryMade,
+        quoteReceived: quoteReceived,
         booked: booked,
         ruledOut: ruledOut,
         totalQuote: parseFloat(totalQuote).toFixed(2),
@@ -685,6 +708,54 @@ function App() {
       setSupplierData(dataObject);
 
     }
+
+  }
+
+  const supplierBooked = (supplierList, taskTypeID, supplierIDBooked) => {
+  
+    let tempSupplierList = { ...supplierList, list: supplierList.list.map((item) => {
+
+      if(item.taskTypeID === taskTypeID && item.UUID.trim() !== supplierIDBooked.trim()){
+
+        return { ...item, status: "Ruled out", updated: new Date(), updatedBy: user.email };
+
+      }
+
+      return item;
+
+    })};
+
+    saveSupplierList(tempSupplierList);
+    setSupplierList(tempSupplierList);
+  
+  }
+
+  const getSettingsData = () => {
+
+      const existingSettings = getSettings();
+
+      if(existingSettings === null || isEmpty(existingSettings)){
+
+        setSettings(baseSettings);
+        saveSettings(baseSettings);
+        sessionStorage.setItem("settings", JSON.stringify(baseSettings));
+
+      }else{
+
+        const getSessionSettings = JSON.parse(sessionStorage.getItem("settings"));
+
+        if(getSessionSettings !== null){
+
+          setSettings(getSessionSettings);
+
+        }else{
+
+          setSettings(existingSettings);
+          sessionStorage.setItem("settings", JSON.stringify(existingSettings));
+
+        }
+
+      }
 
   }
 
@@ -708,7 +779,15 @@ function App() {
 
     }
 
-  }, [getTaskData, getTaskData, getSupplierData, guestList, guestData, taskList, taskData, supplierList, supplierData]);
+    if(isEmpty(settings)){
+
+      getSettingsData();
+
+    }
+
+
+
+  }, [getTaskData, getTaskData, getSupplierData, getSettings, settings, guestList, guestData, taskList, taskData, supplierList, supplierData]);
 
   useEffect(() => {
 
@@ -777,16 +856,15 @@ function App() {
 
           <Route basename="/wedding" path="/">
 
-
             <Route index element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faqs } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
 
             <Route path="managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData } supplierData={ supplierData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
-            <Route path="managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin } faqs={ faqs } setFaqs={ setFaqs }  setFaqState={ setFaqState } faqState={ faqState }/>} />
-            <Route path="managemywedding/guests" element={<Guests loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
-            <Route path="managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
-            <Route path="managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
-            <Route path="managemywedding/suppliers" element={<Suppliers loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }/>} />
-            <Route path="managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }  getSupplierData={ getSupplierData}/>} />
+            <Route path="managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin } faqs={ faqs } setFaqs={ setFaqs }  setFaqState={ setFaqState } faqState={ faqState } settings={ settings } setSettings={ setSettings } />} />
+            <Route path="managemywedding/guests" element={<Guests loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } settings={ settings } setSettings={ setSettings }/>} />
+            <Route path="managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } getGuestData={ getGuestData}/>} />
+            <Route path="managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin } settings={ settings } setSettings={ setSettings }/>} />
+            <Route path="managemywedding/suppliers" element={<Suppliers loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses } supplierBooked={ supplierBooked } settings={ settings } setSettings={ setSettings }/>} />
+            <Route path="managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }  getSupplierData={ getSupplierData} supplierBooked={ supplierBooked }/>} />
             <Route path="wedding/rsvp" element={<RSVPForm headerOn={true} bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue}/>} />
             <Route path="wedding/privacy-policy" element={<PrivacyPolicy headerOn={true} bridalParty={bridalParty} />} />
 

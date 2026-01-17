@@ -6,18 +6,19 @@ export default function SupplierFilter(props){
 
     const setSupplierFilter = props.setSupplierFilter;
     const filterName = props.filterName;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
 
     const onClick = (e) => {
 
         let value = e.target.innerText.trim();
 
-        console.log(value);
+        const copySettings = { ...settings };
 
-        if(value === "All states"){
-
-            value = "All";
-
-        }
+        console.log("copySettings", copySettings)
+        copySettings["suppliers"].filter.state = value;
+        setSettings(copySettings);
+        sessionStorage.setItem("settings", JSON.stringify(copySettings));
 
         e.preventDefault();
         setSupplierFilter(value);
@@ -56,10 +57,11 @@ export default function SupplierFilter(props){
 
         <div className="filterButtons"> 
 
-            <button className={ getActive("All", filterName) } onClick={ onClick }>All states</button>
+            <button className={ getActive("All", filterName) } onClick={ onClick }>All</button>
             <button className={ getActive("Ruled Out", filterName) } onClick={ onClick }>Ruled out</button>
             <button className={ getActive("Shortlisted", filterName) } onClick={ onClick }>Shortlisted</button>
             <button className={ getActive("Enquiry made", filterName) } onClick={ onClick }>Enquiry made</button>
+            <button className={ getActive("Quote received", filterName) } onClick={ onClick }>Quote received</button>
             <button className={ getActive("Booked", filterName) } onClick={ onClick }>Booked</button>
 
         </div>

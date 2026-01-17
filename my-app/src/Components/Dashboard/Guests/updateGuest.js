@@ -8,6 +8,8 @@ import { roles } from '../../App/mainData';
 import WeddingClothingForm from './clothing';
 import GenderDropdown from '../../Wigits/genderDropdown';
 import { weddingClothingSizes } from '../../App/wedding_clothing_sizes_schema_with_gender';
+import Email, { checkValidEmail } from '../../Wigits/contact/email';
+import Phone, { checkValidPhone } from '../../Wigits/contact/phone';
 // import { parsePhoneNumberFromString, isPossiblePhoneNumber, isValidPhoneNumber, validatePhoneNumberLength } from 'libphonenumber-js';
 
 export default function UpdateGuest(props){
@@ -20,6 +22,8 @@ export default function UpdateGuest(props){
     const setGuestList = props.setGuestList;
     const bridalParty = props.bridalParty;
     const user = props.user;
+
+    const getGuestData = props.getGuestData;
  
     const [personID, setPersonID] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -43,12 +47,13 @@ export default function UpdateGuest(props){
     const [additionalGuestsSet, setAdditionalGuestsSet] = useState(false);
     const [valueDiet, setValueDiet] = useState('');
     const [valueAllergies, setValueAllergies] = useState('');
+    const [dietComments, setDietComments] = useState('');
     const [UUID, setUUID] = useState('');
     const [updated, setUpdated] = useState(0);
-    const [totalEmptyState, setTotalEmptyState] = useState(0);
-    const [validEmail, setValidEmail] = useState(false);
-    const [validPhone, setValidPhone] = useState(false);
+    const [empty, setEmpty] = useState(0);
     const getRoles = props.getRoles;
+    let validEmail = checkValidEmail(email);
+    let validPhone = checkValidPhone(mobile);
 
     const disableItem = user ? false : true;
 
@@ -95,14 +100,14 @@ export default function UpdateGuest(props){
             if(typeof guestList.list[index]["email"] !== 'undefined'){
 
                 setEmail(guestList.list[index]["email"]);
-                checkEmail(guestList.list[index]["email"])
-
+               
+               
             }
 
             if(typeof guestList.list[index]["mobile"] !== 'undefined'){
 
                 setMobile(guestList.list[index]["mobile"]);
-                checkPhone(guestList.list[index]["mobile"])
+               
 
             }
 
@@ -172,6 +177,12 @@ export default function UpdateGuest(props){
 
             }
 
+             if(typeof guestList.list[index]["commentsDietry"] !== 'undefined'){
+
+                setDietComments(guestList.list[index]["commentsDietry"]);
+
+            }
+
         }
 
         setLoading(false);
@@ -181,8 +192,6 @@ export default function UpdateGuest(props){
     useEffect(() => {
 
         setLoading(true);
-        console.log('Getting person data for ID:', personID);
-
         getPersonData(personID);
 
     }, [ getPersonData, personID ]);
@@ -198,7 +207,8 @@ export default function UpdateGuest(props){
 
     if(additionalGuests.length === 0 && checkAdditionalGuestsSet === true && noAdditionalGuests > 0 && additionalGuestsState === false){
 
-        let newArray = additionalGuests;
+        // Create a fresh array (don't reuse the reference) and include commentsDietry if present
+        let newArray = [];
 
         for(let i = 0; i < noAdditionalGuests; i++){
 
@@ -213,6 +223,7 @@ export default function UpdateGuest(props){
                 object["role"] = guestList.list[index].additionalGuests[i].role;
                 object["diet"] = guestList.list[index].additionalGuests[i].diet;
                 object["allergies"] = guestList.list[index].additionalGuests[i].allergies;
+                object["commentsDietry"] = guestList.list[index].additionalGuests[i].commentsDietry || "";
 
             }else{
 
@@ -222,6 +233,7 @@ export default function UpdateGuest(props){
                 object["role"] = "Guest";
                 object["diet"] = "";
                 object["allergies"] = "";
+                object["commentsDietry"] = "";
 
             }
 
@@ -236,91 +248,20 @@ export default function UpdateGuest(props){
 
     }
 
-    const checkPhone = (number) => {
-
-        const char = number.length;
-        let phoneNumber = number;
-        let validNumber = false;
-    
-        if( isNaN(phoneNumber) === false && phoneNumber.length === 11){
-
-            validNumber = true;
-
-        }
-        
-        const getIcon = document.getElementsByClassName("phoneCheck")[0];
-
-        // console.log(getIcon);
-
-        if(validNumber){
-
-            getIcon.style.color = "var(--green)";
-            getIcon.className = "fa-solid fa-circle-check icon2 phoneCheck";
-            setValidPhone(true);
-
-        }else if(char > 0){
-
-            getIcon.style.color = "var(--red)";
-            getIcon.className = "fa-solid fa-circle-xmark icon2 phoneCheck";
-            setValidPhone(false);
-
-        }else{
-
-            getIcon.style.color = "var(--grey)";
-            getIcon.className = "fa-solid fa-circle-minus icon2 phoneCheck";
-            setValidPhone(false);
-
-        }
-
-    }
-
-    const checkEmail = (email) => {
-
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        const char = email.length;
-        const regexResult = regex.test(email);
-
-        const getIcon = document.getElementsByClassName("emailCheck")[0];
-
-        if(regexResult){
-
-            getIcon.style.color = "var(--green)";
-            getIcon.className = "fa-solid fa-circle-check icon2 emailCheck";
-            setValidEmail(true);
-
-        }else if(char > 0){
-
-            getIcon.style.color = "var(--red)";
-            getIcon.className = "fa-solid fa-circle-xmark icon2 emailCheck";
-            setValidEmail(false);
-
-        }else{
-
-            getIcon.style.color = "var(--grey)";
-            getIcon.className = "fa-solid fa-circle-minus icon2 emailCheck";
-            setValidEmail(false);
-
-        }
-
-    }
-
     const onInputMainGuest = (e) =>{
 
         const itemName = e.target.getAttribute("name");
-        const itemValue = e.target.value.trim();
+        const itemValue = e.target.value;
+        const updateList = { ...guestList };
+        updateList.list[index][itemName] = itemValue;
 
-        if(itemName === "email"){
+        if(itemName === "firstName"){
 
-            checkEmail(itemValue);
-
-        }
-
-        if(itemName === "mobile"){
-
-            checkPhone(itemValue);
+            setFirstName(itemValue);
 
         }
 
+        setGuestList(updateList);
         saveGuestListItem(guestList, index, itemName, itemValue);
         checkEmpty(e.target);
 
@@ -329,20 +270,55 @@ export default function UpdateGuest(props){
     const onInputGuests = (e) =>{
 
         const itemName = e.target.getAttribute("name");
-        const itemValue = e.target.value.trim();
+        const itemValue = e.target.value;
         const className = e.target.className.split(" ");
-        const guestIndex = className[className.length - 1];
+        const guestIndex = parseInt(className[className.length - 1], 10);
 
+        // Persist to storage
         saveGuestListItemGuest(guestList, index, guestIndex, itemName, itemValue);
 
-        let currentList = additionalGuests;
-        currentList[itemName] = itemValue;
+        // Update component state immutably for the specific guest object
+        let currentList = [ ...additionalGuests ];
+        let guestObj = { ...(currentList[guestIndex] || {}) };
+        guestObj[itemName] = itemValue;
+        currentList[guestIndex] = guestObj;
         setAdditionalGuests(currentList);
         setUpdated(updated + 1);
 
     }
 
-   
+    const onChangeOptionGuest = (e) => {
+
+        const itemName = e.target.getAttribute("name");
+        const itemValue = e.target.value.trim();
+        const className = e.target.className.split(" ");
+         const guestIndex = parseInt(className[className.length - 1], 10);
+
+         // Persist to storage
+        saveGuestListItemGuest(guestList, index, guestIndex, itemName, itemValue);
+      
+        // Update component state immutably for the specific guest object
+        let currentList = [ ...additionalGuests ];
+        let guestObj = { ...(currentList[guestIndex] || {}) };
+        guestObj[itemName] = itemValue;
+        currentList[guestIndex] = guestObj;
+        setAdditionalGuests(currentList);
+        setUpdated(updated + 1);
+
+        if(itemName === "diet"){
+
+            e.target.style.color = "black";
+
+        }
+
+        if(itemName === "allergies"){
+
+            e.target.style.color = "black";
+            
+        }
+
+    }
+
     const deleteListItem = (event) => {
 
         const checkAction = window.confirm("Are you sure you want to delete the guest?");
@@ -371,39 +347,17 @@ export default function UpdateGuest(props){
 
         if(value === "" || value === "Not confirmed"){
 
-            color = { color: "var(--grey)"}
-
+            color = { color: "var(--grey)" }
+           
         }else{
 
-            color = { color: "var(--black)"}
+            color = { color: "var(--black)" }
 
         }
 
         return color;
 
     }
-
-    const checkEmpty = (item) => {
-
-        if(item.value !== ""){
-
-            if(item.tagName === "SELECT"){
-
-                item.style.outline = "none";
-                item.style.borderColor = "var(--grey)";
-
-            }else{
-
-                item.style.borderColor = "var(--grey)";
-
-            }
-
-            item.style.color  = "var(--black)";
-
-        }
-
-    }
-
 
     const addGuest = (event) => {
 
@@ -426,14 +380,20 @@ export default function UpdateGuest(props){
 
         const itemName = e.target.getAttribute("name");
         const itemValue = e.target.value.trim();
+        const updateList = { ...guestList };
+        updateList.list[index][itemName] = itemValue;
 
+        setGuestList(updateList);
         saveGuestListItem(guestList, index, itemName, itemValue);
 
         if(itemName === "rsvp"){
 
             setRSVP(itemValue);
+            
 
         }
+
+
 
         if(itemName === "role"){
 
@@ -468,37 +428,11 @@ export default function UpdateGuest(props){
 
         }
 
-
-
-    }
-
-    const onChangeOptionGuest = (e) => {
-
-        const itemName = e.target.getAttribute("name");
-        const itemValue = e.target.value.trim();
-        const className = e.target.className.split(" ");
-        const guestIndex = className[className.length - 1];
-
-        saveGuestListItemGuest(guestList, index, guestIndex, itemName, itemValue);
-
-        let currentList = additionalGuests;
-        currentList[itemName] = itemValue;
-        setAdditionalGuests(currentList);
-        setUpdated(updated + 1);
-
-        if(itemName === "diet"){
-
-            e.target.style.color = "black";
-
-        }
-
-        if(itemName === "allergies"){
-
-            e.target.style.color = "black";
-            
-        }
+        getGuestData(guestList); // Refresh guest data after RSVP change
 
     }
+
+ 
 
     const createAddList = (number) => {
 
@@ -508,14 +442,14 @@ export default function UpdateGuest(props){
 
             if(i === 0){
 
-                options.push(<option value={i}>I won't be brining a guest</option>);
+                options.push(<option value={i} key={i}>I won't be brining a guest</option>);
 
             }else{
 
                 let addS = i > 1 ? "s": "";
                 let str = "I will be bringing " + i + " guest" + addS;
 
-                options.push(<option value={i}>{ str }</option>);
+                options.push(<option value={i} key={i}>{ str }</option>);
 
             }
 
@@ -560,14 +494,14 @@ export default function UpdateGuest(props){
 
         return  (
 
-            <div className='row'>
+            <div className='row' key={ iconNumber }>
 
                         <div className='inputGroup col-12'>
 
                             <div>
                             
                                 <i className={getClassNameAdd( iconNumber )}></i>
-                                <select className='guestAdd'  name='guestAdd' style={ getColor(selectValue) } onChange={ addGuest } value={ selectValue }>
+                                <select className='checkMain guestAdd'  name='guestAdd' style={ getColor(selectValue) } onChange={ addGuest } value={ selectValue } disabled={ disableItem }>
                                     <option value="" hidden className="noOption">please confirm additional guests...</option>
                                     { createAddList( maxGuests ) }
                                 </select>
@@ -619,164 +553,79 @@ export default function UpdateGuest(props){
 
     }
 
-    const checkEmptyFields = () => {
+    const returnLinks = () =>{
 
-        const allowedEmpty = ["mobile", "number", "roadName", "town", "post-code-1", "post-code-2"];
-        const inputs = document.getElementsByTagName("input");
-        const selects = document.getElementsByTagName("select");
+        return (
+  
+            <div className='col-6 topLinks'> 
 
-        const checkInputs = checkFields(inputs, allowedEmpty);
-        const checkSelects = checkFields(selects, allowedEmpty);
+                <div>{ mobile !== "" && validPhone ? <Phone updateFunction={ onInputMainGuest } value={ mobile } type="icon" numberType={ "mobile" }/> : "" }</div>
+                <div>{ email !== "" && validEmail ? <Email updateFunction={ onInputMainGuest } value={ email } type="icon" /> : "" }</div>
 
-        const totalEmpty = checkInputs + checkSelects;
+                <div>
+                    <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
+                    <div style={{display:"none"}}>{ UUID }</div>
+                </div>
 
-        if(totalEmptyState !== totalEmpty){
+            </div>
 
-            setTotalEmptyState(totalEmpty);
-            
-        }
-
-        let returnText;
-
-        if(totalEmpty === 0){
-
-            returnText = " (completed)";
-
-        }else{
-
-            returnText = " (" + totalEmpty + " required fields)";
-
-        }
-
-        return returnText;
+        )
 
     }
 
-    const checkFields = (fields, allowedEmpty) => {
+     const getTitle = (type) => {
 
-        let count = 0;
+        let title;
+        let text = firstName + " " + surname + " details";
+        let emptyText;
 
-        for(let i=0; i < fields.length; i++){
+        if(empty === 0){
 
-            let fieldName = fields[i].getAttribute('name');
-            let fieldValue;
+            emptyText = "[completed]";
 
-            if(fields[i].tagName === "SELECT"){
+        }else{
 
-                fieldValue = fields[i].value;
+            emptyText = "[" + empty + " incomplete]";
+        }
 
-            }else{
+        title = text + " " + emptyText;
 
-                fieldValue = fields[i].defaultValue;
+        return title;
 
-                if(fieldValue === ""){
+    }
 
-                    fieldValue = fields[i].value;
-                
-                }
+    const checkEmpty = (item) => {
+    
+        const items = document.getElementsByClassName(item);
 
-            }
+        let empty = 0;
 
-          
+        for(let i=0; i< items.length; i++){
 
-            if(fields[i].tagName === "SELECT"){
-
-                fields[i].style.border = "1px solid var(--grey)";
-
-            }else{
+            let value = items[i].value;
             
-                fields[i].style.borderColor = "var(--grey)";
+            if(value === "" || value === "Not confirmed"){
 
-            }   
+                empty += 1;
+                items[i].style.borderColor = "red";
 
-            if(allowedEmpty.includes(fieldName) === false){
+            }else{
 
-                if(fieldValue === "" || fieldValue === "Not confirmed"){
-
-                    count += 1;
-
-                    if(fields[i].tagName === "SELECT"){
-
-                        fields[i].style.border = " 1px solid red";
-                    
-
-                    }else{
-
-                        fields[i].style.borderColor = "red";
-
-                    }
-                    
-                    
-                }
+                items[i].style.borderColor = "var(--grey)";
 
             }
 
         }
 
-        return count;
+        setEmpty(empty);
 
     }
 
-    const getPhoneLink = (num, type="input") => {
+    useEffect(() => {
 
-        let itemName;
-        let item = num;
+        checkEmpty("checkMain");
 
-         if(type === "input"){
-
-            itemName = "fa-solid fa-phone icon";
-
-        }else{
-
-            itemName = "fa-solid fa-phone icon3";
-
-        }
-
-         if(item !== "" && validPhone){
-
-            let href = "tel:" + num;
-            item = <a href={href}> <i className={ itemName }></i></a>
-
-        }else{
-
-            item = <i className={ itemName }></i>;
-
-        }
-
-        return item;
-        
-    }
-
-    const getEmailLink = (email, type="input") => {
-
-        let itemName;
-        let item;
-
-        if(type === "input"){
-
-            itemName = "fa-solid fa-envelope icon";
-
-        }else{
-
-            itemName = "fa-solid fa-envelope icon3";
-
-        }
-
-         if(item !== "" && validEmail){
-
-            let href = "mailto:" + email;
-        
-            item = <a href={href}> <i className={ itemName }></i></a>;
-
-        }else{
-
-            item = <i className={ itemName }></i>;
-
-        }
-
-        return  item;
-        
-    }
+    });
 
     return(
 
@@ -784,49 +633,33 @@ export default function UpdateGuest(props){
 
             <section id="updateGuestSection">
 
-               
-                    <div className='row two'>
+                <div className='row two'>
                     
-                        <div className='col-6'>
+                    <div className={ disableItem ? "col-12": "col-6" }>
 
-                            <h2>
+                        <h2>
 
-                            { firstName + " " + surname + " details"}
+                        { getTitle()  }
 
-                            { maxGuests > 0 && additionalGuestsSet === false ? " " + checkEmptyFields() : "" }
-
-                            { noAdditionalGuests > 0 && additionalGuestsSet === true ? checkEmptyFields() : "" }
-
-                            </h2>
-
-                        </div>
-                        <div className='col-6 topLinks'> 
-
-                            <div>{ mobile !== "" && validPhone ? getPhoneLink(mobile, "link") : "" }</div>
-                            <div>{ email !== "" && validEmail ? getEmailLink(email, "link") : "" }</div>
-
-                            <div>
-                                <button className="deleteButton" onClick={ deleteListItem } >Delete</button>
-                                <div style={{display:"none"}}>{ UUID }</div>
-                            </div>
-
-                        </div>
+                        </h2>
 
                     </div>
+            
+                    { disableItem ? "": returnLinks() }
 
-        
-
+                </div>
+                    
                 <form id='inputForm'>
 
                     <div className='row two'>
 
                         <div className='inputGroup col-6'>
                             <i className="fa fa-user icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setFirstName( e.target.value )} name='firstName' placeholder='first name' value={ firstName }></input>
+                            <input type='text' className='checkMain inputBox' onChange={ onInputMainGuest } name='firstName' placeholder='first name' value={ guestList.list[index].firstName }></input>
                         </div>
                         <div className='inputGroup col-6'>
                             <i className="fa fa-user icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInputMainGuest }  onChange={ e => setSurname( e.target.value )} name='surname' placeholder='surname' value={ surname }></input>
+                            <input type='text' className='checkMain inputBox' onChange={ onInputMainGuest } name='surname' placeholder='surname' value={ guestList.list[index].surname }></input>
                         </div>
 
                     </div>
@@ -839,7 +672,7 @@ export default function UpdateGuest(props){
                         <div className='inputGroup col-12'>
 
                             <i className="fa-solid fa-person-circle-question icon"></i>
-                            <select className='guestType' style={ getColor() } name='role'  onChange={ onChangeOption } value={ role } disabled={ disableItem }>
+                            <select className='checkMain guestType' style={ getColor(role) } name='role'  onChange={ onChangeOption } value={ guestList.list[index].role } disabled={ disableItem }>
                                 <option value="" hidden className="noOption">please select role...</option>
                                 <option>Guest</option>
                                 { getRoles(roles) }
@@ -855,7 +688,8 @@ export default function UpdateGuest(props){
                         <div className='inputGroup col-12'>
 
                             <i className="fa-solid fa-circle-info icon"></i>
-                            <select className='guestType'  name='guestType' style={ getColor(guestType) } onChange={ onChangeOption } value={ guestType } disabled> 
+
+                            <select className='checkMain guestType'  name='guestType' style={ getColor(guestType) } onChange={ onChangeOption } value={ guestList.list[index].guestType } disabled={ disableItem }> 
                                 <option value="" hidden className="noOption">please select age category...</option>
                                 <option>Over 18</option>
                                 <option>Under 18</option>
@@ -867,29 +701,10 @@ export default function UpdateGuest(props){
                     </div>
 
                     {/* Email Section */}
-                    <div className='row'>
-
-                        <div className='inputGroup col-12'>
-
-                            { getEmailLink(email) }
-                            <input type='email' className='inputBox checkIcon' onExit={ onInputMainGuest } onChange={ e => setEmail( e.target.value )} name='email' placeholder='email' value={ email }></input>
-                            <i className="fa-solid fa-circle-minus icon2 emailCheck"></i>
-                        
-                        </div>
-
-                    </div>
-
+                    <Email updateFunction={ onInputMainGuest } value={ guestList.list[index].email } type="input" class='checkMain inputBox checkIcon'/>
+                   
                     {/* Mobile Section */}
-                    <div className='row'>
-
-                        <div className='inputGroup col-12'>
-
-                            { getPhoneLink(mobile) }
-                            <input type='text' className='inputBox checkIcon' onExit={ onInputMainGuest } onChange={ e => setMobile( e.target.value )} name='mobile' placeholder='mobile' value={ mobile }></input>
-                            <i className="fa-solid fa-circle-minus icon2 phoneCheck"></i>
-                        </div>
-
-                    </div>
+                    <Phone updateFunction={ onInputMainGuest } value={ guestList.list[index].mobile } type="input" numberType={ "mobile" } lass='checkMain inputBox checkIcon'/>
 
                     {/* Address Section */}
 
@@ -897,12 +712,12 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-4'>
                             <i className="fa-solid fa-house icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setNumber( e.target.value )} name='number' placeholder='house name/number' value={ number }></input>
+                            <input type='text' className='inputBox' onChange={ onInputMainGuest}name='number' placeholder='house name/number' value={ guestList.list[index].number }></input>
                         </div>
 
                         <div className='inputGroup col-8'>
                             <i className="fa-solid fa-road icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setRoad( e.target.value )} name='roadName' placeholder='road name' value={ road }></input>
+                            <input type='text' className='inputBox' onChange={ onInputMainGuest} name='roadName' placeholder='road name' value={ guestList.list[index].roadName }></input>
                         </div>
 
                     </div>
@@ -912,7 +727,7 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-12'>
                             <i className="fa-solid fa-location-pin icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setTown( e.target.value )} name='town' placeholder='town' value={ town }></input>
+                            <input type='text' className='inputBox' onChange={ onInputMainGuest} name='town' placeholder='town' value={ guestList.list[index].town }></input>
                         </div>
 
                     </div>
@@ -922,11 +737,11 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-2'>
                             <i className="fa-solid fa-signs-post icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setPostCode1( e.target.value )} name='post-code-1' placeholder='post (xxxx)' maxLength='4' value={ postCode1 }></input>
+                            <input type='text' className='inputBox' onChange={ onInputMainGuest} name='postCode1' placeholder='post (xxxx)' maxLength='4' value={ guestList.list[index].postCode1 }></input>
                         </div>
                         <div className='inputGroup col-3'>
                             <i className="fa-solid fa-signs-post icon"></i>
-                            <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setPostCode2( e.target.value )} name='post-code-2' placeholder='code (xxx)' maxLength='3' value={ postCode2 }></input>
+                            <input type='text' className='inputBox' onChange={ onInputMainGuest} name='postCode2' placeholder='code (xxx)' maxLength='3' value={ guestList.list[index].postCode2 }></input>
                         </div>
 
                     </div>
@@ -936,7 +751,7 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-12'>
                         <i className="fa-solid fa-person-circle-plus icon"></i>
-                        <input type='text' className='inputBox' onExit={ onInputMainGuest } onChange={ e => setMaxGuests( e.target.value )} name='maxGuests' placeholder='set the max number of guests' value={ maxGuests } disabled={ disableItem }></input>
+                        <input type='text' className='checkMain inputBox' onChange={ onInputMainGuest } name='maxGuests' placeholder='set the max number of guests' value={ guestList.list[index].maxGuests } disabled={ disableItem }></input>
 
                         </div>
 
@@ -952,7 +767,7 @@ export default function UpdateGuest(props){
 
                         <div className='inputGroup col-12'>
                             <i className={getRSVPClassName(rsvp)}></i>
-                            <select className="rsvp" name="rsvp" onChange={ onChangeOption } style={ getColor(rsvp) } value={ rsvp }>
+                            <select className="checkMain rsvp" name="rsvp" onChange={ onChangeOption } style={ getColor(rsvp) } value={ guestList.list[index].rsvp }>
                                 <option>Not confirmed</option>
                                 <option>Confirmed</option>
                                 <option>Declined</option>
@@ -962,7 +777,18 @@ export default function UpdateGuest(props){
                     </div>
 
 
-                    { rsvp === "Confirmed" ? <DietSection diet={ dietry.dietry.diet } allergies={ dietry.dietry.allergies } showGuest={ "" } hideGuest={ "" } onChange={ onChangeOption } valueDiet={ valueDiet } valueAllergies={ valueAllergies } disableItem={ disableItem } name={ firstName + " " + surname }/> : ""}
+                    { rsvp === "Confirmed" ? <DietSection diet={ dietry.dietry.diet } 
+                                                          allergies={ dietry.dietry.allergies } 
+                                                          showGuest={ "" } hideGuest={ "" } 
+                                                          onChange={ onChangeOption }
+                                                          onInput={ onInputMainGuest }
+                                                          valueDiet={ guestList.list[index].diet } 
+                                                          valueAllergies={ guestList.list[index].allergies } 
+                                                          disableItem={ disableItem } 
+                                                          name={ firstName + " " + surname }
+                                                          valueComments={ guestList.list[index].dietComments }
+                                                          
+                                             /> : ""}
 
                     { guestType !== "Guest" && rsvp === "Confirmed" && role !== "Guest" ?   <WeddingClothingForm 
 
@@ -973,7 +799,7 @@ export default function UpdateGuest(props){
                                                                                                 guestList={ guestList } index={ index } 
                                                                                                 checkEmpty={ checkEmpty } 
                                                                                                 disableItem={ disableItem } 
-                                                                                                name={ firstName + " " + surname } 
+                                                                                                name={ guestList.list[index].firstName + " " + guestList.list[index].surname } 
                                                                                                 weddingClothingSizes={ weddingClothingSizes }
 
                                                                                             /> : ""}
@@ -984,7 +810,7 @@ export default function UpdateGuest(props){
 
             <section className="additionalGuests">
 
-                { !additionalGuestsSet ? <p style={{"textAlign": "center"}}>Please confirm your additional guest.</p>: "" }
+                { !additionalGuestsSet && noAdditionalGuests > 0  ? <p style={{"textAlign": "center"}}>Please confirm your additional guest.</p>: "" }
                 { noAdditionalGuests === 0 && additionalGuestsSet ? <p style={{"textAlign": "center"}}>You have selected not to bring any additional guests with you.</p>: "" }
                 { noAdditionalGuests > 0 ? listAdditionalGuests(noAdditionalGuests) : "" }
 

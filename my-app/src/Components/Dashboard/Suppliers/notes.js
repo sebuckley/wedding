@@ -5,7 +5,6 @@ export default function Notes(props){
     const notes = props.notes;
     const [display, setDisplay] = useState(false)
 
-
     const sortNotes = (notes) => {
 
        notes.sort((a, b) =>  new Date(b.created) - new Date(a.created));  
@@ -17,8 +16,6 @@ export default function Notes(props){
         setDisplay(prev => !prev);
         
     };
-
-
 
     sortNotes(notes);
 
@@ -33,7 +30,7 @@ export default function Notes(props){
         let hours = newDate.getHours();
         const minutes = newDate.getMinutes().toString().padStart(2, '0');
 
-// Determine AM or PM
+        // Determine AM or PM
         const amOrPm = hours >= 12 ? 'pm' : 'am';
 
         // Convert to 12-hour format
@@ -94,8 +91,6 @@ export default function Notes(props){
         return style;
 
     }
-
-   
 
     const getRemainingNotes = () => {
 

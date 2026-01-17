@@ -5,9 +5,11 @@ import Login from '../../Login/Login';
 import Header from '../../Wigits/Header/header';
 import AddSupplier from './addSupplier';
 import Loading from '../../PublicSite/Components/loading/loading';
+import { getTaskIndex } from '../../Wigits/dataFunctions-taskList';
 import SupplierList from './suppliersList';
 import SupplierFilter from './supplierFilter';
 import SupplierSort from './supplierSort';
+import { saveSupplierList } from '../../Wigits/dataFunctions-suppliers';
 
 export default function Suppliers(props){
 
@@ -15,13 +17,6 @@ export default function Suppliers(props){
     const search = location.search; // e.g., #/path?param1=value1&param2=value2
     let filterParam = search.split("=")[1];
     let filterAdd = search.split("=")[0];
-
-    if(typeof filterParam === "undefined"){
-
-      filterParam = "";
-
-    }
-
     const user = props.user;
     const setUser = props.setUser;
     const loading = props.loading;
@@ -30,29 +25,77 @@ export default function Suppliers(props){
     const setLoggedin = props.setLoggedin;
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
-    const [setType, setSetType] = useState(filterParam);
-
-    const clearSearch = useSearchParams();
-
+    const supplierBooked = props.supplierBooked;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
+    let paramID;
+    let paramName;
     let filterName;
     let filterName2;
     let currentDisplay = false;
 
-    if(setType !== ""){
+    if(typeof filterParam === "undefined"){
 
-      filterName = "All";
+      paramName = "";
+      paramID = "";
+      filterParam = "";
+
+    }else{
+      
+      if(filterAdd === "?add"){
+
+        currentDisplay = true;
+
+        if(taskList){
+
+          const index = getTaskIndex(taskList, filterParam);
+          paramID = taskList.list[index].taskID;
+          paramName = taskList.list[index].taskName;
+          
+
+        }else{
+
+          paramName = "";
+          paramID = "";
+
+        }
+
+      }else{
+
+        currentDisplay = false;
+
+        if(taskList){
+
+          const index = getTaskIndex(taskList, filterParam);
+          paramID = taskList.list[index].taskID;
+          paramName = taskList.list[index].taskName;
+          
+
+        }else{
+
+          paramName = "";
+          paramID = "";
+
+        }
+
+      }
+
+
+    }
+
+    
+    const [taskType, setTaskType] = useState(filterParam);
+    const clearSearch = useSearchParams();
+
+    if(taskType !== ""){
+
+      filterName = settings["suppliers"].filter.state;
       filterName2 = filterParam;
 
     }else{
 
-      filterName = "All";
-      filterName2 = "All";
-
-    }
-
-    if(filterAdd === "?add"){
-
-      currentDisplay = true;
+      filterName = settings["suppliers"].filter.state;
+      filterName2 = settings["suppliers"].filter.type;
 
     }
 
@@ -60,14 +103,30 @@ export default function Suppliers(props){
     const wedding = props.wedding;
     const setSupplierList = props.setSupplierList;
     const supplierList = props.supplierList;
-    const supplierStatuses = props.supplierStatuses;
+    const supplierStatuses = props.supplierStatuses;  
+    const detailsLocation = bridalParty.weddingDetails.location;
     const [supplierFilter, setSupplierFilter] = useState(filterName);
     const [supplierFilter2, setSupplierFilter2] = useState(filterName2);
-    const [supplierSortedBy, setSupplierSortedBy] = useState("name");
-    const [supplierSorted, setSupplierSorted] = useState("asc");
-    const [display, setDisplay] = useState(currentDisplay);
+    const [supplierSortedBy, setSupplierSortedBy] = useState(settings["suppliers"].sort.supplierSortedBy);
+    const [supplierSorted, setSupplierSorted] = useState(settings["suppliers"].sort.supplierSorted);
+    const [display, setDisplay] = useState("");
+
+    if(display === "" || display !== currentDisplay){
+
+      setDisplay(currentDisplay);
+
+    }
 
     const [stateChange, setStateChange] = useState(0);
+
+    const getSearchText = (data) => {
+
+        let searchName = data.split(" ").join("+");
+        searchName = searchName + "+" + detailsLocation;
+
+        return searchName;
+
+    }
 
     if(loading){
 
@@ -89,13 +148,14 @@ export default function Suppliers(props){
 
             <div className="adminBody">
 
-              <AddSupplier setSupplierList={ setSupplierList } supplierList={ supplierList } taskList={ taskList } setTaskList={ setTaskList } setStateChange={ setStateChange } stateChange={ stateChange } supplierStatuses={ supplierStatuses } user={ user } display={ display } setDisplay={ setDisplay } setType={ setType } location={ bridalParty.weddingDetails.location }/>
+              <AddSupplier setSupplierList={ setSupplierList } supplierList={ supplierList } taskList={ taskList } setTaskList={ setTaskList } setStateChange={ setStateChange } stateChange={ stateChange } supplierStatuses={ supplierStatuses } user={ user } display={ display } setDisplay={ setDisplay } taskName={ paramName } taskID={ paramID } location={ detailsLocation } getSearchText={ getSearchText }/>
 
               {/* <ListType setListType={ setListType } listType={ listType } /> */}
 
-              <SupplierFilter setSupplierFilter={ setSupplierFilter } filterName={ supplierFilter }/>
-              <SupplierSort setSupplierSorted={ setSupplierSorted } supplierSorted={ supplierSorted } setSupplierSortedBy={ setSupplierSortedBy } supplierSortedBy={ supplierSortedBy } setSupplierFilter2={ setSupplierFilter2 } supplierFilter2={ supplierFilter2 } taskList={ taskList }/>
+              <SupplierFilter setSupplierFilter={ setSupplierFilter } filterName={ supplierFilter } settings={ settings } setSettings={ setSettings }  />
+              <SupplierSort setSupplierSorted={ setSupplierSorted } supplierSorted={ supplierSorted } setSupplierSortedBy={ setSupplierSortedBy } supplierSortedBy={ supplierSortedBy } setSupplierFilter2={ setSupplierFilter2 } supplierFilter2={ supplierFilter2 } taskList={ taskList } setStateChange={ setStateChange } stateChange={ stateChange } settings={ settings } setSettings={ setSettings } />
               
+              { paramName !== "" && !display ? <a href={ "https://www.google.com/search?q=" + getSearchText(paramName) } target="_blank" >Search for { paramName }</a> : "" }
             
 
               { supplierList.length === 0 ? "No suppliers in list": "" }
@@ -113,7 +173,8 @@ export default function Suppliers(props){
                                               user={ user }
                                               setTaskList={ setTaskList }
                                               taskList={ taskList }
-                                              setType={ filterParam }
+                                              taskType={ filterName2 }
+                                              supplierBooked={ supplierBooked }
                                             /> : "" }
               
                

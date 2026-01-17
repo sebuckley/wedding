@@ -1,5 +1,5 @@
 import '../Dashboard.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DietSection from '../../PublicSite/Components/rsvp/dietrysection';
 import dietry from '../../PublicSite/Components/Data/dietry';
 
@@ -15,20 +15,84 @@ export default function NewGuest(props){
     const roles = props.roles;
     const getRoles = props.getRoles;
     const disableItem = props.disableItem;
+    const [empty, setEmpty] = useState(0);
+    const [itemName, setItemName] = useState("");
 
     const role = typeof additionalGuests[arrayNumber].role === "undefined" ? "Guest" : additionalGuests[arrayNumber].role;
 
     const getNumber = (text, number) => {
 
-        return text + " " + number;
+        const guest = "guest"+ number.toString()
+
+        if(itemName === ""){
+
+            setItemName(guest);
+
+        }
+
+        return guest + " " + text + " " + number;
 
     }
 
+    const getTitle = (type) => {
+
+        let title;
+        let text = "Additional Guest " + guestNumber + " details";
+        let emptyText;
+
+        if(empty === 0){
+
+            emptyText = "[completed]";
+
+        }else{
+
+            emptyText = "[" + empty + " incomplete]";
+        }
+     
+        title = text + " " + emptyText;
+
+        return title;
+
+    }
+
+     const checkEmpty = (item) => {
+
+        const items = document.getElementsByClassName(item);
+
+        let empty = 0;
+
+        for(let i=0; i< items.length; i++){
+
+            let value = items[i].value;
+            
+            if(value === ""){
+
+                empty += 1;
+                items[i].style.borderColor = "red";
+
+            }else{
+
+                items[i].style.borderColor = "var(--grey)";
+
+            }
+
+        }
+
+        setEmpty(empty);
+
+    }
+
+    useEffect(() => {
+
+        checkEmpty(itemName);
+
+    });
+
     return (
 
-        <div className={ getNumber("addGuestGroup", arrayNumber) }> 
+        <div className={ getNumber("addGuestGroup", arrayNumber) } key={ arrayNumber}> 
 
-            <h2>Guest { guestNumber }</h2>
+            <h2>{ getTitle() }</h2>
 
             <div className='row two'>
 
@@ -64,7 +128,7 @@ export default function NewGuest(props){
                 <div className='inputGroup col-12'>
 
                     <i className="fa-solid fa-circle-info icon"></i>
-                    <select className={ getNumber("guestType", arrayNumber) }  name='guestType' style={getColor(additionalGuests[arrayNumber].guestType)} onChange={ onChangeOptionGuest } value={ additionalGuests[arrayNumber].guestType }>
+                    <select className={ getNumber("guestType", arrayNumber) }  name='guestType' style={ getColor(additionalGuests[arrayNumber].guestType) } onChange={ onChangeOptionGuest } value={ additionalGuests[arrayNumber].guestType }>
                         <option value="" hidden className="noOption">please select age category...</option>
                         <option>Over 18</option>
                         <option>17</option>
@@ -91,7 +155,7 @@ export default function NewGuest(props){
 
             </div>
 
-            <DietSection diet={ dietry.dietry.diet } allergies={ dietry.dietry.allergies } showGuest={ "" } hideGuest={ "" } onChange={ onChangeOptionGuest } valueDiet={ additionalGuests[arrayNumber].diet } valueAllergies={ additionalGuests[arrayNumber].allergies } titleType={ "guest" } arrayNumber={ arrayNumber }/>
+            <DietSection diet={ dietry.dietry.diet } allergies={ dietry.dietry.allergies } showGuest={ "" } hideGuest={ "" } onChange={ onChangeOptionGuest } onInput={ onInputGuests } valueDiet={ additionalGuests[arrayNumber].diet } valueAllergies={ additionalGuests[arrayNumber].allergies } valueComments={ additionalGuests[arrayNumber].commentsDietry } titleType={ "guest" } arrayNumber={ arrayNumber }/>
 
         </div>
 

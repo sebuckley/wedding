@@ -6,11 +6,17 @@ export default function GuestFilter(props){
 
     const setGuestFilter = props.setGuestFilter;
     const filterName = props.filterName;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
 
     const onClick = (e) => {
 
         e.preventDefault();
         setGuestFilter(e.target.innerText);
+        const newSettings = { ...settings };
+        newSettings["guestList"].filter.state = e.target.innerText;
+        setSettings(newSettings);
+        sessionStorage.setItem("settings", JSON.stringify(newSettings));
 
         const filterButtons = document.getElementsByClassName('guestfilterButton');
 

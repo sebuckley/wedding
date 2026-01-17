@@ -1,9 +1,10 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link  } from 'react-router-dom';
 import '../Dashboard.css';
 import { splitByCapitalNums, updateSupplierTask, deleteSupplierTaskItem } from '../../Wigits/dataFunctions';
 import { getSupplierIndex, saveSupplierList, deleteSupplierListItem } from '../../Wigits/dataFunctions-suppliers';
+import { getTaskIndex } from '../../Wigits/dataFunctions-taskList';
 
 export default function SupplierListItem(props){
 
@@ -11,7 +12,14 @@ export default function SupplierListItem(props){
     const index = props.index;
     const setSupplierList = props.setSupplierList;
     const supplierList = props.supplierList;
+    const supplierBooked = props.supplierBooked;
     const [status, setStatus] = useState(item.status);
+
+    // Keep local status synced to prop changes so UI reflects updates immediately
+    useEffect(() => {
+        setStatus(item.status);
+    }, [item.status]);
+
     const stateChange = props.stateChange;
     const setStateChange = props.setStateChange; 
     const supplierStatuses = props.supplierStatuses;
@@ -77,23 +85,26 @@ export default function SupplierListItem(props){
 
     }
 
-     const getType = (a, UUID) => {
+     const getType = (taskID, supplierID) => {
 
-        let type;
+        let name;
         let link;
 
-        if(typeof a === "undefined" || a === ""){
+        if(typeof taskID === "undefined" || taskID === ""){
 
-            link = "managemywedding/supplier/?supplierID=" + UUID;
-            type = <a href={link}>add type</a>;
+            link = "/#/managemywedding/supplier/?supplierID=" + supplierID;
+            name = <a href={link}>add type</a>;
 
         }else{
 
-            type = splitByCapitalNums(a);
+            const index = getTaskIndex(taskList, taskID);
+            const taskName = taskList.list[index].taskName
+
+            name = taskName;
 
         }
 
-        return type;
+        return name;
 
     }
 
@@ -106,13 +117,23 @@ export default function SupplierListItem(props){
         let index = getSupplierIndex(supplierID,supplierList);
 
         supplierList.list[index]["status"] = value;
+        supplierList.list[index]["payments"] = [];
+        supplierList.list[index]["updated"] = new Date();
+        supplierList.list[index]["updatedBy"] = user.eamil;
+
         saveSupplierList(supplierList);
         setSupplierList(supplierList);
 
         let newTaskList = updateSupplierTask(supplierList, supplierID, value, taskList, supplierList.list[index], user);
         setTaskList(newTaskList);
 
-        if(value === "Booked" || value === "Enquiry made"){
+        if(value === "Booked"){
+
+            supplierBooked(supplierList, supplierList.list[index].taskTypeID, supplierID);
+
+        }
+
+        if(value === "Booked" || value === "Enquiry made" || value === "Quote recieved"){
 
             const reDirectString = "/#/managemywedding/supplier/?supplierID=" + supplierID.trim();
             window.location.replace(reDirectString);
@@ -144,12 +165,13 @@ export default function SupplierListItem(props){
             <div className={ "supplierRow " + index} key={ index }>
 
                 <div className="col-2">{ getSupplierLink(item.UUID, item.name) }</div>
-                <div className="col-2" title="supplier type">{ getType(item.type, item.UUID) }</div>
+                <div className="col-2" title="supplier type">{ getType(item.taskTypeID, item.UUID) }</div>
                 <div className="col-1" title="email">{ getEmail(item.email) }</div>
                 <div className="col-1" title="call">{ getPhone(item.phone, item.UUID) }</div>
                 <div className="col-1" title="website">{ getWebsite(item.website, item.UUID) }</div>
                 <div className="col-2" title={ item.status }>
-                    <select className={ item.type } name="status" value={status} onChange={ onChange }>
+            
+                    <select className={ item.type } name="status" value={ status } onChange={ onChange } >
                         <option value="">None</option>
                         {supplierStatuses.map((s, i) => (
                             <option key={i} value={s}>{s}</option>

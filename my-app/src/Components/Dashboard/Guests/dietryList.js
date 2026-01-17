@@ -96,13 +96,13 @@ export default function DietryList(props){
 
                     return (
 
-                        <div>
+                        <>
 
                             { checkMain(item, index) }
 
                             { loadAdditionalGuests(item.additionalGuests, item.additionalGuestsSet, item.maxGuests) }
 
-                        </div>
+                        </>
 
                     )
 
@@ -126,8 +126,8 @@ export default function DietryList(props){
                                 //the columns to be displayed
                                 person={ item }
                                 displayRole = { true }
-                                diet={ true }
-                                allergies={ true }
+                                displayDiet={ true }
+                                displayAllergies={ true }
                                 
                             />
 
@@ -228,8 +228,8 @@ export default function DietryList(props){
                     //the columns to be displayed
                     person={ checkPerson }
                     displayRole = { true }
-                    diet={ true }
-                    allergies={ true }
+                    displayDiet={ true }
+                    displayAllergies={ true }
                     
                 />
 

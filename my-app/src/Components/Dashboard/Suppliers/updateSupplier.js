@@ -8,6 +8,9 @@ import Notes from './notes';
 import SupplierCostDetails from './supplierBooked';
 import SupplierQuoteDetails from './supplierQuote';
 import currencyList from '../Details/currencyList';
+import Email, { checkValidEmail } from '../../Wigits/contact/email';
+import Phone, { checkValidPhone } from '../../Wigits/contact/phone';
+import PaymentHistory from './paymentHistory';
 
 export default function UpdateSupplier(props){
 
@@ -16,14 +19,18 @@ export default function UpdateSupplier(props){
     // const supplierIDParam = search.split("=")[1];
     const getSupplierDataUpdate = props.getSupplierData;
 
-      useEffect(() => {
+    useEffect(() => {
+
         // Extract the ID from the URL search params
         const newSupplierID = search.split("=")[1];
         
         // Only update if it's different from current state
         if (newSupplierID && newSupplierID !== supplierID) {
+
             setSupplierID(newSupplierID);
+
         }
+
     }, [search]);  // Run whenever URL changes
 
     const user = props.user;
@@ -34,12 +41,13 @@ export default function UpdateSupplier(props){
     const supplierStatuses = props.supplierStatuses;
     const currency = props.currency;
     const bridalParty = props.bridalParty;
+    const supplierBooked = props.supplierBooked;
 
     const object = {
 
         UUID: "",
         name: "",
-        type: "",
+        taskTypeID: "",
         contactDetails: {
 
             email: "",
@@ -86,6 +94,7 @@ export default function UpdateSupplier(props){
     const [validEmail, setValidEmail] = useState(false);
     const [validPhone, setValidPhone] = useState(false);
     const [validWeb, setValidWeb] = useState(false);
+    const [validLatLong, setValidLatLong] = useState("");
     const [note, setNote] = useState('');
     const [formLength, setFormLength] = useState(0);
     const [totalEmptyState, setTotalEmptyState] = useState(0);
@@ -98,7 +107,7 @@ export default function UpdateSupplier(props){
     const deposit = formData.payments?.depositValue || "";
     const depositDate = formData.payments?.depositDate || "";
     const depositPaidBy = formData.payments?.depositPaidBy || "";
-    const balance = formData.payments?.balance || "";
+    const balance = formData.payments?.balance || null;
     const depositPaymentType = formData.payments?.depositPaymentType || "";
     const balancePaymentType = formData.payments?.balancePaymentType || "";
     const balancePaidDate = formData.payments?.balancePaidDate || "";
@@ -111,7 +120,7 @@ export default function UpdateSupplier(props){
     const email = formData.contactDetails?.email || "";
     const phone = formData.contactDetails?.phone || "";
     const website = formData.contactDetails?.website || "";
-    const type = formData.type || "";
+    const taskTypeID = formData.taskTypeID || "";
     const status = formData.status || "";
     const number = formData.address?.number || "";
     const roadName = formData.address?.roadName || "";
@@ -119,16 +128,21 @@ export default function UpdateSupplier(props){
     const postCode1 = formData.address?.postCode1 || "";
     const postCode2 = formData.address?.postCode2 || "";
 
+    if(validLatLong === ""){
 
-    if(formData.payments?.balance  === "" && totalCost !== "" && deposit !== ""){
+        if(latitude && longitude && isValidLatitude(parseFloat(latitude)) && isValidLongitude(parseFloat(longitude))){
 
-        let newObject = formData.payments;
-        newObject["balance"] = parseInt(totalCost) - parseInt(deposit);
-        formData.payments = newObject;
-        setFormData(formData);
-        
+            //console.log("valid lat long");
+            setValidLatLong(true);
+
+        }else{
+
+             //console.log("invalid lat long");
+            setValidLatLong(false);
+
+        }
+
     }
-    
 
     const checkPhone = (number) => {
 
@@ -257,13 +271,13 @@ export default function UpdateSupplier(props){
 
     function isValidLatitude(latitude) {
 
-        return typeof latitude === 'number' && latitude >= -90 && latitude <= 90;
+        return typeof latitude === 'number' && !isNaN(latitude) && latitude >= -90 && latitude <= 90;
 
     }
 
     function isValidLongitude(longitude) {
 
-        return typeof longitude === 'number' && longitude >= -180 && longitude <= 180;
+        return typeof longitude === 'number' && !isNaN(longitude) && longitude >= -180 && longitude <= 180;
 
     }
 
@@ -272,14 +286,16 @@ export default function UpdateSupplier(props){
         const currentIndex = getSupplierIndex(supplierID, supplierList);
 
         const name = e.target.getAttribute("name");
-        let value = e.target.value.trim();
+        let value = e.target.value;
         let newObject = { ...formData };  // Create new object reference
         let weddingVenueDisplay = false;
         let weddingReceptionVenueDisplay = false;
-        const itemType = document.getElementsByName("type")[0];
+        const itemType = document.getElementsByName("taskTypeID")[0];
+        const itemOption = itemType.options[itemType.selectedIndex].text
         const itemStatus = document.getElementsByName("status")[0];
+        const taskItemStatus = name === "status" ? value : itemStatus;
 
-        if(itemType.value === "WeddingVenue" && itemStatus.value === "Booked" || itemType.value === "WeddingReceptionVenue" && itemStatus.value === "Booked"){
+        if(itemOption === "Wedding Venue" && itemStatus.value === "Booked" || itemOption === "Wedding Reception Venue" && itemStatus.value === "Booked"){
 
             let itemBusinessName = document.getElementsByName("name")[0];
             let itemEmail = document.getElementsByName("email")[0];
@@ -293,12 +309,22 @@ export default function UpdateSupplier(props){
             let itemLatitude = document.getElementsByName("latitude")[0];   
             let itemLongitude = document.getElementsByName("longitude")[0];
 
-            let fields = [itemBusinessName, itemEmail, itemPhone, itemWebsite, itemNumber, itemRoadName, itemTown, itemPostCode1, itemPostCode2, itemLatitude, itemLongitude];
-            let allowedEmpty = ["website", "phone", "number"];
+            let checkCount;
 
-            let checkCount = checkFields(fields, allowedEmpty, "address");
+            if(typeof itemLatitude === "undefined" || itemLatitude === null || itemLongitude === "undefined" || itemLongitude === null){
 
-            if(checkCount === 0 && itemType.value === "WeddingVenue"){
+                checkCount = 0;
+
+            }else{
+
+                let fields = [itemBusinessName, itemEmail, itemPhone, itemWebsite, itemNumber, itemRoadName, itemTown, itemPostCode1, itemPostCode2, itemLatitude, itemLongitude];
+                let allowedEmpty = ["website", "phone", "number"];
+
+                checkCount = checkFields(fields, allowedEmpty, "address");
+
+            }
+
+            if(checkCount === 0 && itemOption === "Wedding Venue"){
 
                weddingVenueDisplay = true;
 
@@ -308,7 +334,7 @@ export default function UpdateSupplier(props){
 
             }
 
-            if(checkCount === 0 && itemType.value === "WeddingReceptionVenue"){
+            if(checkCount === 0 && itemOption === "Wedding Reception Venue"){
 
                weddingReceptionVenueDisplay = true;
 
@@ -317,12 +343,6 @@ export default function UpdateSupplier(props){
                 weddingReceptionVenueDisplay = false;
 
             }
-
-        }
-
-        if(name === "type"){
-
-            value = value.replace(" ","");
 
         }
 
@@ -336,6 +356,8 @@ export default function UpdateSupplier(props){
 
             newObject.payments.totalCost = newObject.quote?.quoteValue || "0.00";
             newObject.payments.dateBooked = new Date();
+            newObject.payments.balance = newObject.payments.totalCost;
+            newObject.payments.paymentsMade = [];
 
         }
 
@@ -353,8 +375,13 @@ export default function UpdateSupplier(props){
 
             }else{
 
-              
                 value = parseFloat(value).toFixed(2).toString();
+
+            }
+
+            if(name === "quoteValue"){
+
+                newObject["status"] = "Quote received";
 
             }
 
@@ -381,13 +408,26 @@ export default function UpdateSupplier(props){
 
             paymentObject[name] = value;
 
-            if(name === "totalCost" || name === "depositValue"){
+            if(name === "totalCost"){
 
-                if(paymentObject["totalCost"] !== "" && paymentObject["depositValue"] !== ""){
+                const checkArray = paymentObject["paymentsMade"]?.length || 0;
 
-                    paymentObject["balance"] = paymentObject["totalCost"] - paymentObject["depositValue"];
+                if(checkArray === 0){
 
-                } 
+                    paymentObject["balance"] = parseInt(value).toFixed(2).toString();
+
+                }else{
+
+                    let totalPayments = 0;
+
+                    for(let i=0; i < paymentObject["paymentsMade"].length; i++){
+                        totalPayments += parseFloat(paymentObject["paymentsMade"][i].payment);
+                    }
+
+                    paymentObject["balance"] = parseFloat(parseFloat(value) - totalPayments).toFixed(2).toString();
+
+                }
+
             }
 
             newObject["payments"] = paymentObject;
@@ -408,7 +448,7 @@ export default function UpdateSupplier(props){
         newObject["updated"] = new Date();
         newObject["updatedBy"] = user.email;
 
-        if(itemType.value === "WeddingVenue" && itemStatus.value === "Booked"){
+        if(itemOption === "Wedding Venue" && itemStatus.value === "Booked"){
 
             if(weddingVenueDisplay){
 
@@ -424,7 +464,7 @@ export default function UpdateSupplier(props){
 
         }
 
-        if(itemType.value === "WeddingReceptionVenue" && itemStatus.value === "Booked"){
+        if(itemOption === "Wedding Reception Venue" && itemStatus.value === "Booked"){
 
             if(weddingReceptionVenueDisplay){
 
@@ -441,22 +481,63 @@ export default function UpdateSupplier(props){
         }
 
         let newSupplierList = updateSupplierObject(supplierList, currentIndex, newObject);
+
+       
+
         setFormData(newObject);
         setSupplierList(newSupplierList);  // Update parent state with new list
-        checkEmpty(e.target);       
+        checkEmpty(e.target);
 
         getSupplierDataUpdate(newSupplierList);  // Pass UPDATED list, not old supplierList
 
-        let newTaskList = updateSupplierTask(newSupplierList, supplierID, value, taskList, newObject, user);
-        setTaskList(newTaskList);
+        if(name === "status"){
+
+            let newTaskList = updateSupplierTask(newSupplierList, supplierID, taskItemStatus, taskList, newObject, user);
+            setTaskList(newTaskList);
+
+        }
+
         setUpdated(updated + 1);
+
+         if(name === "status" && value === "Booked"){
+
+            supplierBooked(newSupplierList, newObject["taskTypeID"], newObject["UUID"])
+
+        }
 
     }
 
     const onInputNote = (e) => {
 
-        const value = e.target.value.trim();
+        const value = e.target.value;
         setNote(value);
+
+    }
+
+    const onInputLatLong = (e) => {
+
+        const value = e.target.value;
+        const split = value.split(",");
+        let longitude = split[0] ? split[0].trim() : "";
+        let latitude = split[1] ? split[1].trim() : "";
+
+        if(!isNaN(parseFloat(longitude)) && !isNaN(parseFloat(latitude))){
+
+            let newObject = { ...formData };  // Create new object reference
+            let addressObject = formData.address === "" || typeof  formData.address === "undefined" ? {} : formData.address;
+            addressObject["longitude"] = parseFloat(longitude).toString();
+            addressObject["latitude"] = parseFloat(latitude).toString();
+            addressObject["count"] = Object.keys(addressObject).length;
+            newObject["address"] = addressObject;
+            newObject["updated"] = new Date();
+            newObject["updatedBy"] = user.email;
+            const currentIndex = getSupplierIndex(supplierID, supplierList);
+            let newSupplierList = updateSupplierObject(supplierList, currentIndex, newObject);
+            setFormData(newObject);
+            setSupplierList(newSupplierList);  // Update parent state with new list
+            setValidLatLong(true);
+
+        }
 
     }
 
@@ -616,28 +697,28 @@ export default function UpdateSupplier(props){
         
     }
 
+    useEffect(() => {
 
+        if (supplierID && supplierList?.list) {
 
+            const currentIndex = getSupplierIndex(supplierID, supplierList);
+            
+            if (currentIndex !== -1 && supplierList.list[currentIndex]) {
 
-  useEffect(() => {
+                const newFormData = supplierList.list[currentIndex];
+                setFormData(newFormData);
+                
+                checkEmail(newFormData.contactDetails?.email);
+                checkPhone(newFormData.contactDetails?.phone);
+                checkWebsite(newFormData.contactDetails?.website);
 
-    if (supplierID && supplierList?.list) {
+            } else {
 
-        console.log(supplierID);
-        const currentIndex = getSupplierIndex(supplierID, supplierList);
-        console.log(supplierList.list);
-        if (currentIndex !== -1 && supplierList.list[currentIndex]) {
-            const newFormData = supplierList.list[currentIndex];
-            setFormData(newFormData);
-            console.log('Getting supplier data for ID:', supplierID, 'Index:', currentIndex, 'Data:', newFormData.name);
-            checkEmail(newFormData.contactDetails?.email);
-            checkPhone(newFormData.contactDetails?.phone);
-            checkWebsite(newFormData.contactDetails?.website);
-        } else {
-            console.error('Invalid index or supplier not found:', supplierID, currentIndex);
+                console.error('Invalid index or supplier not found:', supplierID, currentIndex);
+
+            }
         }
-    }
-}, [supplierID, supplierList]);
+        }, [supplierID, supplierList]);
 
     const getClassName = (name) => {
 
@@ -654,6 +735,10 @@ export default function UpdateSupplier(props){
          }else if(name === "Shortlisted"){
 
             className = "fa-solid fa-circle-question icon";
+        
+        }else if(name === "Quote received"){
+
+            className = "fa-solid fa-file-invoice icon";
 
         }else{
 
@@ -669,53 +754,89 @@ export default function UpdateSupplier(props){
 
         let count = 0;
 
-        for(let i=0; i < fields.length; i++){
+        //console.log(fields);
 
-            let fieldName = fields[i].getAttribute('name');
-            let fieldValue;
+        if(status !== "Ruled out"){
 
-            if(fields[i].tagName === "SELECT"){
+            let dueDateCheck;
 
-                fieldValue = fields[i].value;
+            for(let i=0; i < fields.length; i++){
 
-            }else{
+                let fieldName = fields[i].getAttribute('name');
+                let fieldValue;
 
-                fieldValue = fields[i].value;
+                if(fieldName === "dueDate"){
 
-                if(fieldValue === ""){
+                    dueDateCheck = fields[i].value;
 
-                    fieldValue = fields[i].value;
-                
                 }
 
-            }
+                if(fields[i].tagName === "SELECT"){
 
-            if(fields[i].tagName === "SELECT"){
+                    fieldValue = fields[i].value;
 
-                fields[i].style.outline = "none";
+                }else{
 
-            }else{
-            
-                fields[i].style.borderColor = "var(--grey)";
+                    fieldValue = fields[i].value;
 
-            }  
+                    if(fieldValue === ""){
 
-            if(allowedEmpty.includes(fieldName) === false){
-
-                if(fieldValue === "" || fieldValue === "Not confirmed"){
-
-                    count += 1;
-
-                    if(fields[i].tagName === "SELECT"){
-
-                        fields[i].style.outline = "1px solid red";
-
-                    }else{
-
-                        fields[i].style.borderColor = "red";
-
-                    }
+                        fieldValue = fields[i].value;
                     
+                    }
+
+                }
+
+                if(fields[i].tagName === "SELECT"){
+
+                    fields[i].style.outline = "none";
+
+                }else{
+                
+                    fields[i].style.borderColor = "var(--grey)";
+
+                }  
+
+                if(allowedEmpty.includes(fieldName) === false){
+
+                    console.log("empty field:", fieldName, fieldValue);
+
+                    if(fieldValue === "" || fieldValue === "Not confirmed"){
+
+                        if(fields[i].tagName === "SELECT"){
+
+                            count += 1;
+                            fields[i].style.outline = "1px solid red";
+
+                        }else{
+
+                            if(fieldName === "balancePaidDate"){
+
+                                let todaysDate = new Date();
+                                let dateCheck = new Date(dueDateCheck);
+
+                                if(dateCheck > todaysDate && dueDateCheck !== ""){  
+
+                                    fields[i].style.borderColor = "var(--grey)";
+
+                                }else{
+
+                                    count += 1;
+                                    fields[i].style.borderColor = "red"; 
+                                    
+                                }
+
+                            }else{
+
+                                count += 1;
+                                fields[i].style.borderColor = "red";
+
+                            }
+
+                        }
+                        
+                    }
+
                 }
 
             }
@@ -728,18 +849,35 @@ export default function UpdateSupplier(props){
 
     const checkEmptyFields = () => {
 
-        const itemType = document.getElementsByName("type")[0] ? document.getElementsByName("type")[0] : { value: "" }  ;
+        const itemType = document.getElementsByName("taskTypeID")[0] ? document.getElementsByName("taskTypeID")[0] : { value: "" };
+        const itemOption = itemType.options[itemType.selectedIndex].text
+        const itemStatus = document.getElementsByName("status")[0] ? document.getElementsByName("status")[0] : { value: "" };
 
-        
         let allowedEmpty;
 
-        if(itemType.value === "WeddingVenue" || itemType.value === "WeddingReceptionVenue"){
+        if(itemOption === "Wedding Venue" || itemOption === "Wedding Reception Venue"){
 
-            allowedEmpty = ["number","website"];
+            if(itemStatus.value === "Enquiry made"){
+
+                allowedEmpty = ["number","website","paymentDate", "payment","paidBy","paymentMethod", "quoteValue", "quoteDate", "quoteBy"];
+
+            }else{
+
+                allowedEmpty = ["number","website","paymentDate", "payment","paidBy","paymentMethod"];
+
+            }
 
         }else{
 
-            allowedEmpty = ["website", "phone", "number", "roadName", "town", "postCode1", "postCode2", "latitude","longitude"];
+            if(itemStatus.value === "Enquiry made"){
+
+                allowedEmpty = ["website", "phone", "number", "roadName", "town", "postCode1", "postCode2", "latitude","longitude","paymentDate", "payment","paidBy","paymentMethod", "quoteValue", "quoteDate", "quoteBy"];
+
+            }else{
+
+                allowedEmpty = ["website", "phone", "number", "roadName", "town", "postCode1", "postCode2", "latitude","longitude","paymentDate", "payment","paidBy","paymentMethod"];
+            
+            }
 
         }
         
@@ -757,15 +895,51 @@ export default function UpdateSupplier(props){
             
         }
 
+       
+
+    }
+
+    const getEmptyFields = () => {
+
         let returnText;
 
-        if(totalEmpty === 0){
+        if(totalEmptyState === 0){
 
-            returnText = " (completed)";
+            if(status === "Booked"){
+
+                returnText = <div style={{margin:"5px"}}> <span className='labelTag booked' title="current status"><i class="fa-solid fa-circle-check"></i> booked</span></div>;
+
+            }else if(status === "Quote received"){
+
+                returnText = <div style={{margin:"5px"}}><span className='labelTag quoted' title="current status"><i class="fa-solid fa-file-invoice"></i> quote recieved</span></div>;
+
+            }else if(status === "Enquiry made"){
+
+                returnText = <div style={{margin:"5px"}}><span className='labelTag enquiry' title="current status"><i class="fa-solid fa-phone"></i> enquiry made</span></div>;
+
+            }else if(status === "Shortlisted"){
+
+                returnText = <div style={{margin:"5px"}}><span className='labelTag shortlisted' title="current status"><i class="fa-solid fa-list"></i> shortlisted</span></div>;
+
+            }else{
+
+                returnText = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i> ruled out</span></div>;
+
+            }
 
         }else{
 
-            returnText = " (" + totalEmpty + " required fields)";
+            if(status === "Ruled out"){
+
+                returnText = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i> ruled out</span></div>;
+
+            }else{
+
+                const getS = totalEmptyState > 1 ? "s" : "";
+
+                returnText = <div style={{margin:"5px"}}><span className='labelTag empty' title="current status">{totalEmptyState + " required field" + getS}</span></div>;
+
+            }
 
         }
 
@@ -804,9 +978,8 @@ export default function UpdateSupplier(props){
         updateSupplierObject(supplierList, currentIndex, newObject);
         setFormData(newObject);
 
-        document.getElementById("Note").value = "";
+        setNote("");
         setUpdated(updated + 1);
-        
 
     }
 
@@ -933,21 +1106,113 @@ export default function UpdateSupplier(props){
 
     }
 
+    const displayLatLong = () => {
+
+        return(
+
+            <>
+
+                <div className='row'>
+
+                    <div className='inputGroup col-12'>
+                            <label className="block mb-2 font-semibold">
+                            Latitude:
+                        </label>
+                        <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
+                        <input type='text' className='inputBox' onChange={ onInput } name='latitude' placeholder='latitude' value={ latitude }></input>
+                    </div>
+
+                </div>
+
+                <div className='row'>
+
+                    <div className='inputGroup col-12'>
+                        <label className="block mb-2 font-semibold">
+                            Longitude:
+                        </label>
+                        <i className="fa-solid fa-location-crosshairs icon" title="longitude"></i>
+                        <input type='text' className='inputBox' onChange={ onInput } name='longitude' placeholder='longitude' value={ longitude }></input>
+                    </div>
+
+                </div>
+
+            </>
+
+        );
+    }
+
+    const displayLatLongCapture = () => {
+
+        return(
+
+            <div className='row'>
+
+                <div className='inputGroup col-12'>
+                        <label className="block mb-2 font-semibold">
+                        Paste Latitude and Longitude from google link:
+                    </label>
+                    <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
+                    <input type='text' className='inputBox' onChange={ onInputLatLong } name='atlongCapture' placeholder='Paste Latitude and Longitude from google link:' value={ "" }></input>
+                </div>
+
+            </div>
+
+        );
+    }
+
+    // Run empty-field validation only when form data or status changes.
+    // Use a short async delay so child components (Email/Phone) can sync their internal input values/icons first.
+    useEffect(() => {
+
+        const timeout = setTimeout(() => {
+            checkEmptyFields();
+        }, 0);
+
+        return () => clearTimeout(timeout);
+
+    }, [formData, status]);
+
+    const getOutstandingBalance = () => {
+
+        let returnText = "";
+
+        if(status === "Booked" && formData.payments){
+
+            const balance = parseFloat(formData.payments.balance || "0.00");
+
+            if(balance > 0){
+
+                returnText = <div style={{margin:"5px"}}><span className='labelTag balance' title="Outstanding balance"><i class="fa-solid fa-file-invoice"></i> { currencyList[currency].symbol }{ balance.toFixed(2) }</span></div>;
+            }
+
+        }
+
+        return returnText;
+
+    }
+
     return(
 
         <div className='contentWrapper'>
 
             <section id="updateGuestSection">
 
-                <div className='row two'>
+                <div className='row'>
 
-                    <div className='col-6'>
+                    <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"left"}}>
                     
-                        <h2>{ formData.name + " " + checkEmptyFields() }</h2>
+                        <h2>{ formData.name } </h2>
+                        
 
                     </div>
 
-                    <div className='topLinks col-6'>
+                    <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"left"}}>
+
+                        <div style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"left"}} >{getEmptyFields()} {getOutstandingBalance()}</div>
+
+                    </div>
+
+                    <div className='topLinks col-4'>
                         
                         <div>{ phone !== "" && validPhone ? getPhoneLink(email, "link") : "" }</div>
                         <div>{ website !== "" && validWeb ? getWebLink(website, "link") : "" }</div>
@@ -970,16 +1235,17 @@ export default function UpdateSupplier(props){
                  
                     </div>
 
-                      <div className='row'>
+                    <div className='row'>
 
-                    <div className='inputGroup col-12'>
+                        <div className='inputGroup col-12'>
 
                             <i className="fa-solid fa-circle-info icon" title="Supplier type"></i>
 
                             
-                            <select className='guestType' style={ getColor(type) } name='type' onChange={ onInput } value={ type.replace(/\s/g,"") }>
+                            <select className='guestType' style={ getColor(taskTypeID) } name='taskTypeID' onChange={ onInput } value={ taskTypeID }>
                                 {taskList.list.map((s, i) => (
-                                    <option key={i} value={s.taskName.replace(/\s/g,"")}>{splitByCapitalNums(s.taskName)}</option>
+                               
+                                    <option key={i} value={ s.taskID }>{ s.taskName }</option>
                                 ))}
                             </select>
                         
@@ -987,28 +1253,13 @@ export default function UpdateSupplier(props){
 
                     </div>
 
-                    <div className='row'>
+                    {/* Email Section */}
+                    <Email updateFunction={ onInput } value={ email } type="input" class='inputBox checkIcon' />
 
-                        <div className='inputGroup col-12'>
-
-                            { getEmailLink(formData.contactDetails?.email) }
-                            <input type='email' className='inputBox checkIcon' name='email' placeholder='email' value={ email } onInput={ onInput }></input>
-                            <i className="fa-solid fa-circle-minus icon2 emailCheck"></i>
-                        
-                        </div>
-
-                    </div>
-
-                    <div className='row'>
-
-                        <div className='inputGroup col-12'>
-                            { getPhoneLink(formData.contactDetails?.phone) }
-                            <input type='text' className='inputBox checkIcon' name='phone' placeholder='phone' value={ phone } onInput={ onInput }></input>
-                            <i className="fa-solid fa-circle-minus icon2 phoneCheck"></i>
-                        </div>
-
-                    </div>
-
+                     {/* Mobile Section */}
+                    <Phone updateFunction={ onInput } value={ phone } type="input" numberType={ "phone" } lass='inputBox checkIcon' setRemoveSpaces={ true }/>
+                    
+                    {/* Website Section */}
                     <div className='row'>
 
                         <div className='inputGroup col-12'>
@@ -1060,33 +1311,9 @@ export default function UpdateSupplier(props){
                     </div>
 
                     { addressSearch && latitude === "" || addressSearch && longitude === "" ? <a href={ getSearchAddress() } target="_blank">Search to add logitude and latitude</a> : "" }
-
-                     {/* Latitude */}
-                    <div className='row'>
-
-                        <div className='inputGroup col-12'>
-                             <label className="block mb-2 font-semibold">
-                                Latitude:
-                            </label>
-                            <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
-                            <input type='text' className='inputBox' onChange={ onInput } name='latitude' placeholder='latitude' value={ latitude }></input>
-                        </div>
-
-                    </div>
-
-                     {/* Longitude */}
-                    <div className='row'>
-
-                        <div className='inputGroup col-12'>
-                            <label className="block mb-2 font-semibold">
-                                Longitude:
-                            </label>
-                            <i className="fa-solid fa-location-crosshairs icon" title="longitude"></i>
-                            <input type='text' className='inputBox' onChange={ onInput } name='longitude' placeholder='longitude' value={ longitude }></input>
-                        </div>
-
-                    </div>
-
+                    { addressSearch && latitude === "" && !validLatLong || addressSearch && longitude === "" && !validLatLong ? displayLatLongCapture() : "" }
+                    { addressSearch && latitude !== "" && longitude !== "" ? displayLatLong() : "" }
+                    
                      <div className='row'>
 
                         <div className='inputGroup col-12'>
@@ -1107,24 +1334,29 @@ export default function UpdateSupplier(props){
 
                     </div>
 
-                    { formData.status === "Enquiry made"  ? <SupplierQuoteDetails type="quote" onInput={ onInput } quote={ costValue } currency={ currency } currencyList={ currencyList } getColor={ getColor } quoteDate={ quoteDate } quoteBy={ quoteBy }/> : "" }
-                    { formData.status === "Booked"  ?   <SupplierCostDetails  type="booked" 
-                                                                            onInput={ onInput } 
-                                                                            defaultValue={ costValue } 
-                                                                            currency={ currency } 
-                                                                            currencyList={ currencyList } 
-                                                                            getColor={ getColor } 
-                                                                            deposit={ deposit } 
-                                                                            depositDate={ depositDate }
-                                                                            dueDate={ dueDate}
-                                                                            balance={ balance }
-                                                                            balancePaidBy={ balancePaidBy }
-                                                                            depositPaidBy={ depositPaidBy }
-                                                                            balancePaymentType={ balancePaymentType }
-                                                                            balancePaidDate={ balancePaidDate }
-                                                                            depositPaymentType={ depositPaymentType }
+                    { formData.status === "Enquiry made" || formData.status === "Quote received" ? <SupplierQuoteDetails type="quote" onInput={ onInput } quote={ costValue } currency={ currency } currencyList={ currencyList } getColor={ getColor } quoteDate={ quoteDate } quoteBy={ quoteBy }/> : "" }
+                    { formData.status === "Booked"  ?   <SupplierCostDetails 
+
+                                                            type="booked" 
+                                                            onInput={ onInput } 
+                                                            defaultValue={ costValue } 
+                                                            dueDate={ dueDate }
+                                                            balance={ balance }
+                                                            currency={ currency } 
+                                                            currencyList={ currencyList } 
+                                                            getColor={ getColor }                                                    
+                        
+                                                            user={ user }
+                                                            supplierList={ supplierList }
+                                                            setSupplierList={ setSupplierList }
+                                                            taskList={ taskList }
+                                                            setTaskList={ setTaskList }
+                                                            supplierID={ supplierID }
+                                                            payments={ typeof formData.payments.paymentsMade !== "undefined" ? formData.payments : [] }
 
                                                         /> : "" }
+
+                    { formData.status === "Booked" && typeof formData.payments.paymentsMade !== "undefined" ? <PaymentHistory paymentsMade={ formData.payments.paymentsMade } /> : null }
 
                     <div className='row'>
 

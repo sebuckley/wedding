@@ -5,11 +5,17 @@ export default function BridalFilter(props){
     const setWeddingFilter = props.setWeddingFilter;
     const filterName = props.filterName;
     const checkEmptyWedding = props.checkEmptyWedding;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
 
     const onClick = (e) => {
 
         e.preventDefault();
         setWeddingFilter(e.target.innerText);
+
+        let copySettings = { ...settings };
+        copySettings["details"].state = e.target.innerText;
+        setSettings(copySettings);
 
         const filterButtons = document.getElementsByClassName('weddingfilterButton');
 
@@ -20,6 +26,11 @@ export default function BridalFilter(props){
         }
 
         e.target.className = "weddingfilterButton activeWeddingFB";
+
+        setTimeout(() => {
+            checkEmptyWedding();    
+        }, 100);
+        
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { splitByCapitalNums, toProperCase } from "../../Wigits/dataFunctions";
 import { saveGuestListItem } from "../../Wigits/dataFunctions-guestList";
 import { saveBridalPartyClothing } from "../../Wigits/dataFunctions-bridalParty";
@@ -13,9 +13,10 @@ const WeddingClothingForm = (props) => {
   const role = props.role ? props.role.toLowerCase() : "";
   const guestList = props.guestList;
   const index = parseInt(props.index);
-  const checkEmpty = props.checkEmpty; // Fallback to a no-op if not provided
   const bridalParty = props.bridalParty;
   const selection = props.selection;
+  const [empty, setEmpty] = useState(0);
+  let emptyText;
  
   const disableItem = props.disableItem;
 
@@ -119,11 +120,6 @@ const WeddingClothingForm = (props) => {
       saveGuestListItem(guestList, index, "clothing", newObject);
 
     }
-
-    
-
-
-    
    
   };
 
@@ -146,11 +142,54 @@ const WeddingClothingForm = (props) => {
 
   }
 
+  const checkEmpty = () => {
+  
+      const items = document.getElementsByClassName("guestClothing");
+
+      let empty = 0;
+
+      for(let i=0; i< items.length; i++){
+
+          let value = items[i].value;
+          
+          if(value === ""){
+
+              empty += 1;
+              items[i].style.borderColor = "red";
+
+          }else{
+
+              items[i].style.borderColor = "var(--grey)";
+              
+          }
+
+      }
+
+      setEmpty(empty);
+
+  }
+
+  useEffect(() => {
+
+      checkEmpty();
+
+  });
+
+  if(empty === 0){
+
+    emptyText = "[completed]";
+
+  }else{
+
+    emptyText = "[" + empty + " incomplete]";
+
+  }
+
   return (
 
     <>
 
-    <h2 onClick={ displayClothing } style={{width: "100%"}}><i onClick={ displayClothing } id="addClothingIcon" className="fa fa-circle-plus iconHeader2"></i>{ disableItem ? "Your wedding clothing sizes" : name + " wedding clothing sizes"}</h2>
+    <h2 onClick={ displayClothing } style={{width: "100%"}}><i onClick={ displayClothing } id="addClothingIcon" className="fa fa-circle-plus iconHeader2"></i>{ disableItem ? "Your wedding clothing sizes" : name + " wedding clothing sizes " + emptyText}</h2>
 
     <form id="clothingForm" style={{ display: display }}>
 
@@ -268,7 +307,7 @@ const WeddingClothingForm = (props) => {
                     <input
                       type="text"
                       id={`${section}_${field}`}
-                      className="inputBox3"
+                      className="guestClothing inputBox3"
                       placeholder={placeholder}
                       value={formData[section]?.[field] || ""}
                       onChange={(event) => handleChange(event, section, field)}

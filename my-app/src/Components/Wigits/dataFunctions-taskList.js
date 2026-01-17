@@ -67,7 +67,7 @@ const getTaskIndex = (taskList, UUID) => {
 
     for(let i = 0; i < taskList.list.length; i++){
 
-        if(taskList.list[i].itemID === UUID){
+        if(taskList.list[i].taskID === UUID){
 
             return i;
 

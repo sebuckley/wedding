@@ -192,7 +192,6 @@ const getGuestIndexRole = (guestList, role) => {
 
 }
 
-
 const getGuestGuestIndexRole = (additionalGuests, role) => {
 
     let index = -1;
@@ -224,9 +223,6 @@ const deleteGuestListItem = (guestList, index) => {
     return guestList;
 
 }
-
-
-
 
 export { getGuestList,checkExistingGuest, saveGuestList, saveGuestListItem, saveGuestListItemGuest,  getGuestIndex, getGuestIndexRole, deleteGuestListItem } 
   

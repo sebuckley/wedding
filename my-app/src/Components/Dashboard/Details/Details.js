@@ -11,7 +11,7 @@ import BridalFilter from "./bridalFilter";
 import FAQ from "./faq";
 
 export default function Details(props){
-  
+
     const user = props.user;
     const setUser = props.setUser;
     const loading = props.loading;
@@ -24,13 +24,57 @@ export default function Details(props){
     const faqs = props.faqs;
     const setFaqState = props.setFaqState;
     const faqState = props.faqState;
+    const settings = props.settings;
+    const setSettings = props.setSettings;
+    const pathName = window.location.href.split("?")[1];
+    
+    let filterName;
+
+
+    if(pathName !== "" && typeof pathName !== "undefined"){
+
+      const path = window.location.href.split("?")[0];
+      const url = new URL(path);
+      url.search = ''; // Clear the search query
+      window.history.replaceState({}, document.title, url.toString());
+
+      let selection = pathName.split("=")[1];
+
+      if(bridalParty["first"].UUID === selection){
+
+        filterName = "Partner 1";
+
+      }else if(bridalParty["second"].UUID === selection){
+
+        filterName = "Partner 2"; 
+
+      }
+
+      const copySettings = { ...settings };
+      copySettings["details"].state = filterName;
+      setSettings(copySettings);
+
+    }else{
+
+      filterName = settings["details"].state;
+
+    }
+
     const [listUpdated, setListUpdated] = useState(0);
-    const [weddingFilter, setWeddingFilter] = useState("Wedding Plans");
+    const [weddingFilter, setWeddingFilter] = useState(filterName);
     const [formEmpty, setFormEmpty] = useState(0);
     const [countryEmpty, setCountryEmpty] = useState(0);
     const [styleEmpty, setStyleEmpty] = useState(0);
     const [colorEmpty, setColorEmpty] = useState(0);
-    const [initialEmptyCheck, setEmptyInitialCheck] = useState(false)
+    const [initialEmptyCheck, setEmptyInitialCheck] = useState(false);
+
+    if(weddingFilter === ""){
+
+      setWeddingFilter(filterName); 
+    
+    }
+
+    console.log(weddingFilter);
 
     const emptyDetails = {
 
@@ -50,41 +94,42 @@ export default function Details(props){
 
     const handleChange = (e) => {
 
-      const name = e.target.name;
-      const value = e.target.value;
-      const className = e.target.className;
+      const events = Array.isArray(e) ? e : [e];
 
-      const split = className.split(" ");
-      const createName = split[split.length - 1];
+      let updatedBridalParty = { ...bridalParty };
 
-      const updatedBridalParty = { ...bridalParty, [createName]: { ...bridalParty[createName] } };
+      events.forEach((event) => {
 
-      if (!("UUID" in updatedBridalParty[createName])) {
+        const name = event.target.name;
+        const value = event.target.value;
+        const className = event.target.className;
 
-       updatedBridalParty[createName]["UUID"] = uuidv4();
+        const split = className.split(" ");
+        const createName = split[split.length - 1];
 
-      }
+        updatedBridalParty[createName] = { ...updatedBridalParty[createName] };
 
-      console.log(updatedBridalParty[createName][name]);
+        if (!("UUID" in updatedBridalParty[createName])) {
 
-      updatedBridalParty[createName][name] = value;
+          updatedBridalParty[createName]["UUID"] = uuidv4();
 
-      if(name === "weddingStyle" && value !== "Religious Ceremony"){
+        }
 
-        updatedBridalParty[createName]["religiousType"] = "Humanist";
+        updatedBridalParty[createName][name] = value;
 
-      }
-     
+        if(name === "weddingStyle" && value !== "Religious Ceremony"){
+
+          updatedBridalParty[createName]["religiousType"] = "Humanist";
+
+        }
+
+      
+      });
+
       setBridalParty(updatedBridalParty);
       saveBridalParty(updatedBridalParty);
       setListUpdated(listUpdated + 1);
       checkEmptyWedding();
-
-      if(name !== "weddingStyleCategory" && name !== "styleDescription"){
-
-        checkEmpty(e.target);
-
-      }
 
     };
 
@@ -110,9 +155,15 @@ export default function Details(props){
               items[i].style.borderColor = "red";
               items[i].style.outline = "none";
 
+            }else{
+
+              items[i].style.borderColor = "var(--grey)";
+
             }
 
         }
+
+        
 
         setFormEmpty(empty);
         checkEmptyCountry();
@@ -189,7 +240,6 @@ export default function Details(props){
         setColorEmpty(empty);
 
     }
-
 
     const getRoles = () => {
 
@@ -391,7 +441,7 @@ export default function Details(props){
 
         <div className="adminBody">
 
-          <BridalFilter setWeddingFilter={ setWeddingFilter } filterName={ weddingFilter } checkEmptyWedding={ checkEmptyWedding }/>
+          <BridalFilter setWeddingFilter={ setWeddingFilter } filterName={ weddingFilter } checkEmptyWedding={ checkEmptyWedding } settings={ settings } setSettings={ setSettings } />
 
 
           <div id="detailsForm">

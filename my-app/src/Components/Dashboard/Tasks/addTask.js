@@ -131,7 +131,7 @@ export default function AddTask(props){
             newTask["created"] = new Date();
             newTask["history"] = []
             newTask["createdBy"] = user.user;
-            newTask["itemID"] = uuidv4();
+            newTask["taskID"] = uuidv4();
             newTask["state"] = "";
             newTask["activity"] = "";
             newTask["toDoDate"] = "";

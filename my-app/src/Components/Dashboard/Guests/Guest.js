@@ -17,6 +17,8 @@ export default function Guest(props){
     const loggedIn = props.loggedIn;
     const setLoggedin = props.setLoggedin;
 
+    const getGuestData = props.getGuestData;
+
     const bridalParty = props.bridalParty;
     const guestList = props.guestList;
     const setGuestList = props.setGuestList;
@@ -66,6 +68,7 @@ export default function Guest(props){
                 user={ user }
                 loading={ loading }
                 setLoading={ setLoading }
+                getGuestData={ getGuestData }
 
               />
 
