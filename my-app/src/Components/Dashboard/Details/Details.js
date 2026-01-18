@@ -74,8 +74,6 @@ export default function Details(props){
     
     }
 
-    console.log(weddingFilter);
-
     const emptyDetails = {
 
       firstName: "",

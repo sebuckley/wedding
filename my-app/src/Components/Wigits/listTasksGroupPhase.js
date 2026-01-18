@@ -17,6 +17,7 @@ const ListTasksGroupPhase = (props) => {
   const taskSortedBy = props.taskSortedBy;
   const onChangeDate = props.onChangeDate;
   const taskFiltered = props.taskFiltered;
+  const getPhases = props.getPhases;
   const [taskListUpdated, setThisListUpdated] = useState(0);
 
   const sortList = (array, sortBy="taskName", type="asc") => {
@@ -256,14 +257,16 @@ const ListTasksGroupPhase = (props) => {
 
   const generateGroups = () => {
 
-    const list = weddingTaskPhases.map((item) => {
+    const tempList = getPhases(false);
 
-        const title = <h3>{ item }</h3>
-        const group = generateList(taskList, item);
+    const list = tempList.map((item) => {
+
+        const title = <h3>{ item.phase }</h3>
+        const group = generateList(taskList, item.phase);
 
         return(
 
-                <div key={item}>
+                <div key={item.phase}>
                     {title}
                     {group}
                 </div>

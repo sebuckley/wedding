@@ -119,7 +119,7 @@ export default function TaskRow(props){
         if(type === "input"){
 
          
-            returnObject = <div className="inputDate col-3" ><div><label>Due Date:</label><input type='date' onChange={ onChangeDate } className="dateBox2" value={ currentDate }></input></div></div>
+            returnObject = <div className="inputDate col-3" ><div><label>Next Action Date:</label><input type='date' onChange={ onChangeDate } className="dateBox2" value={ currentDate }></input></div></div>
 
 
         }else{

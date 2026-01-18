@@ -5,75 +5,143 @@ import { uuidv4 } from '../../Wigits/dataFunctions';
 
 export default function AddTask(props){
 
-    const [display, setDisplay] = useState(false);
-    const [newTask, setNewTask] = useState('');
-    const setTaskList = props.setTaskList;
+    const object = {
 
-    if(newTask === ''){
+        taskName: '',
+        groupSelect: '',
+        groupInput: '',
+        phaseSelect: '',
+        phaseInput: ''
+
+    }
+
+    const [display, setDisplay] = useState(false);
+    const [formData, setFormData] = useState("");
+    const [displayGroupInput, setDisplayGroupInput] = useState(false);
+    const [displayPhaseInput, setDisplayPhaseInput] = useState(false);
+    const setTaskList = props.setTaskList;
+    const taskList = props.taskList;
+    const user = props.user;
+    const getGroup = props.getGroup;
+    const getPhases = props.getPhases;
+
+    if(formData === ''){
 
         if(localStorage.getItem('newTask') !== null){
 
-            setNewTask(localStorage.getItem('newTask'));
+            setFormData(localStorage.getItem('newTask'));
             setDisplay(true);
+
+        }else{
+
+            setFormData(object);
 
         }
 
     }
 
-    const onInput = (e) =>{
+    const onChange = (e) =>{
 
-        const value = e.target.value.trim();
+        const value = e.target.value;
+        const name = e.target.name;
 
-        localStorage.setItem("newTask", value);
+        if(name === "groupSelect" && value === "add"){
+
+            setDisplayGroupInput(true);
+            
+
+        }else if(name === "phaseSelect" && value === "add"){
+
+            setDisplayPhaseInput(true);
+
+        }else if(name === "groupSelect" && value !== "add"){
+
+            setDisplayGroupInput(false);
+            
+
+        }else if(name === "phaseSelect" && value !== "add"){
+
+            setDisplayPhaseInput(false);
+
+        }
+
         checkEmpty(e.target);
+        setFormData({...formData, [name]: value});
+        localStorage.setItem("newTask", JSON.stringify(formData));
 
     }
 
     const checkForm = () => {
 
-        let allowedEmpty = [];
-
-        const getForm = document.getElementById("inputForm");
         let empty = 0;
 
-        for(let i = 0; i < getForm.length; i ++){
+        if(formData.taskName === ""){
 
-            let itemValue = getForm[i].value;
-            let tagName = getForm[i].tagName;
-            let itemName = getForm[i].name;
+            empty += 1;
+            let item = document.getElementsByName("taskName")[0];
+            item.style.borderColor = "var(--red)";
 
-            if(tagName !== "BUTTON" && allowedEmpty.includes(itemName) === false && itemValue === ""){
+        }else{
 
-                empty += 1;
-
-                if(tagName === "SELECT"){
-
-                    getForm[i].style.outline = "1px solid var(--red)";
-    
-                }else{
-    
-                    getForm[i].style.borderColor = "var(--red)";
-    
-                }
-                                    
-            }else{
-
-                if(itemValue !== ""){
-
-                    let index = allowedEmpty.indexOf(itemName);
-                    if (index !== -1) {
-
-                        allowedEmpty.splice(index, 1);
-
-                    }
-
-                }
-
-            }
+            let item = document.getElementsByName("taskName")[0];
+            item.style.borderColor = "var(--grey)";
 
         }
 
-        return [empty, allowedEmpty];
+        if(formData.groupSelect === ""){
+
+            empty += 1;
+            let item = document.getElementsByName("groupSelect")[0];
+            item.style.outline = "2px solid var(--red)";    
+
+        }else{
+
+            let item = document.getElementsByName("groupSelect")[0];
+            item.style.outline = "none";        
+
+        }
+
+        if(formData.phaseSelect === ""){
+
+            empty += 1;
+            let item = document.getElementsByName("phaseSelect")[0];
+            item.style.outline = "2px solid var(--red)";  
+
+        }else{
+
+            let item = document.getElementsByName("phaseSelect")[0];
+            item.style.outline = "none";        
+
+        }
+
+         if(formData.groupSelect === "add" && formData.groupInput === ""    ){
+
+            empty += 1;
+            let item = document.getElementsByName("groupSelect")[0];
+            item.style.outline = "2px solid var(--red)";    
+
+        }else{
+
+            let item = document.getElementsByName("groupSelect")[0];
+            item.style.outline = "none";        
+
+        }
+
+        if(formData.phaseSelect === "add" && formData.phaseInput === ""){
+
+            empty += 1;
+            let item = document.getElementsByName("phaseSelect")[0];
+            item.style.outline = "2px solid var(--red)";  
+
+        }else{
+
+            let item = document.getElementsByName("phaseSelect")[0];
+            item.style.outline = "none";  
+
+        }
+
+
+        return [empty];
 
     }
 
@@ -88,7 +156,7 @@ export default function AddTask(props){
 
         });
 
-        let newWord = splitWord.join('');
+        let newWord = splitWord.join(' ');
 
         return newWord;
        
@@ -99,50 +167,43 @@ export default function AddTask(props){
 
         const emptyInputs = checkForm();
         let newTask = {};
+        let tempTaskList = { ...taskList };
 
         if(emptyInputs[0] === 0){
 
-            const formData = document.getElementById("inputForm");
-            let taskList = getTaskList();
+            let newValue = formData.taskName;
 
-            for(let i = 0; i < formData.length; i++){
+            const checkExisting = checkExistingTask(taskList, newValue);
 
-                if(formData[i].tagName !== "BUTTON"){
+            if(checkExisting){
 
-                    let newValue = toProperCase(formData[i].value);
-
-                    const checkExisting = checkExistingTask(taskList, newValue);
-
-                    if(checkExisting){
-
-                        alert("This task already exists");
-                        return;
-
-                    }
-
-                    newTask[formData[i].getAttribute("name")] = toProperCase(formData[i].value);
-
-                }
+                alert("This task already exists");
+                return;
 
             }
 
-            const user = JSON.parse(localStorage.getItem("token"));
-
-            newTask["created"] = new Date();
-            newTask["history"] = []
-            newTask["createdBy"] = user.user;
-            newTask["taskID"] = uuidv4();
-            newTask["state"] = "";
             newTask["activity"] = "";
+            newTask["created"] = new Date();
+            newTask["createdBy"] = user.user;
+            newTask["group"] = formData.groupSelect === "add" ? formData.groupInput : formData.groupSelect;
+            newTask["history"] = [];
+            newTask["order"] = "";
+            newTask["phase"] = formData.phaseSelect === "add" ? formData.phaseInput : formData.phaseSelect;
+            newTask["state"] = "To-do";
+            newTask["taskID"] = uuidv4();
+            newTask["taskName"] = toProperCase(formData.taskName);
             newTask["toDoDate"] = "";
             newTask["lastUpdated"] = "";
             newTask["lastUpdatedBy"] = "";
         
-            taskList.list.push(newTask);
-            taskList.length = taskList.list.length;
+            tempTaskList.list.push(newTask);
+            tempTaskList.length = taskList.list.length;
 
-            saveTaskList(taskList);
-            setTaskList(taskList);
+            saveTaskList(tempTaskList);
+            setTaskList(tempTaskList);
+            setDisplay(false);
+            setDisplayGroupInput(false);
+            setDisplayPhaseInput(false);
             
             clearForm();
             clearState();
@@ -166,7 +227,6 @@ export default function AddTask(props){
 
     const checkEmpty = (item) => {
 
-
         if(item.value !== ""){
 
             if(item.tagName === "SELECT"){
@@ -187,22 +247,14 @@ export default function AddTask(props){
 
     const clearState = () => {
 
-        setNewTask('');
+        setFormData('');
 
     }
 
     const clearForm = () => {
 
-        const getForm = document.getElementById("inputForm");
-
-        for( let i = 0; i < getForm.length; i++){
-
-            getForm[i].value = "";
-
-        }
-
+        setFormData("");
         localStorage.removeItem('newTask');
-        setNewTask('');
 
     }
 
@@ -251,11 +303,43 @@ export default function AddTask(props){
 
     }
 
+    const getColor = (item) => {
+
+        let color;
+
+        if(item === ""){
+
+            color = { color: "var(--grey)"}
+
+        }else{
+
+            color = { color: "var(--black)"}
+
+        }
+
+        return color;
+
+    }
+
+    const getClassName = () => {
+
+        if(display){
+
+            return "fa fa-circle-minus iconHeader";
+
+        }else{
+
+            return "fa fa-circle-plus iconHeader";
+
+        }
+
+    }
+
     return(
 
         <section id="addTaskSection">
 
-            <i onClick={ displayAddTask } id="addTaskIcon" className="fa fa-circle-plus iconHeader"></i>
+            <i onClick={ displayAddTask } id="addTaskIcon" className={ getClassName() }></i>
             <h1 onClick={ displayAddTask } id="addTaskTitle">Add Task</h1>
 
             <form id='inputForm' style={ getCurrentDisplay() } target="_blank">
@@ -264,7 +348,51 @@ export default function AddTask(props){
 
                     <div className='inputGroup col-12'>
                         <i className="fa fa-user icon"></i>
-                        <input type='text' className='inputBox' onInput={ onInput } onChange={ e => setNewTask( e.target.value )} name='taskName' placeholder='Add task' value={ newTask }></input>
+                        <input type='text' className='inputBox'  onChange={ onChange } name='taskName' placeholder='Add task' value={ formData.taskName }></input>
+                    </div>
+               
+                </div>
+
+                <div className="row">
+                    <div className="inputGroup col-12">
+                        <i className="fa-solid fa-circle-info icon"></i>
+                        
+                        <select className="guestType" name="groupSelect" value={ formData.groupSelect } onChange={ onChange } style={ getColor(formData.groupSelect) }>
+                            <option value="" hidden>Supplier type... (required)</option>
+                            { getGroup() }
+                            <option value="add" >Add new</option>
+                        </select>
+                    </div>
+                </div>
+
+                 <div className='row two customGroup' style={{ display: displayGroupInput ? '' : 'none' }}>
+
+                    <div className='inputGroup col-12'>
+                        <i className="fa fa-user icon"></i>
+                        <input type='text' className='inputBox' onChange={ onChange } name='groupInput' placeholder='Add task group' value={ formData.groupInput }></input>
+                    </div>
+               
+                </div>
+
+               
+
+                 <div className="row">
+                    <div className="inputGroup col-12">
+                        <i className="fa-solid fa-circle-info icon"></i>
+                        
+                        <select className="guestType" name="phaseSelect" value={ formData.phaseSelect } onChange={ onChange } style={ getColor(formData.phaseSelect) }>
+                            <option value="" hidden>Supplier type... (required)</option>
+                            { getPhases()}
+                             <option value="add" >Add new</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className='row two customPhase' style={{ display: displayPhaseInput ? '' : 'none' }}>
+
+                    <div className='inputGroup col-12'>
+                        <i className="fa fa-user icon"></i>
+                        <input type='text' className='inputBox'  onChange={ onChange } name='phaseInput' placeholder='Add task phase' value={ formData.phase }></input>
                     </div>
                
                 </div>
