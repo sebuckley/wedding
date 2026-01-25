@@ -518,8 +518,8 @@ export default function UpdateSupplier(props){
 
         const value = e.target.value;
         const split = value.split(",");
-        let longitude = split[0] ? split[0].trim() : "";
-        let latitude = split[1] ? split[1].trim() : "";
+        let latitude = split[0] ? split[0].trim() : "";
+        let longitude = split[1] ? split[1].trim() : "";
 
         if(!isNaN(parseFloat(longitude)) && !isNaN(parseFloat(latitude))){
 
