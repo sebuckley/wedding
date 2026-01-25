@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Each style now includes a description and guest attire guidance
 export const weddingStyles = {
@@ -183,6 +183,7 @@ export default function WeddingStyleDropdown(props) {
   const onDescriptionChange = (e, updated=false) => {
 
     setDescription(e.target.value);
+    autoResize();
 
     if(!updated){
 
@@ -223,19 +224,31 @@ export default function WeddingStyleDropdown(props) {
 
   }
 
+  const autoResize = () => {
+
+        const el = document.querySelector('.style-description textarea');
+
+        el.style.height = "auto";           // Reset height
+        el.style.height = el.scrollHeight + "px"; // Set to scroll height
+
+  }
+
+  useEffect(() => {
+    autoResize();
+  }, [description]);  
+
   return (
     <>
       <h2>Wedding Style { getStyleStatus() }</h2>
 
       <div className="row">
 
-
-
-        <div className="col-12">
+        <div className='inputGroupColumn col-12'>
 
             <label htmlFor="wedding-style">Select Wedding Style:</label>
 
-            <div className="wedding-style-dropdown">
+            <div className="col-12">
+           
               <i className="fa-solid fa-person-dress icon"></i>
               <select
                 id="wedding-style"
@@ -302,11 +315,11 @@ export default function WeddingStyleDropdown(props) {
 
             <div className="row">
                 
-              <div className="col-12">
+              <div className='inputGroupColumn col-12'>
 
-                <div className="style-description" style={{marginTop: '0.5em', color: '#555'}}>
+                <div className="style-description col-12">
                   <label>Style description:</label>
-                  <textarea name="styleDescription" className="description weddingDetails" onInput={ onDescriptionChange } style={{width: "calc(100% - 25px)"}} value={ description }></textarea>
+                  <textarea name="styleDescription" className="description weddingDetails" onInput={ onDescriptionChange } style={{width: "100%",resize: "none", overflowY: "hidden" }} value={ description } ></textarea>
                 </div>
 
               </div>
@@ -318,4 +331,7 @@ export default function WeddingStyleDropdown(props) {
 
 
   );
+
+ 
+
 }

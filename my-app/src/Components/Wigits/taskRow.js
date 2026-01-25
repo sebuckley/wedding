@@ -159,10 +159,9 @@ export default function TaskRow(props){
 
         <div className="row" key={ taskID }>
 
-            <div className="titleName col-3" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}>
+            <div className="titleName col-3" style={{display: "flex", alignItems: "flex-end", justifyContent: "flex-end", marginBottom: "20px", textAlign: "right"}}>
 
-                
-                { splitByCapitalNums(taskName) }:
+                { taskName }:
                 
 
             </div>

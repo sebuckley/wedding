@@ -260,13 +260,14 @@ export default function AddSupplierPayment(props) {
                {/* Payment date */}    
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Payment date:
                     </label>
+                    <div className="col-12">
                     <i className="fa-solid fa-calendar-check icon"></i>
                     <input type='date' className='dateBox3 dateChange' name="paymentDate" style={ getColor(formData.paymentDate) } onChange={ onInput } value={ formData.paymentDate } ></input>
-
+                    </div>
                 </div>
 
             </div>
@@ -274,14 +275,14 @@ export default function AddSupplierPayment(props) {
             {/* Payment amount */}
             <div className='row'>
                 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Payment amount:
                     </label>
-
+                    <div className="col-12">
                     <i className="icon">{currencyList[currency].symbol}</i>
                     <input type='text' className='inputBox' name="payment"  placeholder="0.00 (payment)" onChange={ onInput } value={ formData.payment } numeric="true" ></input>
-
+                    </div>
                 </div>
 
             </div>
@@ -289,10 +290,11 @@ export default function AddSupplierPayment(props) {
             {/* Who made the payment? */}   
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                      <label className="block mb-2 font-semibold">
                         Payee:
                     </label>
+                    <div className="col-12">
                     <i className="fa-solid fa-user icon"></i>
                     <select className="guestType" name="paidBy"  style={ getColor(formData.paidBy) }  value={ formData.paidBy } onChange={ onInput }>
 
@@ -302,6 +304,7 @@ export default function AddSupplierPayment(props) {
                         <option value="Other">Other</option>
         
                     </select>
+                    </div>
 
                 </div>
 
@@ -310,10 +313,11 @@ export default function AddSupplierPayment(props) {
              {/* Payment type? */}
             <div className='row'>
     
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                      <label className="block mb-2 font-semibold">
                          Paid by:
                     </label>
+                    <div className="col-12">
                     <i className="fa-solid fa-credit-card icon"></i>
                     <select className="guestType" name="paymentMethod"  style={ getColor(formData.paymentMethod) } value={ formData.paymentMethod } onChange={ onInput }>
 
@@ -324,13 +328,14 @@ export default function AddSupplierPayment(props) {
         
                     </select>
                 </div>
+                </div>
 
             </div>
 
                
 
                 <div className="row">
-                    <div className="inputGroup col-12">
+                    <div className="inputGroupColumn col-12">
                         <button type="button" className="button primary" onClick={submitForm}>Add Payment</button>
                         <button type="button" className="button secondary" onClick={clearForm}>Clear payment</button>
                     </div>
@@ -338,7 +343,7 @@ export default function AddSupplierPayment(props) {
             </div>
 
              {/* <div className="row">
-                <div className="inputGroup col-12">
+                <div className="inputGroupColumn col-12">
                     
                     <button type="button" className="button secondary" onClick={clearPaymentData}>Clear payments</button>
                 </div>

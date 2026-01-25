@@ -849,7 +849,7 @@ function App() {
   return (
 
     <div className="wrapper">
-
+``
       <HashRouter>
 
         <Routes>
@@ -858,7 +858,7 @@ function App() {
 
             <Route index element={<PublicSite bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} faq={ faqs } weddingDayInvite={ weddingDayInvite } weddingReceptionInvite={ weddingReceptionInvite } loggedIn={ loggedIn } setLoggedin={ setLoggedin }/>} />
 
-            <Route path="managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } isEmpty={ isEmpty } taskData={ taskData } supplierData={ supplierData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
+            <Route path="managemywedding/" element={<Dashboard loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser } bridalParty={bridalParty}  wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } guestData={ guestData } getGuestData={ getGuestData } isEmpty={ isEmpty } taskList={ taskList} taskData={ taskData } getTaskData={ getTaskData} supplierList={ supplierList } supplierData={ supplierData } getSupplierData={ getSupplierData } loggedIn={ loggedIn } setLoggedin={ setLoggedin } />} />
             <Route path="managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin } faqs={ faqs } setFaqs={ setFaqs }  setFaqState={ setFaqState } faqState={ faqState } settings={ settings } setSettings={ setSettings } />} />
             <Route path="managemywedding/guests" element={<Guests loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } settings={ settings } setSettings={ setSettings }/>} />
             <Route path="managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } getGuestData={ getGuestData}/>} />

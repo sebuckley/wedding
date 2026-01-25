@@ -1,4 +1,5 @@
 import './Dashboard.css';
+import { React, useEffect } from 'react';
 import Login from '../Login/Login';
 import Header from '../Wigits/Header/header';
 import { Link } from 'react-router-dom';
@@ -15,6 +16,12 @@ export default function Dashboard(props){
     const setUser = props.setUser;
     const loading = props.loading;
     const setLoading = props.setLoading;
+    const getGuestData = props.getGuestData;
+    const getTaskData = props.getTaskData;
+    const getSupplierData = props.getSupplierData;
+    const guestList = props.guestList;
+    const taskList = props.taskList;
+    const supplierList = props.supplierList;
 
     const guestData = props.guestData;
     const taskData = props.taskData;
@@ -43,6 +50,14 @@ export default function Dashboard(props){
       return text;
 
     }
+
+    useEffect( () => {
+
+      getGuestData(guestList);
+      getTaskData(taskList);
+      getSupplierData(supplierList);
+
+    }    , []);
 
     if(loading){
   
@@ -156,8 +171,7 @@ export default function Dashboard(props){
               { isEmpty(taskData) ? "" : <ValueBox title={ "Not started" } value={ taskData.notStarted } href={"/managemywedding/tasks"}/> }
               { isEmpty(taskData) ? "" : <ValueBox title={ "Planned Activity" } value={ taskData.planned } href={"/managemywedding/tasks"}/> }
               { isEmpty(taskData) ? "" : <ValueBox title={ "Researching" } value={ taskData.researched } href={"/managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Enquiry Made" } value={ taskData.enquiry } href={"/managemywedding/tasks"}/> }
-              { isEmpty(taskData) ? "" : <ValueBox title={ "Booked" } value={ taskData.selected } href={"/managemywedding/tasks"}/> }
+     
 
             </div>
 

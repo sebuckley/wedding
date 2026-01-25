@@ -381,7 +381,7 @@ export default function AddTask(props){
                         <i className="fa-solid fa-circle-info icon"></i>
                         
                         <select className="guestType" name="phaseSelect" value={ formData.phaseSelect } onChange={ onChange } style={ getColor(formData.phaseSelect) }>
-                            <option value="" hidden>Supplier type... (required)</option>
+                            <option value="" hidden>Supplier phase... (required)</option>
                             { getPhases()}
                              <option value="add" >Add new</option>
                         </select>
@@ -399,7 +399,7 @@ export default function AddTask(props){
 
                 <div className='row'>
 
-                    <div className='inputGroup col-12'>
+                    <div className='inputGroupColumn col-12'>
                         <button type='button' onClick={ submitForm } id='submitBtn' className='button primary'>Add Task</button>
                         <button type='button' onClick={ clearNewTask } id='clearBtn' className='button secondary'>Clear form</button>
                     </div>

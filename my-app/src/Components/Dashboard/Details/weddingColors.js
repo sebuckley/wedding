@@ -186,7 +186,9 @@ const WeddingColorSelector = (props) => {
       <h2>Wedding Color Selector { getColorStatus() }</h2>
 
         <div className='row'>
-            <div className='inputGroup col-12'>
+            <div className='inputGroupColumn col-12'>
+                <label>Main Wedding Colour</label>
+                <div className='col-12'>
                 <i className="fa-solid fa-palette icon"></i>
                 <select
                     value={selectedColor}
@@ -237,6 +239,8 @@ const WeddingColorSelector = (props) => {
 
                 </select>
 
+                </div>
+
             </div>
         </div>
 
@@ -247,10 +251,10 @@ const WeddingColorSelector = (props) => {
 
         <div className='row'>
 
-            <div className='inputGroup col-12 flexColorSelect'>
+            <div className='inputGroupColumn col-12 flexColorSelect'>
 
                     <div>Choose Custom Color:</div>
-                    <div>
+                    <div className="col-12">
                         <input
                         type="color"
                         className="inputColor color weddingDetails"
@@ -272,7 +276,7 @@ const WeddingColorSelector = (props) => {
                     
                     { customColorHex !== "#ffffff" && customColorHex !== "#000000" ?  <h3>Main Color</h3> : "" }
         
-                    { customColorHex !== "#ffffff" && customColorHex !== "#000000" ?  <div className="colorChart" style={{ backgroundColor: customColorHex, padding: '10px', color: getContrastTextColor(customColorHex), fontWeight: "bold" }}>{ getColorNameFromHex(customColorHex) }</div> : "" }
+                    { customColorHex !== "#ffffff" && customColorHex !== "#000000" ?  <div className="colorChart" style={{ backgroundColor: customColorHex, padding: '10px', color: getContrastTextColor(customColorHex), fontWeight: "bold", width:"100%" }}>{ getColorNameFromHex(customColorHex) }</div> : "" }
 
                     { customColorHex !== "#ffffff" && customColorHex !== "#000000" ? <h4>Suggested Accent Colors:</h4> : "" }
 
@@ -291,12 +295,14 @@ const WeddingColorSelector = (props) => {
         {!useCustomColor && selectedColorObj && (
 
             <div className='row'>
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
 
                     <h3>Main Color</h3>
 
-                    <div className="color colorChart" style={{ backgroundColor: selectedColorObj.hex, padding: '10px', color: getContrastTextColor(selectedColorObj.hex), fontWeight: "bold" }}>
-                        {selectedColorObj.name}
+                    <div style={{ width:"100%"}}>
+                        <div  className="color colorChart" style={{ backgroundColor: selectedColorObj.hex, padding: '10px', color: getContrastTextColor(selectedColorObj.hex), fontWeight: "bold", width:"99%", borderRadius: "5px", boxSizing: "border-box" }}>
+                          {selectedColorObj.name}
+                        </div>
                     </div>
                     
                     <ColorPalettePreview hex={ selectedColorObj.hex } />

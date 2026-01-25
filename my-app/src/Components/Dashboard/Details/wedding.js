@@ -165,11 +165,11 @@ export default function WeddingPlans(props){
 
             object =  <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         RSVP:
                     </label>
-                    <div>
+                    <div class='col-12'>
                         <i className="fa-solid fa-calendar-day icon"></i>
                         <input type={ checkType(rsvpDate) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(rsvpDate) } name="dateTimeRSVP" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(rsvpDate) }></input>
                     </div>
@@ -209,11 +209,11 @@ export default function WeddingPlans(props){
 
             object =  <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Reception Date & Time:
                     </label>
-                    <div>
+                    <div class='col-12'>
                         <i className="fa-solid fa-calendar-day icon"></i>
                         <input type={ checkType(receptionDate) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(receptionDate) } name="dateTimeRSVP" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(receptionDate) }></input>
                     </div>
@@ -253,11 +253,11 @@ export default function WeddingPlans(props){
 
             object =  <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Wedding end date/time:
                     </label>
-                    <div>
+                    <div class='col-12'>
                         <i className="fa-solid fa-calendar-day icon"></i>
                         <input type={ checkType(dateTimeEnd) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(dateTimeEnd) } name="dateTimeEnd" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(dateTimeEnd) }></input>
                     </div>
@@ -374,11 +374,11 @@ export default function WeddingPlans(props){
 
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Preferred date and time:
                     </label>
-                    <div>
+                    <div class='col-12'>
                         <i className="fa-solid fa-calendar-day icon"></i>
                         <input type={ checkType(dateWedding) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(dateWedding) } name="dateTime" placeholder="Proposed date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(dateWedding) }></input>
                     </div>
@@ -397,11 +397,11 @@ export default function WeddingPlans(props){
 
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Budget:
                     </label>
-                    <div>
+                    <div class='col-12'>
                         { budget !== "" ? <i className="icon">{ currencyList[currency].symbol } </i>: <i className="fa-solid fa-sterling-sign icon"></i> }
                      
                         <input
@@ -424,11 +424,11 @@ export default function WeddingPlans(props){
 
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Preferred location:
                     </label>
-                    <div>
+                    <div class='col-12'>
                         <i className="fa-solid fa-location-arrow icon"></i>
                         <input type='text' className='inputBox checkDetails weddingDetails' name="location" onInput={ handleChange } placeholder="Preferred location" defaultValue={ location }></input>
                     </div>
@@ -438,11 +438,11 @@ export default function WeddingPlans(props){
 
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                      <label className="block mb-2 font-semibold">
                         Max guests:
                     </label>
-                    <div>
+                    <div class='col-12'>
                         <i className="fa-solid fa-person-circle-question icon"></i>
                         <input type='number' className='inputBox checkDetails weddingDetails' name="maxGuests" onInput={ handleChange } placeholder="max guests" defaultValue={ maxGuests }></input>
                     </div>

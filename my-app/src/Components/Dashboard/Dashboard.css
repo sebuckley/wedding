@@ -2,7 +2,8 @@
 .adminBody {
 
     margin-top: 100px;
-    padding: 5px;
+    padding-bottom: 50px;
+    padding-right: 17px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -10,11 +11,7 @@
 
 }
 
-h1, h2, h3 {
 
-
-
-}
 
 .flexColumn {
 
@@ -30,7 +27,6 @@ h1, h2, h3 {
     flex-direction: row;  /* children in a row */
     align-items: center;  /* vertical alignment */
     width: auto !important;
-    margin: 5px;
     height: 100px;
     
 
@@ -223,7 +219,8 @@ form {
 
 .contentWrapper{
 
-    width: 60%;
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -276,7 +273,7 @@ form {
 
 #updateGuestSection {
 
-    width: 100%;
+    width: 60%;
     
 }
 
@@ -402,9 +399,9 @@ li > div {
 .row {
 
     width: 100%;
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    margin:5px;
 
 }
 
@@ -493,6 +490,14 @@ li > div {
 .col-12 {
 
     width: 100%;
+    box-sizing: border-box;
+
+}
+
+.w-full {
+
+    width: 100%;
+    box-sizing: border-box;
 
 }
 
@@ -501,7 +506,8 @@ li > div {
     margin: 5px;
     text-align: left;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
 
 
 }
@@ -527,14 +533,14 @@ li > div {
 textarea{
 
     width: 100%;
-    display: inline-block;
+    display: block;
     margin: 0px;
     padding: 10px;
     text-align: left;
     border: 1px solid var(--light-grey);
     border-radius: 10px;
     font-size: 18px;
-    width: calc(100% - 60px);
+    box-sizing: border-box;
     white-space: pre-wrap;
 
 }
@@ -598,10 +604,13 @@ textarea{
 
 .icon2 {
 
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--grey);
-    padding: 5px 5px 5px 10px;
+    padding: 5px 8px 5px 8px;
     font-size: 19px;
+    height: 45px;
     
 }
 
@@ -676,92 +685,138 @@ textarea{
 
 .inputBox {
 
-    display: inline-block;
-    width: calc(100% - 60px); 
-
+    display: block;
+    width: 100%; 
+    box-sizing: border-box;
     margin: 0px;
-    padding: 13px 10px 10px 20px;
+    padding: 10px 8px 8px 40px;
     text-align: left;
     border: 1px solid var(--light-grey);
     border-radius: 10px;
-    padding-left: 50px;
-    font-size: 16px;
+    font-size: 15px;
+    min-height: 45px;
 
 }
 
 .inputBox2 {
 
-    display: inline-block;
-    width: calc(100% - 15px);
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0px;
-     padding: 13px 10px 10px 20px;
+    padding: 10px 8px 8px 10px;
     text-align: left;
     border: 1px solid var(--light-grey);
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 16px;
+    min-height: 45px;
  
 
 }
 
 .inputBox3 {
 
-    display: inline-block;
-    width: calc(100% - 30px);
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0px;
-     padding: 13px 10px 10px 20px;
+    padding: 10px 8px 8px 10px;
     text-align: left;
     border: 1px solid var(--light-grey);
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 16px;
+    min-height: 45px;
 
 }
 
 .dateBox {
 
-    display: inline-block;
-    width: calc(100% - 30px);
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0px;
-    padding: 13px 10px 10px 20px;
+    padding: 10px 8px 8px 40px;
     text-align: left;
     border: 1px solid var(--grey);
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 15px;
     background-color: white;
-    text-indent: 15px;
+    min-height: 45px;
+    color: #000;
 
+}
+
+.dateBox::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.dateBox::placeholder {
+    color: #999;
+}
+
+.dateBox:invalid {
+    color: #999;
 }
 
 .dateBox2 {
 
-    display: inline-block;
-    width: calc(100% - 30px);
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0px;
-    padding: 10px 10px 10px 10px;
+    padding: 8px 8px 8px 8px;
     text-align: left;
     border: 1px solid var(--grey);
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 15px;
     background-color: white;
-   
+    min-height: 45px;
+    color: #000;
 
+}
 
+.dateBox2::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.dateBox2::placeholder {
+    color: #999;
+}
+
+.dateBox2:invalid {
+    color: #999;
 }
 
 .dateBox3 {
 
-    display: inline-block;
-    width: calc(100%);
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0px;
-    padding: 10px 10px 10px 10px;
+    padding: 8px 8px 8px 40px !important;
     text-align: left;
     border: 1px solid var(--grey);
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 15px;
     background-color: white;
-     text-indent: 15px;
-   
+    min-height: 45px;
+    color: #000;
 
+}
 
+.dateBox3::-webkit-calendar-picker-indicator {
+    color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.dateBox3::placeholder {
+    color: #999;
+}
+
+.dateBox3:invalid {
+    color: #999;
 }
 
 .block {
@@ -773,7 +828,8 @@ textarea{
 
 .checkIcon {
 
-    width: calc(96% - 60px);
+    width: 85% !important;
+    box-sizing: border-box;
 
 }
 
@@ -997,10 +1053,55 @@ textarea{
 
 }
 
+.inputGroupColumn {
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 5px 10px;
+    
+}
+
 .inputGroup {
 
-    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin: 5px 10px;
     
+}
+
+.wedding-style-dropdown {
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+
+}
+
+.wedding-style-dropdown select {
+
+    width: 100%;
+    padding-left: 40px;
+    box-sizing: border-box;
+
+}
+
+#detailsForm .wedding-style-dropdown {
+
+    width: 100% !important;
+
+}
+
+#detailsForm .wedding-style-dropdown select {
+
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+
 }
 
 #guestList {
@@ -1121,11 +1222,11 @@ textarea{
     flex-direction: row;
     align-items: center;
     justify-content: center;
-     margin: 5px;
-     padding:10px;
+
     border: 1px solid var(--grey);
     border-radius: 9px;
     cursor: pointer;
+    margin-top: 10px;
     
 
 }
@@ -1150,15 +1251,17 @@ textarea{
 
 select {
 
+    display: block;
     border: 1px solid var(--grey);
-    height: 47px !important;
+    min-height: 45px !important;
     border-radius:10px !important;
-    width: calc(100%) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
     font-family: Arial, sans-serif ;
-    font-size: 16px;
+    font-size: 15px;
     margin: 0px !important;
     color: black;
-    padding: 10px !important;
+    padding: 8px 8px 8px 8px !important;
     border: 1px solid var(--grey) ;
     outline: none;
     background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='%23000000' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
@@ -1586,6 +1689,8 @@ select option {
     .adminBody {
 
         margin-top: 100px;
+        padding-bottom: 50px;
+        padding-right: 17px;
         padding:5px;
         width: 95%;
         display: flex;
@@ -1757,6 +1862,7 @@ select option {
      .col-12 {
 
         width: 97%;
+        box-sizing: border-box;
 
     }
 
@@ -1789,45 +1895,49 @@ select option {
 
     .inputBox {
 
-        display: inline-block;
-        width: calc(100% - 60px);
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
         margin: 0px;
-        padding: 10px;
+        padding: 10px 8px 8px 40px;
         text-align: left;
-        border: 1px solid var(--grey);
+        border: 1px solid var(--light-grey);
         border-radius: 10px;
-        padding-left: 50px;
-        font-size: 16px;
+        font-size: 15px;
+        min-height: 45px;
     
     
     }
     
     .inputBox3 {
 
-        display: inline-block;
-        width: calc(100% - 30px);
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
         margin: 0px;
-        padding: 10px;
+        padding: 10px 8px 8px 10px;
         text-align: left;
-        border: 1px solid var(--grey);
+        border: 1px solid var(--light-grey);
         border-radius: 10px;
-        padding-left: 14px 12px 12px 14px;
         font-size: 16px;
+        min-height: 45px;
     
     
     }
 
     .dateBox2 {
 
-        display: inline-block;
-        width: calc(100%);
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
         margin: 0px;
-        padding: 10px 10px 10px 10px;
+        padding: 8px 8px 8px 8px;
         text-align: left;
         border: 1px solid var(--grey);
         border-radius: 10px;
-        font-size: 16px;
+        font-size: 15px;
         background-color: white;
+        min-height: 45px;
     
 
 
@@ -1835,7 +1945,8 @@ select option {
 
     .checkIcon {
 
-        width: calc(88% - 60px);
+        width: 85% !important;
+        box-sizing: border-box;
     
     }
 

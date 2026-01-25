@@ -242,10 +242,10 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
                 Country & Clothing Sizing System { getCountryStatus() }
             </h2>
             <div className="row">
-                <div className="inputGroup col-12">
+                <div className="inputGroupColumn col-12">
 
                     <label className="block mb-2 font-semibold">Select Country:</label>
-                    <div>
+                    <div className='col-12'>
                         { selectedCountryName !== "" ? <Flag countryCode={countrySizePreferences[selectedCountryName].icon} alt={ selectedCountryName + " flag" }/> : <i className="fa-solid fa-earth icon"></i> } 
                         <select
                             className="border px-3 py-2 rounded w-full guestType countrySize weddingDetails"
@@ -274,11 +274,11 @@ const sizeSystems = ["UK", "US", "EU", "AU", "JP", "CN", "KR"];
             {selectedCountry && (
 
                 <div className="row">
-                    <div className="inputGroup col-12">
+                    <div className="inputGroupColumn col-12">
                         <label className="block mb-2 font-semibold">
                             Select Clothing Size System:
                         </label>
-                        <div>
+                        <div className='col-12'>
                             <i className="fa-solid fa-shirt icon"></i>
                             <select
                                 id="sizeSystem"

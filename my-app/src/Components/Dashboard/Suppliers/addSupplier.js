@@ -370,7 +370,7 @@ export default function AddSuppliers(props) {
                
 
                 <div className="row">
-                    <div className="inputGroup col-12">
+                    <div className="inputGroupColumn col-12">
                         <button type="button" className="button primary" onClick={submitForm}>Add Supplier</button>
                         <button type="button" className="button secondary" onClick={clearForm}>Clear Form</button>
                     </div>

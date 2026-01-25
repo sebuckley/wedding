@@ -38,13 +38,14 @@ export default function SupplierQuoteDetails(props){
             {/* Quote */}
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Quote:
                     </label>
-                    <i className="icon">{currencyList[currency].symbol}</i>
-                    <input type='text' className='inputBox' name="quoteValue"  placeholder="0.00 (quote)"  onChange={ onInput } defaultValue={ quote } numeric="true" onBlur={ formatNumber }></input>
-
+                    <div className="col-12">
+                        <i className="icon">{currencyList[currency].symbol}</i>
+                        <input type='text' className='inputBox' name="quoteValue"  placeholder="0.00 (quote)"  onChange={ onInput } defaultValue={ quote } numeric="true" onBlur={ formatNumber }></input>
+                    </div>
                 </div>
 
             </div>
@@ -52,13 +53,14 @@ export default function SupplierQuoteDetails(props){
             {/* Deposit date */}    
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Quote date:
                     </label>
+                    <div className="col-12">
                     <i className="fa-solid fa-calendar-check icon"></i>
                     <input type='date' className='dateBox3 dateChange' name="quoteDate" style={ getColor(quoteDate) } onChange={ onInput } defaultValue={ quoteDate } ></input>
-
+                    </div>       
                 </div>
 
             </div>
@@ -66,13 +68,14 @@ export default function SupplierQuoteDetails(props){
              {/* Quote by */}
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Quoted by:
                     </label>
-                    <i className="fa-solid fa-person icon"></i>
-                    <input type='text' className='inputBox' name="quoteBy"  placeholder="name of official"  onChange={ onInput } defaultValue={ quoteBy } ></input>
-
+                    <div className="col-12">
+                        <i className="fa-solid fa-person icon"></i>
+                        <input type='text' className='inputBox' name="quoteBy"  placeholder="name of official"  onChange={ onInput } defaultValue={ quoteBy } ></input>
+                    </div>
                 </div>
 
             </div>

@@ -61,14 +61,14 @@ export default function SupplierCostDetails(props){
 
             <div className='row'>
                 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Balance:
                     </label>
-
-                    <i className="icon">{currencyList[currency].symbol}</i>
-                    <input type='text' className='inputBox' disabled onChange={ onInput } value={ balance } numeric="true" ></input>
-
+                    <div className="col-12">
+                        <i className="icon">{currencyList[currency].symbol}</i>
+                        <input type='text' className='inputBox' disabled onChange={ onInput } value={ balance } numeric="true" ></input>
+                    </div>
                 </div>
 
             </div>
@@ -83,13 +83,14 @@ export default function SupplierCostDetails(props){
 
            <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Total Cost:
                     </label>
+                    <div className="col-12">
                     <i className="icon">{currencyList[currency].symbol}</i>
                     <input type='text' className='inputBox' name="totalCost"  placeholder="0.00 (total cost)"  onChange={ onInput } defaultValue={ cost } numeric="true" onBlur={ formatNumber }></input>
-
+                    </div>
                 </div>
 
             </div>
@@ -98,13 +99,14 @@ export default function SupplierCostDetails(props){
             {/* Due date */}
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                     <label className="block mb-2 font-semibold">
                         Due date:
                     </label>
+                    <div className="col-12">
                     <i className="fa-solid fa-calendar-day icon"></i>
                     <input type='date' className='dateBox3 dateChange' name="dueDate" style={ getColor(dueDate) } onChange={ onInput } value={ dueDate } ></input>
-
+                    </div>
                 </div>
 
             </div>

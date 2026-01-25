@@ -1114,24 +1114,28 @@ export default function UpdateSupplier(props){
 
                 <div className='row'>
 
-                    <div className='inputGroup col-12'>
+                    <div className='inputGroupColumn col-12'>
                             <label className="block mb-2 font-semibold">
                             Latitude:
                         </label>
-                        <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
-                        <input type='text' className='inputBox' onChange={ onInput } name='latitude' placeholder='latitude' value={ latitude }></input>
+                        <div className="col-12">
+                            <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
+                            <input type='text' className='inputBox' onChange={ onInput } name='latitude' placeholder='latitude' value={ latitude }></input>
+                        </div>
                     </div>
 
                 </div>
 
                 <div className='row'>
 
-                    <div className='inputGroup col-12'>
+                    <div className='inputGroupColumn col-12'>
                         <label className="block mb-2 font-semibold">
                             Longitude:
                         </label>
-                        <i className="fa-solid fa-location-crosshairs icon" title="longitude"></i>
-                        <input type='text' className='inputBox' onChange={ onInput } name='longitude' placeholder='longitude' value={ longitude }></input>
+                        <div className="col-12">
+                            <i className="fa-solid fa-location-crosshairs icon" title="longitude"></i>
+                            <input type='text' className='inputBox' onChange={ onInput } name='longitude' placeholder='longitude' value={ longitude }></input>
+                        </div>
                     </div>
 
                 </div>
@@ -1147,7 +1151,7 @@ export default function UpdateSupplier(props){
 
             <div className='row'>
 
-                <div className='inputGroup col-12'>
+                <div className='inputGroupColumn col-12'>
                         <label className="block mb-2 font-semibold">
                         Paste Latitude and Longitude from google link:
                     </label>
@@ -1316,11 +1320,12 @@ export default function UpdateSupplier(props){
                     
                      <div className='row'>
 
-                        <div className='inputGroup col-12'>
+                        <div className='inputGroupColumn col-12'>
 
                              <label className="block mb-2 font-semibold">
                                 Status:
                             </label>
+                            <div className='col-12'>
                             <i className={getClassName(status)}></i>
                             <select className="guestType" name="status"  style={ getColor(status) } value={ status } onChange={ onInput }>
                     
@@ -1330,6 +1335,7 @@ export default function UpdateSupplier(props){
                                 ))}
                
                             </select>
+                            </div>
                         </div>
 
                     </div>

@@ -11,12 +11,12 @@ export default function CurrencySelector(props) {
   return (
 
     <div className="row">
-      <div className="inputGroup col-12">
+      <div className="inputGroupColumn col-12">
       <label htmlFor="currency" className="block mb-2 font-medium">
         Select Currency:
       </label>
 
-      <div>
+      <div class='col-12'>
 
       { selectedCurrency !== "" ? <Flag countryCode={currencyList[selectedCurrency].icon} alt={ currencyList[selectedCurrency].name + " flag" }/> : <i className="fa-solid fa-money-bill icon"></i> } 
 
