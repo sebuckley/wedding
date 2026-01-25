@@ -179,7 +179,8 @@ export default function Dashboard(props){
 
             <div>
 
-              { isEmpty(supplierData) ? "Loading..." : <ValueBox title={ "Shortlisted" } value={ supplierData.shortlisted } href={"/managemywedding/suppliers"}/> }
+              { isEmpty(supplierData) ? "" : <ValueBox title={ "Ruled out" } value={ supplierData.ruledOut } href={"/managemywedding/suppliers"}/> }
+              { isEmpty(supplierData) ? "" : <ValueBox title={ "Shortlisted" } value={ supplierData.shortlisted } href={"/managemywedding/suppliers"}/> }
               { isEmpty(supplierData) ? "" : <ValueBox title={ "Enquiry made" } value={ supplierData.enquiryMade } href={"/managemywedding/suppliers"}/> }
               { isEmpty(supplierData) ? "" : <ValueBox title={ "Quote received" } value={ supplierData.quoteReceived } href={"/managemywedding/suppliers"}/> }
               { isEmpty(supplierData) ? "" : <ValueBox title={ "Booked" } value={ supplierData.booked } href={"/managemywedding/suppliers"}/> }

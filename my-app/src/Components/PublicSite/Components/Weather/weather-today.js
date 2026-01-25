@@ -7,7 +7,7 @@ export default function WeatherToday(props){
     const lat = props.lat;
     const lon = props.lon;
 
-    const apiCallString = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=metric";
+    const apiCallString = "https://api.openweathermap.org/data/2.5/weather?lat=" + lon + "&lon=" + lat + "&appid=" + apiKey + "&units=metric";
 
     const [weatherData, setWeatherData] = useState([])
     const [isError, setIsError] = useState(false);

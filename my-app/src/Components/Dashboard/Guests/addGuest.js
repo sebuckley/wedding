@@ -650,7 +650,7 @@ export default function AddGuests(props){
 
                 <div className='row'>
 
-                    <div className='inputGroup col-12'>
+                    <div className='inputGroupColumn col-12'>
                         <button type='button' onClick={ submitForm } id='submitBtn' className='button primary'>Add guest</button>
                         <button type='button' onClick={ clearAddGuest } id='clearBtn' className='button secondary'>Clear form</button>
                     </div>

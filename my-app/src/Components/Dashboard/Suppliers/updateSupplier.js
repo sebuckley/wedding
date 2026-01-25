@@ -1155,8 +1155,10 @@ export default function UpdateSupplier(props){
                         <label className="block mb-2 font-semibold">
                         Paste Latitude and Longitude from google link:
                     </label>
+                    <div className="col-12">
                     <i className="fa-solid fa-location-crosshairs icon" title="latitude"></i>
                     <input type='text' className='inputBox' onChange={ onInputLatLong } name='atlongCapture' placeholder='Paste Latitude and Longitude from google link:' value={ "" }></input>
+                    </div>
                 </div>
 
             </div>

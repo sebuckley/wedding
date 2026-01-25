@@ -51,7 +51,7 @@ export default function Details(props){
 
         return (
 
-            <div className="detailsheader">
+            <div className="detailsheader" style={{ textAlign: "center" }}>
                 <h1>Venue</h1>
             </div>
 
