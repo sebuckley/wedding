@@ -17,12 +17,13 @@ import Details from './Components/Dashboard/Details/Details';
 import Guests from './Components/Dashboard/Guests/Guests';
 import Guest from './Components/Dashboard/Guests/Guest';
 import Tasks from './Components/Dashboard/Tasks/Tasks';
+import Task from './Components/Dashboard/Tasks/Task';
 import Suppliers from './Components/Dashboard/Suppliers/Suppliers';
 import Supplier from './Components/Dashboard/Suppliers/Supplier';
 import PublicSite from './Components/PublicSite/PublicSite';
 import RSVPForm from './Components/PublicSite/rsvpform';
 import PrivacyPolicy from './Components/Wigits/Privacy-Policy/privacy-policy';
-import { mainTaskData, weddingTasks } from './Components/App/mainData';
+import { mainTaskData, weddingTasks, phaseOrder } from './Components/App/mainData';
 import { bridalParty as bridalOriginal , wedding as weddingOriginal,  weddingVenue, faqs as questionsOriginal , weddingDayInvite, weddingReceptionInvite} from './Components/PublicSite/Components/Data/data';
 
 const supplierStatuses = ["To-do", "Ruled out","Shortlisted", "Enquiry made","Quote received", "Booked"];
@@ -846,6 +847,74 @@ function App() {
   
   }
 
+  const getPhases = (options=true) => {
+
+        let phasesList = [];
+                            
+        taskList.list.map((s, i) => {
+            
+            if(!phasesList.some(item => item.phase === s.phase) && s.phase !== "") {
+
+                phasesList.push( {phase: s.phase, order: s.order} );
+
+            }  
+
+        })
+
+        if(!options){
+
+            phasesList.sort((a, b) => Object.keys(phaseOrder).indexOf(a.phase) - Object.keys(phaseOrder).indexOf(b.phase));
+            return phasesList;
+
+        }
+
+        phasesList.sort((a, b) => Object.keys(phaseOrder).indexOf(a.phase) - Object.keys(phaseOrder).indexOf(b.phase));
+
+        phasesList = phasesList.map((item, index) => {
+            return(
+                <option key={ index } value={ item.phase }>{ item.phase }</option>
+            )
+        });
+                            
+        return phasesList
+
+
+  }
+
+  const getGroups = (options=true) => {
+
+      let groupList = [];
+                          
+      taskList.list.map((s, i) => {
+          
+          if(!groupList.some(item => item.group === s.group) && s.group !== "") {
+
+              groupList.push( {group: s.group, order: s.order} );
+
+          }  
+          
+      })
+
+      if(!options){
+
+          groupList.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
+          return groupList;
+
+      }  
+
+      groupList.sort((a, b) => (a.group > b.group) ? 1 : -1);
+
+      groupList = groupList.map((item, index) => {
+          return(
+              <option key={ index } value={ item.group }>{ item.group }</option>
+          )
+      });
+                          
+      return groupList;
+
+  }
+
   return (
 
     <div className="wrapper">
@@ -862,7 +931,8 @@ function App() {
             <Route path="managemywedding/details" element={<Details loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} setBridalParty={ setBridalParty } wedding={wedding} weddingVenue={weddingVenue} loggedIn={ loggedIn } setLoggedin={ setLoggedin } faqs={ faqs } setFaqs={ setFaqs }  setFaqState={ setFaqState } faqState={ faqState } settings={ settings } setSettings={ setSettings } />} />
             <Route path="managemywedding/guests" element={<Guests loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } settings={ settings } setSettings={ setSettings }/>} />
             <Route path="managemywedding/guest" element={<Guest loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} guestList={ guestList } setGuestList={ setGuestList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } getGuestData={ getGuestData}/>} />
-            <Route path="managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin } settings={ settings } setSettings={ setSettings }/>} />
+            <Route path="managemywedding/tasks" element={<Tasks loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin } settings={ settings } setSettings={ setSettings } phaseOrder={ phaseOrder } getPhases={ getPhases } getGroups={ getGroups }/>} />
+            <Route path="managemywedding/task" element={<Task loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} taskList={ taskList } setTaskList={ setTaskList } loggedIn={ loggedIn } setLoggedin={ setLoggedin } settings={ settings } setSettings={ setSettings } getPhases={ getPhases } getGroups={ getGroups }/>} />
             <Route path="managemywedding/suppliers" element={<Suppliers loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses } supplierBooked={ supplierBooked } settings={ settings } setSettings={ setSettings }/>} />
             <Route path="managemywedding/supplier" element={<Supplier loading={loading} setLoading={ setLoading } user={ user } setUser={ setUser }  bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue} supplierList={ supplierList } setSupplierList={ setSupplierList } getRoles={ getRoles } loggedIn={ loggedIn } setLoggedin={ setLoggedin } taskList={ taskList } setTaskList={ setTaskList } supplierStatuses={ supplierStatuses }  getSupplierData={ getSupplierData} supplierBooked={ supplierBooked }/>} />
             <Route path="wedding/rsvp" element={<RSVPForm headerOn={true} bridalParty={bridalParty} wedding={wedding} weddingVenue={weddingVenue}/>} />

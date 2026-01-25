@@ -22,7 +22,7 @@ export default function AddTask(props){
     const setTaskList = props.setTaskList;
     const taskList = props.taskList;
     const user = props.user;
-    const getGroup = props.getGroup;
+    const getGroups = props.getGroups;
     const getPhases = props.getPhases;
 
     if(formData === ''){
@@ -195,6 +195,8 @@ export default function AddTask(props){
             newTask["toDoDate"] = "";
             newTask["lastUpdated"] = "";
             newTask["lastUpdatedBy"] = "";
+            newTask["description"] = "";
+            newTask["order"] = tempTaskList.list.length + 1;
         
             tempTaskList.list.push(newTask);
             tempTaskList.length = taskList.list.length;
@@ -359,7 +361,7 @@ export default function AddTask(props){
                         
                         <select className="guestType" name="groupSelect" value={ formData.groupSelect } onChange={ onChange } style={ getColor(formData.groupSelect) }>
                             <option value="" hidden>Supplier type... (required)</option>
-                            { getGroup() }
+                            { getGroups() }
                             <option value="add" >Add new</option>
                         </select>
                     </div>

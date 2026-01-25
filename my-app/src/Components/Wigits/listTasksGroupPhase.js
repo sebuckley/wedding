@@ -117,19 +117,6 @@ const ListTasksGroupPhase = (props) => {
 
   }
 
-  const weddingTaskPhases = [
-
-  "12+ Months",
-  "9–12 Months",
-  "6–9 Months",
-  "3–6 Months",
-  "1–3 Months",
-  "Final Month",
-  "Wedding Week",
-  "Wedding Day",
-  "Post-Wedding",
-
-] ;
 
   const generateList = (dataList, phase) => {
 

@@ -1,5 +1,6 @@
 import { splitByCapitalNums } from "./dataFunctions";
 import { supplierStatuses } from "../../App";
+import { Link } from 'react-router-dom';
 
 export default function TaskRow(props){
 
@@ -161,7 +162,7 @@ export default function TaskRow(props){
 
             <div className="titleName col-3" style={{display: "flex", alignItems: "flex-end", justifyContent: "flex-end", marginBottom: "20px", textAlign: "right"}}>
 
-                { taskName }:
+                 <Link to={`/managemywedding/task/?taskId=${ taskID }`}>{ taskName }:</Link>
                 
 
             </div>

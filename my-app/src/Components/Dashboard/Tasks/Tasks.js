@@ -22,6 +22,9 @@ export default function Tasks(props){
     const setLoggedin = props.setLoggedin;
     const settings = props.settings;
     const setSettings = props.setSettings;
+    const getPhases = props.getPhases;
+    const getGroups = props.getGroups;
+  
 
     const pathName = window.location.search;
     let filterName;
@@ -189,76 +192,6 @@ export default function Tasks(props){
 
   }
 
-   const getPhases = (options=true) => {
-
-        let phasesList = [];
-                            
-        taskList.list.map((s, i) => {
-            
-            if(!phasesList.some(item => item.phase === s.phase) && s.phase !== "") {
-
-                phasesList.push( {phase: s.phase, order: s.order} );
-
-            }  
-
-        })
-
-        if(!options){
-
-            phasesList.sort((a, b) => (a.order > b.order) ? 1 : -1);
-            return phasesList;
-
-        }
-
-        phasesList.sort((a, b) => (a.phase > b.phase) ? 1 : -1);
-
-        phasesList = phasesList.map((item, index) => {
-            return(
-                <option key={ index } value={ item.phase }>{ item.phase }</option>
-            )
-        });
-                            
-        return phasesList
-
-
-    }
-
-    const getGroup = (options=true) => {
-
-        let groupList = [];
-                            
-        taskList.list.map((s, i) => {
-            
-            if(!groupList.some(item => item.group === s.group) && s.group !== "") {
-
-                groupList.push( {group: s.group, order: s.order} );
-
-            }  
-            
-        })
-
-        
-
-        if(!options){
-
-            groupList.sort((a, b) => (a.order > b.order) ? 1 : -1);
-
-            return groupList;
-
-        }  
-
-        groupList.sort((a, b) => (a.group > b.group) ? 1 : -1);
-
-        groupList = groupList.map((item, index) => {
-            return(
-                <option key={ index } value={ item.group }>{ item.group }</option>
-            )
-        });
-                            
-        return groupList;
-
-    }
-
   useEffect(() => {
 
     getTaskData();
@@ -285,7 +218,7 @@ export default function Tasks(props){
 
       <div className="adminBody">
 
-        <AddTask setTaskList={ setTaskList } taskList={ taskList } user={ user } getGroup={ getGroup } getPhases={ getPhases }/>
+        <AddTask setTaskList={ setTaskList } taskList={ taskList } user={ user } getGroups={ getGroups } getPhases={ getPhases }/>
 
         <TaskFilter setTaskFiltered={ setTaskFiltered } filterName={ taskFiltered } settings={ settings } setSettings={ setSettings }/>
         <TaskSort setTaskSorted={ setTaskSorted } taskSorted={ taskSorted } setTaskSortedBy={ setTaskSortedBy } taskSortedBy={ taskSortedBy } taskGroupBy={ taskGroupBy } setTaskGroupBy={ setTaskGroupBy } settings={ settings } setSettings={ setSettings }/>
@@ -296,7 +229,7 @@ export default function Tasks(props){
 
             { taskList !== "" && taskGroupBy === "none" ? <ListTasks taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState }/> : "" }
 
-            { taskList !== "" && taskGroupBy === "group" ? <ListTasksGroupType taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState } getGroup={ getGroup }/> : "" }
+            { taskList !== "" && taskGroupBy === "group" ? <ListTasksGroupType taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState } getGroups={ getGroups }/> : "" }
 
             { taskList !== "" && taskGroupBy === "phase" ? <ListTasksGroupPhase taskList={ taskList } onChangeDate={ onChangeDate } taskFiltered={ taskFiltered } taskSorted={ taskSorted } taskSortedBy={ taskSortedBy } setTaskList={ setTaskList } taskListState={ taskListState } setTaskListState={ setTaskListState } getPhases={ getPhases }/> : "" }
 

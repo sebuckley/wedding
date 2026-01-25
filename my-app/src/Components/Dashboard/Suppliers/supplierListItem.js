@@ -15,6 +15,8 @@ export default function SupplierListItem(props){
     const supplierBooked = props.supplierBooked;
     const [status, setStatus] = useState(item.status);
 
+    console.log(item);
+
     // Keep local status synced to prop changes so UI reflects updates immediately
     useEffect(() => {
         setStatus(item.status);
