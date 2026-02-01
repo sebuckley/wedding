@@ -1,5 +1,5 @@
 import '../Dashboard.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams  } from 'react-router-dom';
 import Login from '../../Login/Login';
 import Header from '../../Wigits/Header/header';
@@ -14,9 +14,21 @@ import { saveSupplierList } from '../../Wigits/dataFunctions-suppliers';
 export default function Suppliers(props){
 
     const location = useLocation();
-    const search = location.search; // e.g., #/path?param1=value1&param2=value2
-    let filterParam = search.split("=")[1];
-    let filterAdd = search.split("=")[0];
+
+    const settings = props.settings;
+    const setSettings = props.setSettings;
+
+
+    const [supplierFilterState, setSupplierFilterState] = useState("All");
+    const [supplierFilterTask, setSupplierFilterTask] = useState("");
+    const [taskIndex, setTaskIndex] = useState("");
+    const [taskName, setTaskName] = useState("");
+    const [taskTypeID, setTaskTypeID] = useState("");
+    const [display, setDisplay] = useState("");
+    const [supplierSortedBy, setSupplierSortedBy] = useState(settings["suppliers"].sort.supplierSortedBy);
+    const [supplierSorted, setSupplierSorted] = useState(settings["suppliers"].sort.supplierSorted);
+    const [stateChange, setStateChange] = useState(0);
+
     const user = props.user;
     const setUser = props.setUser;
     const loading = props.loading;
@@ -26,101 +38,30 @@ export default function Suppliers(props){
     const taskList = props.taskList;
     const setTaskList = props.setTaskList;
     const supplierBooked = props.supplierBooked;
-    const settings = props.settings;
-    const setSettings = props.setSettings;
-    let paramID;
-    let paramName;
-    let filterName;
-    let filterName2;
-    let currentDisplay;
-    const [display, setDisplay] = useState("");
-
-    if(typeof filterParam === "undefined" || filterParam === null){
-
-      paramName = "";
-      paramID = "";
-      filterParam = "";
-
-      if(display !== ""){
-
-        currentDisplay = display;
-
-      }else{
-
-        currentDisplay = false;
-
-      }
-      
-
-    }else{
-      
-      if(filterAdd === "?add"){
-
-        currentDisplay = true;
-
-        if(taskList){
-
-          const index = getTaskIndex(taskList, filterParam);
-          paramID = taskList.list[index].taskID;
-          paramName = taskList.list[index].taskName;
-          
-
-        }else{
-
-          paramName = "";
-          paramID = "";
-
-        }
-
-      }else{
-
-        currentDisplay = display;
-
-        if(taskList){
-
-          const index = getTaskIndex(taskList, filterParam);
-          paramID = taskList.list[index].taskID;
-          paramName = taskList.list[index].taskName;
-
-        }else{
-
-          paramName = "";
-          paramID = "";
-
-        }
-
-      }
-
-
-    }
-
-    
-    const [taskType, setTaskType] = useState(filterParam);
-    const clearSearch = useSearchParams();
-
-    if(taskType !== ""){
-
-      filterName = settings["suppliers"].filter.state;
-      filterName2 = filterParam;
-
-    }else{
-
-      filterName = settings["suppliers"].filter.state;
-      filterName2 = settings["suppliers"].filter.type;
-
-    }
-
+   
     const bridalParty = props.bridalParty;
     const wedding = props.wedding;
     const setSupplierList = props.setSupplierList;
     const supplierList = props.supplierList;
     const supplierStatuses = props.supplierStatuses;  
     const detailsLocation = bridalParty.weddingDetails.location;
-    const [supplierFilter, setSupplierFilter] = useState(filterName);
-    const [supplierFilter2, setSupplierFilter2] = useState(filterName2);
-    const [supplierSortedBy, setSupplierSortedBy] = useState(settings["suppliers"].sort.supplierSortedBy);
-    const [supplierSorted, setSupplierSorted] = useState(settings["suppliers"].sort.supplierSorted);
-    
+    let currentDisplay;
+
+    let paramID;
+    let paramName;
+    let filterName;
+    let filterName2;
+
+    // check if display param exists
+    if(display !== ""){
+
+      currentDisplay = display;
+
+    }else{
+
+      currentDisplay = false;
+
+    }
 
     if(display === "" || display !== currentDisplay){
 
@@ -128,9 +69,71 @@ export default function Suppliers(props){
 
     }
 
-    const [stateChange, setStateChange] = useState(0);
+    // get and clear params on load
+    useEffect(() => {
 
+      
+      const search = location.search; // e.g., #/path?param1=value1&param2=value2
+      let filterParam = search.split("=")[1];
+      let filterAdd = search.split("=")[0];
+      let getTaskTypeID;
+
+      if (filterParam) {
+
+          let url = new URL(window.location.href);
+
+          const a = url.href.split('?');
+            // Clear the search query  
+          window.history.replaceState({}, document.title, a[0]);
+
+          if(taskList){
+
+            const index = getTaskIndex(taskList, filterParam);
+            setTaskIndex(index);
+            getTaskTypeID = taskList.list[index].taskID;
+            setTaskTypeID(getTaskTypeID);
+            setTaskName(taskList.list[index].taskName);
+
+            if(filterAdd === "?add"){
+
+              currentDisplay = true;
+              setDisplay(currentDisplay);
+
+            }else{
+
+              currentDisplay = display;
+              setDisplay(currentDisplay);
+
+            }
+
+          }
+
+
+      }
+
+
+    if(filterParam){
+
+      setSupplierFilterState(settings["suppliers"].filter.state);
+      setSupplierFilterTask(getTaskTypeID);
+
+    }else{
+
+      setSupplierFilterState(settings["suppliers"].filter.state);
+      setSupplierFilterTask(settings["suppliers"].filter.type);
+
+    }
+
+    }, []);
+
+   
     const getSearchText = (data) => {
+
+        if(typeof data === "undefined" || data === null){
+
+            return "";  
+
+        }
 
         let searchName = data.split(" ").join("+");
         searchName = searchName + "+" + detailsLocation;
@@ -159,14 +162,29 @@ export default function Suppliers(props){
 
             <div className="adminBody">
 
-              <AddSupplier setSupplierList={ setSupplierList } supplierList={ supplierList } taskList={ taskList } setTaskList={ setTaskList } setStateChange={ setStateChange } stateChange={ stateChange } supplierStatuses={ supplierStatuses } user={ user } display={ display } setDisplay={ setDisplay } taskName={ paramName } taskID={ paramID } location={ detailsLocation } getSearchText={ getSearchText }/>
+              <AddSupplier 
 
-              {/* <ListType setListType={ setListType } listType={ listType } /> */}
+                  setSupplierList={ setSupplierList } 
+                  supplierList={ supplierList } 
+                  taskList={ taskList } 
+                  setTaskList={ setTaskList } 
+                  setStateChange={ setStateChange } 
+                  stateChange={ stateChange } 
+                  supplierStatuses={ supplierStatuses } 
+                  user={ user }
+                  display={ display } 
+                  setDisplay={ setDisplay } 
+                  taskName={ taskName } 
+                  taskID={ taskTypeID } 
+                  location={ detailsLocation } 
+                  getSearchText={ getSearchText }
 
-              <SupplierFilter setSupplierFilter={ setSupplierFilter } filterName={ supplierFilter } settings={ settings } setSettings={ setSettings }  />
-              <SupplierSort setSupplierSorted={ setSupplierSorted } supplierSorted={ supplierSorted } setSupplierSortedBy={ setSupplierSortedBy } supplierSortedBy={ supplierSortedBy } setSupplierFilter2={ setSupplierFilter2 } supplierFilter2={ supplierFilter2 } taskList={ taskList } setStateChange={ setStateChange } stateChange={ stateChange } settings={ settings } setSettings={ setSettings } />
+                />
+
+              <SupplierFilter setSupplierFilter={ setSupplierFilterState } filterName={ supplierFilterState } settings={ settings } setSettings={ setSettings }  />
+              <SupplierSort setSupplierSorted={ setSupplierSorted } supplierSorted={ supplierSorted } setSupplierSortedBy={ setSupplierSortedBy } supplierSortedBy={ supplierSortedBy } setSupplierFilterTask={ setSupplierFilterTask } supplierFilterTask={ supplierFilterTask } taskList={ taskList } setStateChange={ setStateChange } stateChange={ stateChange } settings={ settings } setSettings={ setSettings } />
               
-              { paramName !== "" && !display ? <a href={ "https://www.google.com/search?q=" + getSearchText(paramName) } target="_blank" >Search for { paramName }</a> : "" }
+              { taskName !== "" && !display ? <a href={ "https://www.google.com/search?q=" + getSearchText(taskName) } target="_blank" >Search for { taskName }</a> : "" }
             
 
               { supplierList.length === 0 ? "No suppliers in list": "" }
@@ -174,8 +192,8 @@ export default function Suppliers(props){
                                               wedding={ wedding } 
                                               setSupplierList={ setSupplierList } 
                                               supplierList={ supplierList } 
-                                              supplierFilter={ supplierFilter } 
-                                              supplierFilter2={ supplierFilter2 } 
+                                              supplierFilter={ supplierFilterState } 
+                                              supplierFilterTask={ supplierFilterTask } 
                                               supplierSorted={ supplierSorted } 
                                               supplierSortedBy={ supplierSortedBy } 
                                               setStateChange={ setStateChange } 
@@ -184,7 +202,7 @@ export default function Suppliers(props){
                                               user={ user }
                                               setTaskList={ setTaskList }
                                               taskList={ taskList }
-                                              taskType={ filterName2 }
+                                              taskType={ supplierFilterTask }
                                               supplierBooked={ supplierBooked }
                                             /> : "" }
               

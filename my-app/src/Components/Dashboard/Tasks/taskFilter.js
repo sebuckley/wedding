@@ -131,7 +131,7 @@ export default function TaskFilter(props){
 
                 <button className={ getActive("Not started", filterName,2) } onClick={ onClick2 }>Not started</button>
                 <button className={ getActive("Planned", filterName,2) } onClick={ onClick2 }>Planned</button>
-                <button className={ getActive("Researched", filterName,2) } onClick={ onClick2 }>Researched</button>
+                <button className={ getActive("Researching", filterName,2) } onClick={ onClick2 }>Researching</button>
                 <button className={ getActive("Enquiry made", filterName,2) } onClick={ onClick2 }>Enquiry made</button>
                 <button className={ getActive("Quote recieved", filterName,2) } onClick={ onClick2 }>Quote recieved</button>
                 <button className={ getActive("Booked", filterName,2) } onClick={ onClick2 }>Booked</button>

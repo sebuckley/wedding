@@ -14,8 +14,6 @@ export default function SupplierFilter(props){
         let value = e.target.innerText.trim();
 
         const copySettings = { ...settings };
-
-        console.log("copySettings", copySettings)
         copySettings["suppliers"].filter.state = value;
         setSettings(copySettings);
         sessionStorage.setItem("settings", JSON.stringify(copySettings));

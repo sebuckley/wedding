@@ -19,10 +19,12 @@ export default function AddSuppliers(props) {
     const taskID = props.taskID;
     const location = props.location;
     const getSearchText = props.getSearchText;
+
+    console.log(taskID);
    
     let object = {
 
-        taskID: taskID ,
+        taskID: taskID,
         name: "",
         type: "",
         email: "",
@@ -32,13 +34,7 @@ export default function AddSuppliers(props) {
 
     };
 
-    const [formData, setFormData] = useState("");
-
-    if(formData === ""){
-
-        setFormData(object);
-
-    }
+    const [formData, setFormData] = useState(object);
  
     const getData = () => {
 
@@ -49,6 +45,10 @@ export default function AddSuppliers(props) {
             setDisplay(true);
             setFormData(getData);
 
+        }else{
+
+            setFormData(object);
+            
         }
 
     }

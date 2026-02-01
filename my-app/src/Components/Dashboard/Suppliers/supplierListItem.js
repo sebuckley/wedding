@@ -166,6 +166,8 @@ export default function SupplierListItem(props){
 
             <div className={ "supplierRow " + index} key={ index }>
 
+                {console.log(item)}
+
                 <div className="col-2">{ getSupplierLink(item.UUID, item.name) }</div>
                 <div className="col-2" title="supplier type">{ getType(item.taskTypeID, item.UUID) }</div>
                 <div className="col-1" title="email">{ getEmail(item.email) }</div>

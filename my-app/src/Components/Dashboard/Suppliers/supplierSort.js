@@ -3,8 +3,8 @@ import { splitByCapitalNums } from '../../Wigits/dataFunctions';
 
 export default function SupplierSort(props){
 
-    const setSupplierFilter2 = props.setSupplierFilter2;
-    const supplierFilter2 = props.supplierFilter2;
+    const setSupplierFilterTask = props.setSupplierFilterTask;
+    const supplierFilterTask = props.supplierFilterTask;
     const setSupplierSorted = props.setSupplierSorted;
     const supplierSorted = props.supplierSorted;
     const supplierSortedBy = props.supplierSortedBy;
@@ -22,12 +22,10 @@ export default function SupplierSort(props){
         const itemValue = e.target.value;
 
         const copySettings = { ...settings };
-
-        console.log(settings)
         
         if(itemName === "supplierSortedBy"){
 
-            setSupplierFilter2(itemValue);
+            setSupplierFilterTask(itemValue);
             copySettings["suppliers"].filter.type = itemValue;
 
         }else{
@@ -50,12 +48,12 @@ export default function SupplierSort(props){
 
             <div className="col-2">
 
-                <select name="supplierSortedBy" className="supplierSortedBy" onChange={ onChange } value={ supplierFilter2 } >
+                <select name="supplierSortedBy" className="supplierSortedBy" onChange={ onChange } value={ supplierFilterTask } >
 
                         <option key={-1} value={"All"}>All types</option>
-                     {taskList.list.map((s, i) => (
-                        <option key={i} value={s.taskID}>{s.taskName}</option>
-                    ))}
+                        {taskList.list.map((s, i) => (
+                            <option key={i} value={s.taskID}>{s.taskName}</option>
+                        ))}
 
                 </select>
 

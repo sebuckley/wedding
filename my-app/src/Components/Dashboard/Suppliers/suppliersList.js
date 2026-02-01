@@ -8,7 +8,7 @@ export default function SupplierList(props){
     const setSupplierList = props.setSupplierList;
     const wedding = props.wedding;
     const supplierFilter = props.supplierFilter;
-    const supplierFilter2 = props.supplierFilter2;
+    const supplierFilter2 = props.supplierFilterTask;
     const suppliersSorted = props.supplierSorted;
     const suppliersSortedBy = props.supplierSortedBy;
     const stateChange = props.stateChange;

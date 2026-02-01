@@ -33,8 +33,6 @@ export default function Task(props){
     const taskIDParam = search.split("=")[1];
     let index;
 
-
-  
     if(selectedTaskId !==""){
 
       index = getTaskIndex(taskList, selectedTaskId);
@@ -44,13 +42,10 @@ export default function Task(props){
     
     const handleTaskSelect = (e) => {
 
-        console.log("Task selected:", e.target.value);
         const selectedId = e.target.value;
         setSelectedTaskId(selectedId);
 
     };
-
-    console.log("Selected Task ID:", selectedTaskId);
 
     const selectedIndex = selectedTaskId !=="" ? getTaskIndex(taskList, selectedTaskId) : null;
 
@@ -61,7 +56,6 @@ export default function Task(props){
             setSelectedTaskId(taskIDParam);
             let url = new URL(window.location.href);
 
-            console.log(url)
             const a = url.href.split('?');
              // Clear the search query  
             window.history.replaceState({}, document.title, a[0]);
@@ -96,8 +90,6 @@ export default function Task(props){
             />
 
             <div className="adminBody">
-
-              { console.log("Rendering UpdateTask with index:", selectedIndex) }
                
              { selectedTaskId !== "" ? <UpdateTask 
 

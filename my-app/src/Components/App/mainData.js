@@ -89,6 +89,7 @@ export const weddingTasks = [
   {
     id: "wedding-planner",
     label: "Wedding Planner/Coordinator",
+    description: "Hire a professional to help manage timelines, vendors, budgets, and logistics throughout the planning process and on the wedding day.",
     group: "Core Planning",
     phase: "12–18 Months",
     order: 1,
@@ -98,6 +99,7 @@ export const weddingTasks = [
   {
     id: "wedding-venue",
     label: "Wedding Venue",
+    description:"Choose and book the location where the ceremony will take place, considering capacity, style, availability, and budget.",
     group: "Venues",
     phase: "12–18 Months",
     order: 2,
@@ -107,6 +109,8 @@ export const weddingTasks = [
   {
     id: "reception-venue",
     label: "Wedding Reception Venue",
+    description:
+      "Secure the venue for the reception, ensuring it aligns with guest count, catering requirements, and overall wedding style.",
     group: "Venues",
     phase: "12–18 Months",
     order: 3,
@@ -116,6 +120,8 @@ export const weddingTasks = [
   {
     id: "insurance",
     label: "Insurance",
+    description:
+      "Purchase wedding insurance to protect against unexpected cancellations, vendor issues, or liability concerns.",
     group: "Core Planning",
     phase: "12–18 Months",
     order: 4,
@@ -125,6 +131,8 @@ export const weddingTasks = [
   {
     id: "officiant",
     label: "Officiant",
+    description:
+      "Select and book the person who will legally and ceremonially conduct your wedding ceremony.",
     group: "Ceremony",
     phase: "12–18 Months",
     order: 5,
@@ -134,6 +142,8 @@ export const weddingTasks = [
   {
     id: "photographer",
     label: "Photographer",
+    description:
+      "Hire a photographer to capture key moments before, during, and after the wedding day.",
     group: "Media",
     phase: "12–18 Months",
     order: 6,
@@ -143,6 +153,8 @@ export const weddingTasks = [
   {
     id: "videographer",
     label: "Videographer",
+    description:
+      "Book a videographer to professionally record the ceremony and celebrations.",
     group: "Media",
     phase: "12–18 Months",
     order: 7,
@@ -152,6 +164,8 @@ export const weddingTasks = [
   {
     id: "livestream",
     label: "Live Stream Setup",
+    description:
+      "Arrange equipment and services to live stream the ceremony for guests who cannot attend in person.",
     group: "Media",
     phase: "12–18 Months",
     order: 8,
@@ -161,6 +175,8 @@ export const weddingTasks = [
   {
     id: "caterers",
     label: "Caterers",
+    description:
+      "Select a catering service to provide food and beverages for the reception, including tastings and menu planning.",
     group: "Food & Drink",
     phase: "12–18 Months",
     order: 9,
@@ -172,6 +188,8 @@ export const weddingTasks = [
   {
     id: "marriage-license",
     label: "Marriage License/Legal Documents",
+    description:
+      "Research and prepare all required legal paperwork needed to be officially married.",
     group: "Ceremony",
     phase: "9–12 Months",
     order: 10,
@@ -181,6 +199,8 @@ export const weddingTasks = [
   {
     id: "dress",
     label: "Wedding Dress",
+    description:
+      "Choose and order the wedding dress, allowing time for production, delivery, and fittings.",
     group: "Attire",
     phase: "9–12 Months",
     order: 11,
@@ -190,6 +210,8 @@ export const weddingTasks = [
   {
     id: "suits",
     label: "Suits",
+    description:
+      "Select suits or formalwear for the groom and wedding party, including rentals or custom tailoring.",
     group: "Attire",
     phase: "9–12 Months",
     order: 12,
@@ -199,6 +221,8 @@ export const weddingTasks = [
   {
     id: "engagement-party",
     label: "Engagement Party",
+    description:
+      "Plan and host a celebration to announce and celebrate the engagement with friends and family.",
     group: "Events",
     phase: "9–12 Months",
     order: 13,
@@ -210,6 +234,8 @@ export const weddingTasks = [
   {
     id: "alterations",
     label: "Dress/Suit Alterations",
+    description:
+      "Schedule fittings and alterations to ensure all attire fits perfectly for the wedding day.",
     group: "Attire",
     phase: "6–9 Months",
     order: 14,
@@ -219,6 +245,8 @@ export const weddingTasks = [
   {
     id: "hair-makeup",
     label: "Hair & Make up",
+    description:
+      "Book hair and makeup artists and arrange trials to finalize your wedding-day look.",
     group: "Beauty",
     phase: "6–9 Months",
     order: 15,
@@ -228,6 +256,8 @@ export const weddingTasks = [
   {
     id: "rings",
     label: "Wedding Rings",
+    description:
+      "Choose and purchase wedding rings, allowing time for resizing or engraving if needed.",
     group: "Attire",
     phase: "6–9 Months",
     order: 16,
@@ -237,6 +267,8 @@ export const weddingTasks = [
   {
     id: "dj",
     label: "DJ",
+    description:
+      "Hire a DJ to provide music and manage sound for the reception and key moments.",
     group: "Entertainment",
     phase: "6–9 Months",
     order: 17,
@@ -246,6 +278,8 @@ export const weddingTasks = [
   {
     id: "band",
     label: "Wedding Band",
+    description:
+      "Book a live band to perform during the ceremony, cocktail hour, or reception.",
     group: "Entertainment",
     phase: "6–9 Months",
     order: 18,
@@ -255,6 +289,8 @@ export const weddingTasks = [
   {
     id: "flowers",
     label: "Flowers",
+    description:
+      "Select a florist and design floral arrangements for the ceremony, reception, and wedding party.",
     group: "Decor",
     phase: "6–9 Months",
     order: 19,
@@ -264,6 +300,8 @@ export const weddingTasks = [
   {
     id: "decorations",
     label: "Decorations",
+    description:
+      "Plan and source decorative elements that match your wedding theme and venue style.",
     group: "Decor",
     phase: "6–9 Months",
     order: 20,
@@ -273,6 +311,8 @@ export const weddingTasks = [
   {
     id: "honeymoon",
     label: "Honeymoon",
+    description:
+      "Research, book, and plan travel and accommodations for your post-wedding honeymoon.",
     group: "Post-Wedding",
     phase: "6–9 Months",
     order: 21,
@@ -282,6 +322,8 @@ export const weddingTasks = [
   {
     id: "hen-do",
     label: "Hen Do",
+    description:
+      "Organize the pre-wedding celebration for the bride and her friends.",
     group: "Events",
     phase: "6–9 Months",
     order: 22,
@@ -291,6 +333,8 @@ export const weddingTasks = [
   {
     id: "stag-do",
     label: "Stag Do",
+    description:
+      "Plan the pre-wedding celebration for the groom and his friends.",
     group: "Events",
     phase: "6–9 Months",
     order: 23,
@@ -300,6 +344,8 @@ export const weddingTasks = [
   {
     id: "rehearsal-dinner",
     label: "Rehearsal Dinner",
+    description:
+      "Arrange a dinner for close family and the wedding party following the ceremony rehearsal.",
     group: "Events",
     phase: "6–9 Months",
     order: 24,
@@ -311,6 +357,8 @@ export const weddingTasks = [
   {
     id: "music",
     label: "Music",
+    description:
+      "Finalize playlists and song choices for the ceremony, reception, and special moments.",
     group: "Entertainment",
     phase: "3–6 Months",
     order: 25,
@@ -320,6 +368,8 @@ export const weddingTasks = [
   {
     id: "table-decor",
     label: "Table Decorations",
+    description:
+      "Design and confirm table centerpieces, linens, and place settings.",
     group: "Decor",
     phase: "3–6 Months",
     order: 26,
@@ -329,6 +379,8 @@ export const weddingTasks = [
   {
     id: "lighting",
     label: "Lighting",
+    description:
+      "Plan and arrange lighting to enhance ambience at the ceremony and reception.",
     group: "Decor",
     phase: "3–6 Months",
     order: 27,
@@ -338,6 +390,8 @@ export const weddingTasks = [
   {
     id: "signage",
     label: "Signage",
+    description:
+      "Create signs for directions, seating, schedules, or personalized messages.",
     group: "Decor",
     phase: "3–6 Months",
     order: 28,
@@ -347,6 +401,8 @@ export const weddingTasks = [
   {
     id: "registry",
     label: "Registry",
+    description:
+      "Set up a gift registry and share it with guests through your wedding website or invitations.",
     group: "Post-Wedding",
     phase: "3–6 Months",
     order: 29,
@@ -358,6 +414,8 @@ export const weddingTasks = [
   {
     id: "invitations",
     label: "Invitations",
+    description:
+      "Design, print, and send wedding invitations with all essential details.",
     group: "Stationery",
     phase: "1–3 Months",
     order: 30,
@@ -367,6 +425,8 @@ export const weddingTasks = [
   {
     id: "hashtags",
     label: "HashTags",
+    description:
+      "Create a custom wedding hashtag for guests to use when sharing photos on social media.",
     group: "Stationery",
     phase: "1–3 Months",
     order: 31,
@@ -376,6 +436,8 @@ export const weddingTasks = [
   {
     id: "seating-plan",
     label: "Seating Plan",
+    description:
+      "Assign guest seating for the reception and finalize table arrangements.",
     group: "Stationery",
     phase: "1–3 Months",
     order: 32,
@@ -385,6 +447,8 @@ export const weddingTasks = [
   {
     id: "place-cards",
     label: "Place Cards",
+    description:
+      "Create and print place cards to guide guests to their assigned seats.",
     group: "Stationery",
     phase: "1–3 Months",
     order: 33,
@@ -394,6 +458,8 @@ export const weddingTasks = [
   {
     id: "favours",
     label: "Favours",
+    description:
+      "Choose and prepare small gifts to thank guests for attending your wedding.",
     group: "Stationery",
     phase: "1–3 Months",
     order: 34,
@@ -403,6 +469,8 @@ export const weddingTasks = [
   {
     id: "ceremony-programs",
     label: "Ceremony Programs",
+    description:
+      "Design and print programs outlining the ceremony order and participants.",
     group: "Ceremony",
     phase: "1–3 Months",
     order: 35,
@@ -412,6 +480,8 @@ export const weddingTasks = [
   {
     id: "gifts",
     label: "Bridal Party Gifts",
+    description:
+      "Select thank-you gifts for bridesmaids, groomsmen, and other key participants.",
     group: "Post-Wedding",
     phase: "1–3 Months",
     order: 36,
@@ -421,6 +491,8 @@ export const weddingTasks = [
   {
     id: "thank-you",
     label: "Thank You Notes",
+    description:
+      "Prepare and organize thank-you notes for gifts and attendance.",
     group: "Post-Wedding",
     phase: "1–3 Months",
     order: 37,
@@ -432,6 +504,8 @@ export const weddingTasks = [
   {
     id: "transport-her",
     label: "Transport - Her",
+    description:
+      "Arrange transportation for the bride on the wedding day.",
     group: "Transport",
     phase: "Final Month",
     order: 38,
@@ -441,6 +515,8 @@ export const weddingTasks = [
   {
     id: "transport-him",
     label: "Transport - Him",
+    description:
+      "Arrange transportation for the groom on the wedding day.",
     group: "Transport",
     phase: "Final Month",
     order: 39,
@@ -450,6 +526,8 @@ export const weddingTasks = [
   {
     id: "transport-family",
     label: "Transport - Family",
+    description:
+      "Coordinate transportation for close family members and the wedding party.",
     group: "Transport",
     phase: "Final Month",
     order: 40,
@@ -459,6 +537,8 @@ export const weddingTasks = [
   {
     id: "accommodation",
     label: "Wedding Night Accommodation",
+    description:
+      "Book accommodation for the couple on the wedding night.",
     group: "Accommodation",
     phase: "Final Month",
     order: 41,
@@ -468,6 +548,8 @@ export const weddingTasks = [
   {
     id: "emergency-kit",
     label: "Emergency Kit",
+    description:
+      "Prepare a kit with essentials like medications, sewing supplies, and beauty touch-up items.",
     group: "Logistics",
     phase: "Final Month",
     order: 42,
@@ -477,6 +559,8 @@ export const weddingTasks = [
   {
     id: "day-of",
     label: "Day-Of Supplies",
+    description:
+      "Gather all items needed on the wedding day, including schedules, contacts, and personal essentials.",
     group: "Logistics",
     phase: "Final Month",
     order: 43,
@@ -486,6 +570,8 @@ export const weddingTasks = [
   {
     id: "vendor-tips",
     label: "Vendor Tips & Gratuity Envelopes",
+    description:
+      "Prepare tips and labeled envelopes for vendors and service staff.",
     group: "Logistics",
     phase: "Final Month",
     order: 44,
@@ -497,6 +583,8 @@ export const weddingTasks = [
   {
     id: "vows",
     label: "Vows",
+    description:
+      "Write and finalize personal vows for the ceremony.",
     group: "Ceremony",
     phase: "Wedding Week",
     order: 45,
@@ -506,6 +594,8 @@ export const weddingTasks = [
   {
     id: "backup-weather",
     label: "Backup Plan for Weather",
+    description:
+      "Confirm contingency plans in case of bad weather, especially for outdoor events.",
     group: "Logistics",
     phase: "Wedding Week",
     order: 46,

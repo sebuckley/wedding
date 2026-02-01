@@ -179,6 +179,7 @@ function App() {
       newTask["order"] = weddingTasks[i].order;
       newTask["toDoDate"] = "";
       newTask["state"] = "To-do";
+      newTask["description"] = weddingTasks[i].description;
       newTask["activity"] = "Not started";
       newTask["created"] = new Date();
       newTask["createdBy"] = "system";

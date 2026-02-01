@@ -90,11 +90,15 @@ export default function Tasks(props){
     const [taskGroupBy, setTaskGroupBy] = useState(settings["tasks"].sort.taskGroupedBy);
     const [taskListConfirmed, setTaskListConfirmed] = useState("");
 
-    if(taskListConfirmed === ""){
+    if(taskListConfirmed === "" || taskListConfirmed === undefined){
+
+      console.log(taskList.listConfirmed);
 
       setTaskListConfirmed(taskList.listConfirmed);
 
     }
+
+    
 
     const onChangeDate = (e) => {
 

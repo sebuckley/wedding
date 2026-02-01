@@ -20,6 +20,16 @@ export default function UpdateTask(props) {
 
     });
 
+     const autoResize = () => {
+
+        const el = document.querySelector('.task-description');
+
+        el.style.height = "auto";           // Reset height
+        el.style.height = el.scrollHeight + "px"; // Set to scroll height
+
+    }
+
+
     useEffect(() => {
 
         if (task) {
@@ -37,6 +47,8 @@ export default function UpdateTask(props) {
             });
 
         }
+
+        autoResize();
 
     }, [task]);
 
@@ -167,7 +179,7 @@ export default function UpdateTask(props) {
                             <label className="block mb-2 font-semibold">Group</label>
                             <div className="col-12">
                                 <i className="fa fa-object-group icon"></i>
-                                <select name="group" className='guestType' style={ getColor(formData.group) }  value={ formData.group} onChange={handleChange}>
+                                <select name="group" className='guestType' style={ getColor(formData.group) }  value={ formData.group} onChange={handleChange} disabled={formData.createdBy === "system" ? true : false }>
                                     <option value="">Select Group</option>
                                     {getGroups(true)}
                                 </select>
@@ -197,12 +209,13 @@ export default function UpdateTask(props) {
                             <div className="col-12">
                                 <i className="fa fa-file-text icon"></i>
                                 <textarea 
-                                    className='inputBox' 
+                                    className='inputBox task-description' 
                                     name="description" 
                                     value={ formData.description } 
                                     onChange={ handleChange }
                                     placeholder='Description'
-                                    rows="4"
+                                    style={{width: "100%",resize: "none", overflowY: "hidden" }}
+                                    disabled={formData.createdBy === "system" ? true : false }
                                 />
                             </div>
                         </div>
@@ -218,6 +231,9 @@ export default function UpdateTask(props) {
                                 </p>
                             </div>
                         </div>
+                    </div>
+
+                    <div className='row'>
                         <div className='inputGroupColumn col-12'>
                             <label className="block mb-2 font-semibold">Created By</label>
                             <div className="col-12">
@@ -237,6 +253,9 @@ export default function UpdateTask(props) {
                                 </p>
                             </div>
                         </div>
+
+                        </div>
+                        <div className='row'>
                         <div className='inputGroupColumn col-12'>
                             <label className="block mb-2 font-semibold">Updated By</label>
                             <div className="col-12">
