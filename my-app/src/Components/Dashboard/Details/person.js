@@ -71,13 +71,19 @@ export default function BridalPerson(props){
       checkEmpty();
     }, []);
 
-    if(empty === 0){
+    const getEmptyFields = () => {
 
-      emptyText = "[completed]";
+      if(empty === 0){
 
-    }else{
+        emptyText = <div style={{margin:"5px"}}><span className='labelTag booked' title="current status"><i class="fa-solid fa-circle-check"></i> completed</span></div>;
 
-      emptyText = "[" + empty + " incomplete]";
+      }else{
+
+        emptyText = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i>{empty} required fields</span></div>;
+
+      }
+
+      return emptyText;
 
     }
 
@@ -85,7 +91,21 @@ export default function BridalPerson(props){
 
         <>
 
-            <h2 className="text-2xl font-semibold mb-4">{ getName(selection) +  " " + emptyText}</h2>
+            <div className='row'>
+            
+              <div className='inputGroup col-8'>
+
+                <h2 className="font-semibold">{ getName(selection) } </h2>
+
+              </div>
+
+              <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"right"}}>
+
+                {  getEmptyFields() }
+
+              </div>
+
+            </div>
 
             <div className='row'>
             

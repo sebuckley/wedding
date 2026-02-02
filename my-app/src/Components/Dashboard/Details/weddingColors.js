@@ -168,10 +168,10 @@ const WeddingColorSelector = (props) => {
 
             if(colorEmpty === 0){
 
-                object = <span className="countryCompleted completed">[Completed]</span>;
+                object = <div style={{margin:"5px"}}><span className='labelTag booked' title="current status"><i class="fa-solid fa-circle-check"></i> completed</span></div>;
             }else{
 
-                object = <span className="countryCompleted outstanding">[{ colorEmpty } Outstanding]</span>;
+                object = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i>{colorEmpty} required fields</span></div>;
             }
         }
 
@@ -183,7 +183,22 @@ const WeddingColorSelector = (props) => {
   return (
 
     <div>
-      <h2>Wedding Color Selector { getColorStatus() }</h2>
+
+      <div className='row'>
+          
+        <div className='inputGroup col-8'>
+
+          <h2 className="font-semibold">Wedding Color Selector</h2>
+
+        </div>
+
+        <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"right"}}>
+
+          {  getColorStatus() }
+
+        </div>
+
+      </div>
 
         <div className='row'>
             <div className='inputGroupColumn col-12'>

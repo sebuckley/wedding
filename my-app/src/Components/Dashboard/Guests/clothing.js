@@ -16,7 +16,7 @@ const WeddingClothingForm = (props) => {
   const bridalParty = props.bridalParty;
   const selection = props.selection;
   const [empty, setEmpty] = useState(0);
-  let emptyText;
+
  
   const disableItem = props.disableItem;
 
@@ -175,13 +175,22 @@ const WeddingClothingForm = (props) => {
 
   });
 
-  if(empty === 0){
 
-    emptyText = "[completed]";
+  const getEmptyFields = () => {
 
-  }else{
+    let emptyText;
 
-    emptyText = "[" + empty + " incomplete]";
+    if(empty === 0){
+
+      emptyText = <div style={{margin:"5px"}}><span className='labelTag booked' title="current status"><i class="fa-solid fa-circle-check"></i> completed</span></div>;
+
+    }else{
+
+      emptyText = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i> {empty} required fields</span></div>;
+
+    }
+
+    return emptyText;
 
   }
 
@@ -189,7 +198,21 @@ const WeddingClothingForm = (props) => {
 
     <>
 
-    <h2 onClick={ displayClothing } style={{width: "100%"}}><i onClick={ displayClothing } id="addClothingIcon" className="fa fa-circle-plus iconHeader2"></i>{ disableItem ? "Your wedding clothing sizes" : name + " wedding clothing sizes " + emptyText}</h2>
+    <div className='row'>
+            
+      <div className='inputGroup col-8'>
+
+        <h2 onClick={ displayClothing } style={{width: "100%"}}><i onClick={ displayClothing } id="addClothingIcon" className="fa fa-circle-plus iconHeader2"></i>{ disableItem ? "Your wedding clothing sizes" : name + " wedding clothing sizes "}</h2>
+
+      </div>
+
+      <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"right"}}>
+
+        {  getEmptyFields() }
+
+      </div>
+
+    </div>
 
     <form id="clothingForm" style={{ display: display }}>
 

@@ -211,11 +211,11 @@ export default function WeddingStyleDropdown(props) {
 
       if(styleEmpty === 0){
 
-        object = <span className="countryCompleted completed">[Completed]</span>;
-
+        object = <div style={{margin:"5px"}}><span className='labelTag booked' title="current status"><i class="fa-solid fa-circle-check"></i> completed</span></div>;
+        
       }else{
 
-        object = <span className="countryCompleted outstanding">[{ styleEmpty } Outstanding]</span>;
+        object = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i>{styleEmpty} required fields</span></div>;
 
       }
     }
@@ -226,7 +226,7 @@ export default function WeddingStyleDropdown(props) {
 
   const autoResize = () => {
 
-        const el = document.querySelector('.style-description textarea');
+        const el = document.querySelector('.description');
 
         el.style.height = "auto";           // Reset height
         el.style.height = el.scrollHeight + "px"; // Set to scroll height
@@ -234,12 +234,35 @@ export default function WeddingStyleDropdown(props) {
   }
 
   useEffect(() => {
-    autoResize();
+
+    const el = document.querySelector('.description');
+
+    if(el){
+
+      autoResize();
+      
+    }
+
   }, [description]);  
 
   return (
     <>
-      <h2>Wedding Style { getStyleStatus() }</h2>
+
+      <div className='row'>
+          
+        <div className='inputGroup col-8'>
+
+          <h2 className="font-semibold">Wedding Style</h2>
+
+        </div>
+
+        <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"right"}}>
+
+          {  getStyleStatus() }
+
+        </div>
+
+      </div>
 
       <div className="row">
 

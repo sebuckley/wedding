@@ -47,28 +47,37 @@ export default function DietSection(props){
         let title;
         let text = "Your ";
         name = name + "'s";
-        let emptyText;
-
-        if(empty === 0){
-
-            emptyText = "[completed]";
-
-        }else{
-
-            emptyText = "[" + empty + " incomplete]";
-        }
+      
 
         if(type === "guest"){
 
-            title = "Additional Guest " + guestNumber + " dietry requirements"  + " " + emptyText;
+            title = "Additional Guest " + guestNumber + " dietry requirements"
 
         }else{
 
-            title = disableItem ? text + " dietry requirements" : name + " dietry requirements" + " " + emptyText;
+            title = disableItem ? text + " dietry requirements" : name + " dietry requirements"
 
         }
 
         return title;
+
+    }
+
+    const getEmptyFields = () => {
+
+        let returnText = "";
+
+        if(empty > 0){
+
+            returnText = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i>{empty} required fields</span></div>; 
+
+        }else{
+
+            returnText = <div style={{margin:"5px"}}><span className='labelTag booked' title="current status"><i class="fa-solid fa-circle-check"></i> completed</span></div>;
+
+        }
+        
+        return returnText;
 
     }
 
@@ -195,7 +204,21 @@ export default function DietSection(props){
 
         <>
 
-            <h2 style={{textAlign: "left",width:"100%"}}>{ returnIcon() }{ getTitle(titleType) }</h2>
+            <div className='row'>
+            
+              <div className='inputGroup col-8'>
+
+               {  returnIcon() } <h2 className="font-semibold">{ getTitle(titleType) } </h2>
+
+              </div>
+
+              <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"right"}}>
+
+                { getEmptyFields() }
+
+              </div>
+
+            </div>
 
             <div className="dietRow" style={{display:display}}>
 

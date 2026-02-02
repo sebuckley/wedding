@@ -354,10 +354,12 @@ export default function WeddingPlans(props){
 
             if(formEmpty === 0){
 
-                object = <span className="detailsCompleted completed">[Completed]</span>;
+                object = <div style={{margin:"5px"}}><span className='labelTag booked' title="current status"><i class="fa-solid fa-circle-check"></i> completed</span></div>;
+
+
             }else{
 
-                object = <span className="detailsCompleted outstanding">[{ formEmpty } Outstanding]</span>;
+                object = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i>{formEmpty} required fields</span></div>;
             }
         }
 
@@ -370,7 +372,21 @@ export default function WeddingPlans(props){
 
         <>
 
-            <h2 className="text-2xl font-semibold mb-4">Wedding Plans { getPlanStatus() }</h2>
+            <div className='row'>
+            
+              <div className='inputGroup col-8'>
+
+                <h2 className="font-semibold">Wedding Plans</h2>
+
+              </div>
+
+              <div className='col-4' style={{display:"flex",alignItems:"center",justifyContent:"right"}}>
+
+                {  getPlanStatus() }
+
+              </div>
+
+            </div>
 
             <div className='row'>
 
