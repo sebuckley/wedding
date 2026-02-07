@@ -69,7 +69,7 @@ export default function DietSection(props){
 
         if(empty > 0){
 
-            returnText = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i>{empty} required fields</span></div>; 
+            returnText = <div style={{margin:"5px"}}><span className='labelTag ruledout' title="current status"><i class="fa-solid fa-circle-xmark"></i> {empty} required fields</span></div>; 
 
         }else{
 
