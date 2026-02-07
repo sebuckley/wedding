@@ -1,5 +1,5 @@
 import './Header.css'; 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../../PublicSite/Components/Logo/logo';
 import MobileMenu from './mobileMenu';
@@ -56,38 +56,33 @@ export default function Header(props){
 
     }
 
+ const handleResize = useCallback(() => {
+
+        const hiddenElement = document.getElementsByClassName("headerLinks")[0];
+
+        if (window.innerWidth <= 700) {
+            hiddenElement.style.display = "none";
+            setMobileState(1);
+            setMenuState(1);
+        } else {
+            hiddenElement.style.display = "block";
+            setMobileState(0);
+            setMenuState(0);
+        }
+    }, []); // add dependencies if needed
+
     useEffect(() => {
+        // Run once on mount
+        handleResize();
 
-		const handleResize = () => {
+        // Add listener
+        window.addEventListener("resize", handleResize);
 
-            let hiddenElement = document.getElementsByClassName("headerLinks");
-
-            if(window.innerWidth <= 700){
-    
-                hiddenElement[0].style.display = "none";
-                setMobileState(1);
-                setMenuState(1);
-    
-            }else{
-
-                
-                hiddenElement[0].style.display = "block";
-                setMobileState(0);
-                setMenuState(0);
-
-            }
-
-		};
-
-		window.addEventListener('resize', handleResize);
-
+        // Cleanup on unmount
         return () => {
-
-			window.removeEventListener('resize', handleResize);
-
-		};
-
-	}, []);
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [handleResize]);
 
     useEffect(() => {
 
