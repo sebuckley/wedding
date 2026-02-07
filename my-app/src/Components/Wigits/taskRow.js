@@ -160,7 +160,7 @@ export default function TaskRow(props){
 
         <div className="row" key={ taskID }>
 
-            <div className="titleName col-3" style={{display: "flex", alignItems: "flex-end", justifyContent: "flex-end", marginBottom: "20px", textAlign: "right"}}>
+            <div className="taskTitleName col-3" >
 
                  <Link to={`/managemywedding/task/?taskId=${ taskID }`}>{ taskName }:</Link>
                 

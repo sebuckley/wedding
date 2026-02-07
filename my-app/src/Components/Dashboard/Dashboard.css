@@ -511,6 +511,26 @@ li > div {
 
 }
 
+ .taskTitleName {
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-bottom: 20px !important;
+    text-align: right;
+
+}
+
+ .inputDelete{
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 10px;
+    text-align: center !important;
+
+}
+
 .inputDate {
 
     margin: 5px;
@@ -1957,6 +1977,26 @@ select option {
         text-align: left;
         display: block !important;
     
+    }
+
+    .taskTitleName {
+
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 20px;
+        text-align: center !important;
+
+    }
+
+    .inputDelete{
+
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 10px;
+        text-align: center !important;
+
     }
     
     .inputName{
