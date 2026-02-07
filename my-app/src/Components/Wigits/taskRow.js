@@ -139,15 +139,15 @@ export default function TaskRow(props){
 
         if(state === "To-do" && toDoDate === ""){
 
-            object = !taskListConfirmed ? <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end"}}><button className="deleteButton" onClick={ deleteTaskItem }>Delete</button></div> : <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}></div>
+            object = !taskListConfirmed ? <div className="inputDelete col-2"><button className="deleteButton" onClick={ deleteTaskItem }>Delete</button></div> : <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}></div>
 
         }else if(state === "Booked"){
 
-            object = <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "20px"}}>{ getSupplierLink(supplierID.trim()) } </div>;
+            object = <div className="inputDelete col-2" >{ getSupplierLink(supplierID.trim()) } </div>;
 
         }else{
 
-            object = <div className="inputDelete col-2" style={{display: "flex", alignItems: "flex-end", marginBottom: "10px"}}>{ linkSuppliers(taskName, state, activity, taskID) } </div>;
+            object = <div className="inputDelete col-2">{ linkSuppliers(taskName, state, activity, taskID) } </div>;
 
         }
 
@@ -160,7 +160,7 @@ export default function TaskRow(props){
 
         <div className="row" key={ taskID }>
 
-            <div className="taskTitleName col-3" >
+            <div className="taskTitleName col-3">
 
                  <Link to={`/managemywedding/task/?taskId=${ taskID }`}>{ taskName }:</Link>
                 

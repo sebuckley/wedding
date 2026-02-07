@@ -107,37 +107,21 @@ function App() {
   const [faqState, setFaqState] = useState(false);
   const [settings, setSettings] = useState(sessionStorage.getItem("settings") ? JSON.parse(sessionStorage.getItem("settings")) : localStorage.getItem("settings") ? JSON.parse(localStorage.getItem("settings")) : {});
 
-
-  useEffect(() => {
-
-    const unsubscribe = onAuthStateChanged(auth, (data) => {
-
-      if(typeof auth.currentUser !== "undefined"){
-
-        if(auth.currentUser !== null){
-
-          setUser(data);
-          setLoading(false);
-          setLoggedin(true);
-
-        }else{
-
-          setLoading(false);
-          setLoggedin(false);
-
-        }
-
-      }else{
-
-        setLoading(false);
-        setLoggedin(false);
-
-      }
-
-    });
-
-    return unsubscribe;
-
+  useEffect(() => { 
+    
+    let isMounted = true; 
+    const unsubscribe = onAuthStateChanged(auth, (data) => { 
+      
+      if (!isMounted) return; 
+      
+      setUser(data); 
+      setLoading(false); 
+      setLoggedin(!!data); 
+    
+    }); 
+      
+    return () => { isMounted = false; unsubscribe(); }; 
+    
   }, []);
 
   const checkSupplierList = () => {
