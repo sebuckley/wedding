@@ -162,13 +162,13 @@ export default function SupplierListItem(props){
 
     return (
 
-        <div>
+        <>
 
             <div className={ "supplierRow " + index} key={ index }>
 
                 {console.log(item)}
 
-                <div className="col-2">{ getSupplierLink(item.UUID, item.name) }</div>
+                <div className="col-3">{ getSupplierLink(item.UUID, item.name) }</div>
                 <div className="col-2" title="supplier type">{ getType(item.taskTypeID, item.UUID) }</div>
                 <div className="col-1" title="email">{ getEmail(item.email) }</div>
                 <div className="col-1" title="call">{ getPhone(item.phone, item.UUID) }</div>
@@ -183,12 +183,12 @@ export default function SupplierListItem(props){
                      </select>
                 </div>
                 <div className="col-2" style={{"display":"none"}}> { item.UUID }</div>
-                <div className="col-2" > <button className="deleteButton" onClick={ deleteListItem }>Delete</button></div>
+                {/* <div className="col-2" > <button className="deleteButton" onClick={ deleteListItem }>Delete</button></div> */}
 
 
             </div>
 
-        </div>
+        </>
 
     )
 

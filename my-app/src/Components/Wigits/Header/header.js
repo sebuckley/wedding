@@ -39,7 +39,7 @@ export default function Header(props){
 
     const showMenu = (e) => {
  
-        let hiddenElement = document.getElementsByClassName("headerLinks");
+        let hiddenElement = document.getElementsByClassName("linksGroup");
 
         if (hiddenElement[0].style.display === "block"){
 
@@ -58,17 +58,22 @@ export default function Header(props){
 
  const handleResize = useCallback(() => {
 
-        const hiddenElement = document.getElementsByClassName("headerLinks")[0];
+        const hiddenElement = document.getElementsByClassName("linksGroup")[0];
 
         if (window.innerWidth <= 700) {
+
             hiddenElement.style.display = "none";
             setMobileState(1);
             setMenuState(1);
+
         } else {
+
             hiddenElement.style.display = "block";
             setMobileState(0);
             setMenuState(0);
+
         }
+
     }, []); // add dependencies if needed
 
     useEffect(() => {
@@ -175,8 +180,6 @@ export default function Header(props){
 
         <div className="header">
 
-                { mobileSet ? <MobileMenu showMenu={ showMenu }  menuState={ menuState } /> : ""}
-        
                 <div className="headerLogo">
 
                     <Link to="/"><Logo fName={props.firstName} sName={ props.sName }/></Link>
@@ -193,7 +196,13 @@ export default function Header(props){
 
                     </div>
 
+                    <div style={{display: "flex", alignItems:"right", justifyContent:"right", marginRight:"20px"}}>
+                        { mobileSet ? <MobileMenu showMenu={ showMenu }  menuState={ menuState } /> : ""}
+                    </div>
+
                 </div>
+
+               
 
         </div>
 
