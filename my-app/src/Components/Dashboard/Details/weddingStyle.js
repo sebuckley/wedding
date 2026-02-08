@@ -273,6 +273,7 @@ export default function WeddingStyleDropdown(props) {
             <div className="col-12">
            
               <i className="fa-solid fa-person-dress icon"></i>
+
               <select
                 id="wedding-style"
                 style={getColor(selectedStyle)}
@@ -281,29 +282,35 @@ export default function WeddingStyleDropdown(props) {
                 onChange={onStyleChange}
                 defaultValue={selectedStyle}
               >
-                <option value="" hidden className="noOption">
-                  please select wedding style... (required)
-                </option>
-                {Object.entries(weddingStyles).map(([category, styles]) => (
-                  <optgroup key={category} label={category}>
-                    {styles.map((styleObj) => (
-                      <option key={styleObj.value} value={styleObj.value}>
-                        {styleObj.value}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
+
+                  <option value="" hidden className="noOption">
+                    please select wedding style... (required)
+                  </option>
+                  {Object.entries(weddingStyles).map(([category, styles]) => (
+                    <optgroup key={category} label={category}>
+                      {styles.map((styleObj) => (
+                        <option key={styleObj.value} value={styleObj.value}>
+                          {styleObj.value}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+
               </select>
+
             </div>
           
         </div>
 
-        {selectedStyle === 'Religious Ceremony' && (
+      </div>
 
-         
-            <div className=' col-12'>
+      {selectedStyle === 'Religious Ceremony' && (
+
+          <div className="row">
+
+            <div className='inputGroupColumn col-12'>
               <label htmlFor="religious-type">Select Religious Ceremony Type:</label>
-              <div>
+              <div className="col-12">
                 <i className="fa-solid fa-church icon"></i>
                 <select
                   id="religious-type"
@@ -324,34 +331,30 @@ export default function WeddingStyleDropdown(props) {
                 </select>
               </div>
             </div>
-          
 
-        )}
+          </div>
+        
+      )}
 
+      {/* Show description for the selected style */}
+      {selectedStyle && getSelectedDescription(selectedStyle) && (
 
-       
+        <div className="row">
+            
+          <div className='inputGroupColumn col-12'>
 
-      </div>
-
-       {/* Show description for the selected style */}
-          {selectedStyle && getSelectedDescription(selectedStyle) && (
-
-            <div className="row">
-                
-              <div className='inputGroupColumn col-12'>
-
-                <div className="style-description col-12">
-                  <label>Style description:</label>
-                  <textarea name="styleDescription" className="description weddingDetails" onInput={ onDescriptionChange } style={{width: "100%",resize: "none", overflowY: "hidden" }} value={ description } ></textarea>
-                </div>
-
-              </div>
-
+            <div className="style-description col-12">
+              <label>Style description:</label>
+              <textarea name="styleDescription" className="description weddingDetails" onInput={ onDescriptionChange } style={{width: "100%",resize: "none", overflowY: "hidden" }} value={ description } ></textarea>
             </div>
 
-          )}
-    </>
+          </div>
 
+        </div>
+
+      )}
+
+    </>
 
   );
 
