@@ -213,10 +213,14 @@ export default function WeddingPlans(props){
                     <label className="block mb-2 font-semibold">
                         Reception Date & Time:
                     </label>
-                    <div class='col-12'>
+                   
+                    <div className="dateWrapper">
+                        <div class='col-12'>
                         <i className="fa-solid fa-calendar-day icon"></i>
                         <input type={ checkType(receptionDate) } className='dateBox dateChange checkDetails weddingDetails' style={ getColor(receptionDate) } name="dateTimeRSVP" placeholder="Proposed RSVP date and time" onFocus={ changeToDate } onBlur={ changeToText } defaultValue={ getDateValue(receptionDate) }></input>
+                        </div>
                     </div>
+                    
                 </div>
 
             </div>
@@ -405,7 +409,7 @@ export default function WeddingPlans(props){
     
             { getReceptionDateValue(dateWedding) }
 
-             { getEndDateValue(dateWedding) }
+            { getEndDateValue(dateWedding) }
 
             { getRSVPDateValue(dateWedding) }
 

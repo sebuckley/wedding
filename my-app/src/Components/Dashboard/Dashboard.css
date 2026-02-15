@@ -361,11 +361,7 @@ form {
 
 }
 
-.weddingDetails {
 
-    
-
-}
 
 ul {
 
@@ -527,6 +523,7 @@ li > div {
     text-align: left;
     display: flex;
     align-items: center;
+ 
 
 }
 
@@ -741,8 +738,7 @@ textarea{
 .dateBox {
 
     display: block;
-    width: 100%;
-    box-sizing: border-box;
+    width: calc(100% - 50px);
     margin: 0px;
     padding: 10px 8px 8px 40px;
     text-align: left;
@@ -750,7 +746,7 @@ textarea{
     border-radius: 10px;
     font-size: 15px;
     background-color: white;
-    min-height: 45px;
+    height: 27px;
     color: #000;
 
 }
@@ -772,7 +768,6 @@ textarea{
 
     display: block;
     width: 100%;
-    box-sizing: border-box;
     margin: 0px;
     padding: 8px 8px 8px 8px;
     text-align: left;
@@ -1775,6 +1770,14 @@ h2, h3, h4 {
     background-color: #da190b;
 }
 
+.dateWrapper {
+
+    width: 100%; 
+    overflow: hidden;
+
+}
+
+.flex-item { min-width: 0; }
 
 @media screen and (max-width: 1150px) {
 
@@ -1859,11 +1862,6 @@ h2, h3, h4 {
 
     }
 
-    .weddingDetails {
-
-        width: 100%;
-    
-    }
 
     #detailsForm {
 
@@ -2044,6 +2042,26 @@ h2, h3, h4 {
     
 
 
+    }
+
+   /* Safari-only fix */ @supports (-webkit-touch-callout: none) { 
+    
+        .dateWrapper { 
+            display: flex; 
+            align-items: center; 
+            width: 100%; 
+            overflow: hidden; /* prevents Safari overflow */ 
+        } 
+
+        .dateWrapper input[type="date"] { 
+            flex: 1; 
+            min-width: 0; /* allows shrinking */ 
+            width: 100%; 
+            max-width: 100%; 
+            box-sizing: border-box; 
+        
+        } 
+    
     }
 
     .checkIcon {
