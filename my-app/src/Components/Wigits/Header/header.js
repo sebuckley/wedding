@@ -60,7 +60,7 @@ export default function Header(props){
 
         const hiddenElement = document.getElementsByClassName("linksGroup")[0];
 
-        if (window.innerWidth <= 700) {
+        if (window.innerWidth <= 1267) {
 
             hiddenElement.style.display = "none";
             setMobileState(1);
@@ -196,11 +196,13 @@ export default function Header(props){
 
                     </div>
 
-                    <div style={{display: "flex", alignItems:"right", justifyContent:"right", marginRight:"20px"}}>
-                        { mobileSet ? <MobileMenu showMenu={ showMenu }  menuState={ menuState } /> : ""}
-                    </div>
-
+                  
                 </div>
+
+             
+                { mobileSet ? <MobileMenu showMenu={ showMenu }  menuState={ menuState } /> : ""}
+                
+
 
                
 

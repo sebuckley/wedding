@@ -29,16 +29,24 @@ export default function FAQSet(props) {
 
     return (
 
-    <label>
-        <div>        
-            <Toggle
-            defaultChecked={ faqState }
-            onChange={ handleChange } />
+    <div className="row">
+
+        <div className="inputGroupColumn col-12">  
+
+            <label>
+                <div className="col-12">        
+                    <Toggle
+                    defaultChecked={ faqState }
+                    onChange={ handleChange } />
+                </div>
+                <div  className="col-12">
+                <span>Turn FAQ's on webpage</span>
+                </div>
+            </label>
+
         </div>
-        <div>
-        <span>Turn FAQ's on webpage</span>
-        </div>
-    </label>
+
+    </div>
 
     )
 

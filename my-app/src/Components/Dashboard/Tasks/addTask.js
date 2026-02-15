@@ -344,7 +344,7 @@ export default function AddTask(props){
             <i onClick={ displayAddTask } id="addTaskIcon" className={ getClassName() }></i>
             <h1 onClick={ displayAddTask } id="addTaskTitle">Add Task</h1>
 
-            <form id='inputForm' style={ getCurrentDisplay() } target="_blank">
+            <div id='inputForm' style={ getCurrentDisplay() } target="_blank">
 
                 <div className='row two'>
 
@@ -408,7 +408,7 @@ export default function AddTask(props){
 
                 </div>
 
-            </form>
+            </div>
 
         </section>
 

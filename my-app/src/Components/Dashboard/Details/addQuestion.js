@@ -90,12 +90,11 @@ export default function AddFAQ(props){
         if(display){
 
             setDisplay(false);
-            getIcon.className = "fa fa-circle-plus iconHeader3";
+           
 
         }else{
 
             setDisplay(true);
-            getIcon.className = "fa fa-circle-minus iconHeader3";
 
         }
 
@@ -127,7 +126,11 @@ export default function AddFAQ(props){
 
         <section id="addQuestionSection">
 
-            <i onClick={ displayAddQuestion } id="addQuestionIcon" className="fa fa-circle-plus iconHeader3"></i>
+            <div>
+
+            <i onClick={ displayAddQuestion } id="addQuestionIcon" className={`fa ${display ? "fa-circle-minus" : "fa-circle-plus"} iconHeader3`}></i>
+            </div>
+            
             <h1 onClick={ displayAddQuestion } id="addQuestionTitle">Add FAQ</h1>
             
             <form id='inputForm' style={ getCurrentDisplay() } target="_blank">

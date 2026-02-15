@@ -34,7 +34,11 @@ export default function MobileMenu(props){
 
     return(
 
-        <div className="menuIcon" onClick={ props.showMenu } style={ props.menuState ? menuIcon: closeMenuIcon }></div>
+        <div className="menuIcon">
+
+            <div className="menuIcon" onClick={ props.showMenu } style={ props.menuState ? menuIcon: closeMenuIcon }></div>
+
+        </div>
 
     )
 
