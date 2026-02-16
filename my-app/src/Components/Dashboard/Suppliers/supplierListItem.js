@@ -170,9 +170,11 @@ export default function SupplierListItem(props){
 
                 <div className="col-3">{ getSupplierLink(item.UUID, item.name) }</div>
                 <div className="col-2" title="supplier type">{ getType(item.taskTypeID, item.UUID) }</div>
-                <div className="col-1" title="email">{ getEmail(item.email) }</div>
-                <div className="col-1" title="call">{ getPhone(item.phone, item.UUID) }</div>
-                <div className="col-1" title="website">{ getWebsite(item.website, item.UUID) }</div>
+                <div className="inputGroupRow col-3">
+                <div title="email">{ getEmail(item.email) }</div>
+                <div title="call">{ getPhone(item.phone, item.UUID) }</div>
+                <div title="website">{ getWebsite(item.website, item.UUID) }</div>
+                </div>
                 <div className="col-2" title={ item.status }>
             
                     <select className={ item.type } name="status" value={ status } onChange={ onChange } >
